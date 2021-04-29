@@ -125,4 +125,13 @@ class BoardPageState extends State<BoardPage> {
       ));
     });
   }
+
+  void unsave(Message savedMsg) {
+    setState(() {
+      savedMessages.remove(savedMsg);
+      newMessages.add(savedMsg.copyWith(
+        saved: false,
+      ));
+    });
+  }
 }

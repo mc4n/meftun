@@ -39,23 +39,25 @@ class MessageItem extends StatelessWidget {
 
   Widget _itemFooter(BuildContext context, Message inboxMsg) {
     if (inboxMsg.isSaved) {
-      return Container(
-        margin: EdgeInsets.only(top: 8.0),
-        alignment: Alignment.centerRight,
-        child: Chip(
+      return Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+        Chip(
           label: Text("Saved."),
         ),
-      );
+        ElevatedButton(
+            onPressed: () {
+              BoardPageState.of(context).unsave(inboxMsg);
+            },
+            child: Text("Unsave"))
+      ]);
     } else {
       return Row(
         mainAxisAlignment: MainAxisAlignment.end,
         children: <Widget>[
-          TextButton(
-            child: Text("Save"),
-            onPressed: () {
-              BoardPageState.of(context).save(inboxMsg);
-            },
-          ),
+          ElevatedButton(
+              child: Text("Save"),
+              onPressed: () {
+                BoardPageState.of(context).save(inboxMsg);
+              }),
           TextButton(
             child: Text("Ignore"),
             onPressed: () {
