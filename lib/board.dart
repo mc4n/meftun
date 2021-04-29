@@ -21,19 +21,24 @@ import 'pages/draft_list.dart';
 //
 
 class BoardPage extends StatefulWidget {
+  final Person userLoggedin;
   BoardPage({
     Key key,
+    this.userLoggedin,
   }) : super(key: key);
 
   @override
-  State<StatefulWidget> createState() => BoardPageState();
+  State<StatefulWidget> createState() => BoardPageState(this.userLoggedin);
 }
 
 class BoardPageState extends State<BoardPage> {
+  final Person userLoggedIn;
   List<Message> newMessages;
   List<Message> savedMessages;
   List<Draft> drafts;
   List<Person> contacts;
+
+  BoardPageState(this.userLoggedIn);
 
   @override
   void initState() {
@@ -60,7 +65,7 @@ class BoardPageState extends State<BoardPage> {
       length: 4,
       child: Scaffold(
         appBar: AppBar(
-          title: Text("<logged-in user's name_here>'s Message Board"),
+          title: Text("${this.userLoggedIn.name}'s Message Board"),
           backgroundColor: Colors.grey,
           bottom: TabBar(
             isScrollable: true,
