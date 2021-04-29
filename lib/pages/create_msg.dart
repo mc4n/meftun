@@ -29,6 +29,7 @@ class CreateMessagePageState extends State<CreateMessagePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Colors.grey,
         title: Text("Post a message."),
         leading: CloseButton(),
         actions: <Widget>[

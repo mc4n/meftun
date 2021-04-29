@@ -42,6 +42,7 @@ class _RegisterPageState extends State<RegisterPage> {
 
   Widget _buildBar(BuildContext context) {
     return new AppBar(
+      backgroundColor: Colors.grey,
       title: new Text("Register"),
       centerTitle: true,
     );
@@ -55,6 +56,12 @@ class _RegisterPageState extends State<RegisterPage> {
             child: new TextField(
               controller: _uNameFilter,
               decoration: new InputDecoration(labelText: 'Username:'),
+            ),
+          ),
+          new Container(
+            child: new TextField(
+              controller: _uNameFilter,
+              decoration: new InputDecoration(labelText: 'Name:'),
             ),
           ),
         ],

@@ -49,6 +49,7 @@ class _LoginPageState extends State<LoginPage> {
 
   Widget _buildBar(BuildContext context) {
     return new AppBar(
+      backgroundColor: Colors.blueGrey.shade200,
       title: new Text("Login"),
       centerTitle: true,
     );
