@@ -6,6 +6,8 @@ import 'package:me_flutting/board.dart';
 import 'package:me_flutting/models/mock_repo.dart';
 import 'package:me_flutting/models/person.dart';
 import 'package:me_flutting/pages/signup.dart';
+
+import 'about.dart';
 // --
 
 class LoginPage extends StatefulWidget {
@@ -79,6 +81,10 @@ class _LoginPageState extends State<LoginPage> {
             child: new Text('Sign Up'),
             onPressed: _createAccountClaimed,
           ),
+          new TextButton(
+            child: new Text('About'),
+            onPressed: _aboutClaimed,
+          ),
         ],
       ),
     );
@@ -106,6 +112,13 @@ class _LoginPageState extends State<LoginPage> {
     Navigator.push(
       context,
       MaterialPageRoute(builder: (context) => RegisterPage()),
+    );
+  }
+
+  void _aboutClaimed() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => AboutPage()),
     );
   }
 }
