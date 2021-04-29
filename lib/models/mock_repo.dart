@@ -51,7 +51,7 @@ final mockSavedMessages = [
   Message(
     uuid: uuid.v4(),
     body: "let's do diz thug style, maan. i am down wit ya til' da very end!",
-    saved: false,
+    saved: true,
     from: mocklocalUsers[0],
   ),
 ];
