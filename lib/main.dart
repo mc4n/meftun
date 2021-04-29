@@ -205,12 +205,20 @@ class MessageCardItem extends StatelessWidget {
   }
 
   Widget _itemHeader(Message inboxMsg) {
+    ImageProvider<Object> iPv = AssetImage("avatar.png");
+
+    if (inboxMsg.from.photoURL.startsWith("http")) {
+      iPv = NetworkImage(
+        inboxMsg.from.photoURL,
+      );
+    } else if (inboxMsg.from.photoURL != "") {
+      iPv = AssetImage("${inboxMsg.from.photoURL}.jpg");
+    }
+
     return Row(
       children: <Widget>[
         CircleAvatar(
-          backgroundImage: NetworkImage(
-            inboxMsg.from.photoURL,
-          ),
+          backgroundImage: iPv,
         ),
         Expanded(
           child: Padding(
