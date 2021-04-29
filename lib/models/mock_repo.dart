@@ -17,12 +17,6 @@ final mockNewMessages = [
   ),
   Message(
     uuid: uuid.v4(),
-    body: "let's do diz thug style, maan. i am down wit ya til' da very end!",
-    saved: false,
-    from: mocklocalUsers[0],
-  ),
-  Message(
-    uuid: uuid.v4(),
     body: "let's destroy the poor people, huhhuhaha!",
     saved: false,
     from: Person(
@@ -56,14 +50,10 @@ final mockSavedMessages = [
   ),
   Message(
     uuid: uuid.v4(),
-    body: "Oturum açmamı ister misin yakışıklı?",
-    saved: true,
-    from: Person(
-      name: "Ayca_34",
-      username: "a34",
-      photoURL: "",
-    ),
-  )
+    body: "let's do diz thug style, maan. i am down wit ya til' da very end!",
+    saved: false,
+    from: mocklocalUsers[0],
+  ),
 ];
 
 final mocklocalUsers = [
