@@ -1,15 +1,13 @@
 // -- external libs
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:me_flutting/models/draft.dart';
-import 'package:me_flutting/models/person.dart';
-import 'package:me_flutting/pages/people_list.dart';
 // --
 
 // -- model uses
 import 'models/msg.dart';
 import 'models/mock_repo.dart';
 import 'models/draft.dart';
+import 'models/person.dart';
 // --
 
 // -- pages
@@ -17,6 +15,7 @@ import 'pages/create_msg.dart';
 import 'pages/inbox_msgs.dart';
 import 'pages/saved_msgs.dart';
 import 'pages/draft_list.dart';
+import 'pages/people_list.dart';
 // --
 //
 

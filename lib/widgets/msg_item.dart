@@ -4,7 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/rendering.dart';
 // --
 
-// -- model uses
+// -- models
 import '../models/msg.dart';
 // --
 
@@ -13,10 +13,10 @@ import '../board.dart';
 // --
 //
 
-class MessageCardItem extends StatelessWidget {
+class MessageItem extends StatelessWidget {
   final Message inboxMsg;
 
-  const MessageCardItem({Key key, this.inboxMsg}) : super(key: key);
+  const MessageItem({Key key, this.inboxMsg}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

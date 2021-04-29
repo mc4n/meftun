@@ -1,13 +1,17 @@
 // -- external libs
-
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:me_flutting/board.dart';
-import 'package:me_flutting/models/mock_repo.dart';
-import 'package:me_flutting/models/person.dart';
-import 'package:me_flutting/pages/signup.dart';
+// --
 
+// -- models
+import '../models/mock_repo.dart';
+import '../models/person.dart';
+// --
+
+// -- pages
+import '../board.dart';
 import 'about.dart';
+import 'signup.dart';
 // --
 
 class LoginPage extends StatefulWidget {
