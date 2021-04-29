@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 
 // -- pages
-import 'pages/msg_list.dart';
+import 'board.dart';
 //
 
 void main() => runApp(MyApp());
@@ -13,7 +13,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Message Panel',
-      home: MessagesPage(),
+      home: BoardPage(),
     );
   }
 }
