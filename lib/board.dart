@@ -1,16 +1,22 @@
 // -- external libs
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:me_flutting/models/draft.dart';
+import 'package:me_flutting/models/person.dart';
+import 'package:me_flutting/pages/people_list.dart';
 // --
 
 // -- model uses
 import 'models/msg.dart';
 import 'models/mock_repo.dart';
+import 'models/draft.dart';
 // --
 
 // -- pages
 import 'pages/create_msg.dart';
-import 'pages/msg_list.dart';
+import 'pages/inbox_msgs.dart';
+import 'pages/saved_msgs.dart';
+import 'pages/draft_list.dart';
 // --
 //
 
@@ -26,6 +32,8 @@ class BoardPage extends StatefulWidget {
 class BoardPageState extends State<BoardPage> {
   List<Message> newMessages;
   List<Message> savedMessages;
+  List<Draft> drafts;
+  List<Person> contacts;
 
   @override
   void initState() {
@@ -33,12 +41,13 @@ class BoardPageState extends State<BoardPage> {
 
     newMessages = [];
     savedMessages = [];
-    loadMessages();
-  }
+    drafts = [];
+    contacts = [];
 
-  void loadMessages() {
     newMessages.addAll(mockNewMessages);
     savedMessages.addAll(mockSavedMessages);
+    contacts.addAll(mocklocalUsers);
+    drafts.addAll(mockLocalDrafts);
   }
 
   static BoardPageState of(BuildContext context) {
@@ -48,23 +57,27 @@ class BoardPageState extends State<BoardPage> {
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-      length: 2,
+      length: 4,
       child: Scaffold(
         appBar: AppBar(
-          title: Text("<name_here>'s Message Board"),
+          title: Text("<logged-in user's name_here>'s Message Board"),
           backgroundColor: Colors.grey,
           bottom: TabBar(
             isScrollable: true,
             tabs: [
               _buildCategoryTab("Inbox"),
               _buildCategoryTab("Saved"),
+              _buildCategoryTab("Drafts"),
+              _buildCategoryTab("People"),
             ],
           ),
         ),
         body: TabBarView(
           children: [
-            MessagesList(title: "Inbox", inboxMsgs: newMessages),
-            MessagesList(title: "Saved", inboxMsgs: savedMessages),
+            InboxMessagesList(inboxMsgs: newMessages),
+            SavedMessagesList(inboxMsgs: savedMessages),
+            DraftList(drafts: drafts),
+            PeopleList(buddies: contacts)
           ],
         ),
         floatingActionButton: FloatingActionButton(

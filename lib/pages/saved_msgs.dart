@@ -9,15 +9,14 @@ import '../models/msg.dart';
 // --
 
 // -- pages
-import '../widgets/card_item.dart';
+import '../widgets/msg_item.dart';
 // --
 //
 
-class MessagesList extends StatelessWidget {
-  final String title;
+class SavedMessagesList extends StatelessWidget {
   final List<Message> inboxMsgs;
 
-  const MessagesList({Key key, this.title, this.inboxMsgs}) : super(key: key);
+  const SavedMessagesList({Key key, this.inboxMsgs}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +24,7 @@ class MessagesList extends StatelessWidget {
       mainAxisSize: MainAxisSize.max,
       children: <Widget>[
         Padding(
-          child: Text(title),
+          child: Text("Saved"),
           padding: EdgeInsets.only(top: 16.0),
         ),
         inboxMsgs.length > 0
@@ -38,7 +37,7 @@ class MessagesList extends StatelessWidget {
                   },
                 ),
               )
-            : Text("horaay, we have no new message here!"),
+            : Text("No message saved."),
       ],
     );
   }

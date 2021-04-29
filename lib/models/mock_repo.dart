@@ -1,3 +1,4 @@
+import 'draft.dart';
 import 'msg.dart';
 import 'person.dart';
 import 'package:uuid/uuid.dart';
@@ -71,5 +72,22 @@ final mocklocalUsers = [
     name: "Güllü",
     username: "gulo",
     photoURL: "",
+  ),
+];
+
+final mockLocalDrafts = [
+  Draft(
+    uuid: uuid.v4(),
+    body: "telefonum bozuldu efendim.",
+    to: Person(
+      name: "Cemalettin",
+      username: "cemo",
+      photoURL: "",
+    ),
+  ),
+  Draft(
+    uuid: uuid.v4(),
+    body: "I too got plenty of love for ya... :)",
+    to: mocklocalUsers[0],
   ),
 ];
