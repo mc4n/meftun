@@ -14,9 +14,9 @@ import '../widgets/msg_item.dart';
 //
 
 class SavedMessagesList extends StatelessWidget {
-  final List<Message> inboxMsgs;
+  final List<Message> savedMsgs;
 
-  const SavedMessagesList({Key key, this.inboxMsgs}) : super(key: key);
+  const SavedMessagesList({Key key, this.savedMsgs}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -27,13 +27,13 @@ class SavedMessagesList extends StatelessWidget {
           child: Text("Saved"),
           padding: EdgeInsets.only(top: 16.0),
         ),
-        inboxMsgs.length > 0
+        savedMsgs.length > 0
             ? Expanded(
                 child: ListView.builder(
                   physics: BouncingScrollPhysics(),
-                  itemCount: inboxMsgs.length,
+                  itemCount: savedMsgs.length,
                   itemBuilder: (BuildContext context, int index) {
-                    return MessageItem(inboxMsg: inboxMsgs[index]);
+                    return MessageItem(msgItem: savedMsgs[index]);
                   },
                 ),
               )

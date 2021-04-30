@@ -3,10 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/rendering.dart';
 // --
-
 // -- models
 import '../models/person.dart';
-// --
+
+// -- pages
+import '../pages/person_details.dart';
+//
 
 class PersonItem extends StatelessWidget {
   final Person buddy;
@@ -31,7 +33,16 @@ class PersonItem extends StatelessWidget {
       child: Padding(
         child: Column(
           children: <Widget>[
-            Text(this.buddy.name),
+            TextButton(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) =>
+                            PersonDetailsPage(selectedPerson: buddy)),
+                  );
+                },
+                child: Text(this.buddy.name)),
             CircleAvatar(backgroundImage: iPv),
           ],
         ),

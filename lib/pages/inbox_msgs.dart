@@ -33,7 +33,7 @@ class InboxMessagesList extends StatelessWidget {
                   physics: BouncingScrollPhysics(),
                   itemCount: inboxMsgs.length,
                   itemBuilder: (BuildContext context, int index) {
-                    return MessageItem(inboxMsg: inboxMsgs[index]);
+                    return MessageItem(msgItem: inboxMsgs[index]);
                   },
                 ),
               )

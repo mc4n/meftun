@@ -10,26 +10,26 @@ import '../models/msg.dart';
 
 // -- pages
 import '../board.dart';
+import '../pages/msg_details.dart';
 // --
-//
 
 class MessageItem extends StatelessWidget {
-  final Message inboxMsg;
+  final Message msgItem;
 
-  const MessageItem({Key key, this.inboxMsg}) : super(key: key);
+  const MessageItem({Key key, this.msgItem}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Card(
-      key: ValueKey(inboxMsg.uuid),
+      key: ValueKey(msgItem.uuid),
       color: Colors.lightGreen.shade100,
       margin: EdgeInsets.symmetric(vertical: 10.0, horizontal: 25.0),
       child: Padding(
         child: Column(
           children: <Widget>[
-            _itemHeader(inboxMsg),
-            Text(this.inboxMsg.body),
-            _itemFooter(context, inboxMsg)
+            _itemHeader(context, msgItem),
+            Text(this.msgItem.body),
+            _itemFooter(context, msgItem)
           ],
         ),
         padding: EdgeInsets.all(8.0),
@@ -37,15 +37,15 @@ class MessageItem extends StatelessWidget {
     );
   }
 
-  Widget _itemFooter(BuildContext context, Message inboxMsg) {
-    if (inboxMsg.isSaved) {
+  Widget _itemFooter(BuildContext context, Message msgItem) {
+    if (msgItem.isSaved) {
       return Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
         Chip(
           label: Text("Saved."),
         ),
         ElevatedButton(
             onPressed: () {
-              BoardPageState.of(context).unsave(inboxMsg);
+              BoardPageState.of(context).unsave(msgItem);
             },
             child: Text("Unsave"))
       ]);
@@ -56,12 +56,12 @@ class MessageItem extends StatelessWidget {
           ElevatedButton(
               child: Text("Save"),
               onPressed: () {
-                BoardPageState.of(context).save(inboxMsg);
+                BoardPageState.of(context).save(msgItem);
               }),
           TextButton(
             child: Text("Ignore"),
             onPressed: () {
-              BoardPageState.of(context).ignore(inboxMsg);
+              BoardPageState.of(context).ignore(msgItem);
             },
           )
         ],
@@ -69,15 +69,15 @@ class MessageItem extends StatelessWidget {
     }
   }
 
-  Widget _itemHeader(Message inboxMsg) {
+  Widget _itemHeader(BuildContext context, Message msgItem) {
     ImageProvider<Object> iPv = AssetImage("avatar.png");
 
-    if (inboxMsg.from.photoURL.startsWith("http")) {
+    if (msgItem.from.photoURL.startsWith("http")) {
       iPv = NetworkImage(
-        inboxMsg.from.photoURL,
+        msgItem.from.photoURL,
       );
-    } else if (inboxMsg.from.photoURL != "") {
-      iPv = AssetImage("${inboxMsg.from.photoURL}.jpg");
+    } else if (msgItem.from.photoURL != "") {
+      iPv = AssetImage("${msgItem.from.photoURL}.jpg");
     }
 
     return Row(
@@ -88,7 +88,16 @@ class MessageItem extends StatelessWidget {
         Expanded(
           child: Padding(
               padding: EdgeInsets.only(left: 8.0),
-              child: Text("${inboxMsg.from.name} says: ")),
+              child: TextButton(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) =>
+                              MessageDetailsPage(selectedMessage: msgItem)),
+                    );
+                  },
+                  child: Text("${msgItem.from.name} says: "))),
         )
       ],
     );

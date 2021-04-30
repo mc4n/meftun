@@ -1,9 +1,12 @@
 // -- external libs
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:me_flutting/models/msg.dart';
 // --
 
 class MessageDetailsPage extends StatelessWidget {
+  final Message selectedMessage;
+  const MessageDetailsPage({Key key, this.selectedMessage}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
@@ -17,7 +20,9 @@ class MessageDetailsPage extends StatelessWidget {
         child: new Column(
           children: <Widget>[
             Text(
-              "Message Details to be shown here",
+              this.selectedMessage.from.name +
+                  " : " +
+                  this.selectedMessage.body,
               style: TextStyle(fontSize: 40),
             ),
           ],

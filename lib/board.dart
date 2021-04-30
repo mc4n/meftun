@@ -79,7 +79,7 @@ class BoardPageState extends State<BoardPage> {
         body: TabBarView(
           children: [
             InboxMessagesList(inboxMsgs: newMessages),
-            SavedMessagesList(inboxMsgs: savedMessages),
+            SavedMessagesList(savedMsgs: savedMessages),
             DraftList(drafts: drafts),
             PeopleList(buddies: contacts)
           ],

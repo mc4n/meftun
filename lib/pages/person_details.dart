@@ -2,8 +2,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 // --
+import '../models/person.dart';
+//
 
 class PersonDetailsPage extends StatelessWidget {
+  final Person selectedPerson;
+  const PersonDetailsPage({Key key, this.selectedPerson}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
@@ -17,8 +21,8 @@ class PersonDetailsPage extends StatelessWidget {
         child: new Column(
           children: <Widget>[
             Text(
-              "Person Details to be shown here",
-              style: TextStyle(fontSize: 20),
+              this.selectedPerson.name,
+              style: TextStyle(fontSize: 30),
             ),
           ],
         ),
