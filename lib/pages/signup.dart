@@ -3,83 +3,49 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 // --
 
-class RegisterPage extends StatefulWidget {
-  @override
-  State<StatefulWidget> createState() => new _RegisterPageState();
-}
-
-class _RegisterPageState extends State<RegisterPage> {
-  final TextEditingController _uNameFilter = new TextEditingController();
-  String _uName = "";
-
-  _LoginPageState() {
-    void _uNameListen() {
-      if (_uNameFilter.text.isEmpty) {
-        _uName = "";
-      } else {
-        _uName = _uNameFilter.text;
-      }
-    }
-
-    _uNameFilter.addListener(_uNameListen);
-  }
-
+class RegisterPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
-      appBar: _buildBar(context),
-      body: new Container(
+      appBar: AppBar(
+        backgroundColor: Colors.grey,
+        title: Text("Register"),
+        centerTitle: true,
+      ),
+      body: Container(
         padding: EdgeInsets.all(16.0),
-        child: new Column(
+        child: Column(
           children: <Widget>[
-            _buildTextFields(),
-            _buildButtons(),
+            Container(
+              child: Column(
+                children: <Widget>[
+                  Container(
+                    child: TextField(
+                      decoration: InputDecoration(labelText: 'Username:'),
+                    ),
+                  ),
+                  Container(
+                    child: TextField(
+                      decoration: InputDecoration(labelText: 'Name:'),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Container(
+              child: Column(
+                children: <Widget>[
+                  TextButton(
+                    child: Text('Register'),
+                    onPressed: () => {
+                      // done!
+                    },
+                  ),
+                ],
+              ),
+            ),
           ],
         ),
-      ),
-    );
-  }
-
-  Widget _buildBar(BuildContext context) {
-    return new AppBar(
-      backgroundColor: Colors.grey,
-      title: new Text("Register"),
-      centerTitle: true,
-    );
-  }
-
-  Widget _buildTextFields() {
-    return new Container(
-      child: new Column(
-        children: <Widget>[
-          new Container(
-            child: new TextField(
-              controller: _uNameFilter,
-              decoration: new InputDecoration(labelText: 'Username:'),
-            ),
-          ),
-          new Container(
-            child: new TextField(
-              controller: _uNameFilter,
-              decoration: new InputDecoration(labelText: 'Name:'),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildButtons() {
-    return new Container(
-      child: new Column(
-        children: <Widget>[
-          new TextButton(
-            child: new Text('Register'),
-            onPressed: () => {
-              // done!
-            },
-          ),
-        ],
       ),
     );
   }

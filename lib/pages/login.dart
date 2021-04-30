@@ -96,8 +96,7 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   void _loginClaimed() {
-    Person user = null;
-
+    Person user;
     try {
       user = mocklocalUsers.firstWhere((i) => i.username == _uName);
       if (user == null) {

@@ -8,11 +8,6 @@ import 'package:flutter/rendering.dart';
 import '../models/person.dart';
 // --
 
-// -- pages
-import '../board.dart';
-// --
-//
-
 class PersonItem extends StatelessWidget {
   final Person buddy;
 

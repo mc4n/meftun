@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 
 // -- pages
-import 'board.dart';
 import 'pages/login.dart';
 //
 

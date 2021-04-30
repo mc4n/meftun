@@ -3,12 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 // --
 
-class MessageDetailsPage extends StatefulWidget {
-  @override
-  State<StatefulWidget> createState() => new _MessageDetailsPageState();
-}
-
-class _MessageDetailsPageState extends State<MessageDetailsPage> {
+class MessageDetailsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
