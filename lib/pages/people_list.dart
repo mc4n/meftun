@@ -8,6 +8,7 @@ import 'package:flutter/rendering.dart';
 import '../models/person.dart';
 // --
 
+import '../widgets/person_item.dart';
 //
 
 class PeopleList extends StatelessWidget {
@@ -22,7 +23,7 @@ class PeopleList extends StatelessWidget {
       children: <Widget>[
         Padding(
           child: Text("People"),
-          padding: EdgeInsets.only(top: 16.0),
+          padding: EdgeInsets.symmetric(vertical: 16.0),
         ),
         buddies.length > 0
             ? Expanded(
@@ -30,11 +31,11 @@ class PeopleList extends StatelessWidget {
                   physics: BouncingScrollPhysics(),
                   itemCount: buddies.length,
                   itemBuilder: (BuildContext context, int index) {
-                    return Text(buddies[index].name);
+                    return PersonItem(buddy: buddies[index]);
                   },
                 ),
               )
-            : Text("No people here."),
+            : Text("No people to show."),
       ],
     );
   }
