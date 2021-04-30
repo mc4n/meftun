@@ -62,7 +62,7 @@ final mocklocalUsers = [
   Person(
     name: "Tupac",
     username: "2pac",
-    photoURL: "",
+    photoURL: "pac",
   ),
   Person(
     name: "Muzaffer",
