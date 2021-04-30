@@ -76,8 +76,8 @@ final mocklocalUsers = [
   ),
 ];
 
-final mockLocalDrafts = [
-  Draft(
+final List<Draft> mockLocalDrafts = [
+/*  Draft(
     uuid: uuid.v4(),
     body: "telefonum bozuldu efendim.",
     to: Person(
@@ -90,5 +90,5 @@ final mockLocalDrafts = [
     uuid: uuid.v4(),
     body: "I too got plenty of love for ya... :)",
     to: mocklocalUsers[0],
-  ),
+  ), */
 ];
