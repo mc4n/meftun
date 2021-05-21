@@ -1,11 +1,13 @@
-class Person {
-  final String username;
-  final String name;
-  final String photoURL;
+import 'package:me_flutting/models/chat.dart';
 
-  Person({
-    this.username,
-    this.name,
-    this.photoURL,
-  });
+class Person extends Chat {
+  final String username;
+
+  Person(this.username, [name = '', photoURL = ''])
+      : super(null, name, photoURL);
+
+  @override
+  String toString() {
+    return '[User]\nusername : ${username ?? ""} \n name: $name??""';
+  }
 }

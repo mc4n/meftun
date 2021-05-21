@@ -3,37 +3,26 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 // --
 
-// -- models
-import '../models/mock_repo.dart';
-import '../models/person.dart';
-// --
-
-// -- pages
-import '../board.dart';
-import 'about.dart';
-import 'signup.dart';
-// --
-
 class LoginPage extends StatefulWidget {
   @override
   State<StatefulWidget> createState() => new _LoginPageState();
 }
 
 class _LoginPageState extends State<LoginPage> {
-  final TextEditingController _uNameFilter = new TextEditingController();
-  String _uName = "";
+  // final TextEditingController _uNameFilter = new TextEditingController();
+  // String _uName = "";
 
-  _LoginPageState() {
-    void _uNameListen() {
-      if (_uNameFilter.text.isEmpty) {
-        _uName = "";
-      } else {
-        _uName = _uNameFilter.text;
-      }
-    }
+  // _LoginPageState() {
+  //   void _uNameListen() {
+  //     if (_uNameFilter.text.isEmpty) {
+  //       _uName = "";
+  //     } else {
+  //       _uName = _uNameFilter.text;
+  //     }
+  //   }
 
-    _uNameFilter.addListener(_uNameListen);
-  }
+  //   _uNameFilter.addListener(_uNameListen);
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -65,7 +54,7 @@ class _LoginPageState extends State<LoginPage> {
         children: <Widget>[
           new Container(
             child: new TextField(
-              controller: _uNameFilter,
+              //controller: _uNameFilter,
               decoration: new InputDecoration(labelText: 'Username:'),
             ),
           ),
@@ -80,49 +69,50 @@ class _LoginPageState extends State<LoginPage> {
         children: <Widget>[
           new ElevatedButton(
             child: new Text('Login'),
-            onPressed: _loginClaimed,
+            onPressed: () => {this._loginClaimed(context)},
           ),
-          new TextButton(
-            child: new Text('Sign Up'),
-            onPressed: _createAccountClaimed,
-          ),
-          new TextButton(
-            child: new Text('About'),
-            onPressed: _aboutClaimed,
-          ),
+          // new TextButton(
+          //   child: new Text('Sign Up'),
+          //   onPressed: _createAccountClaimed,
+          // ),
+          // new TextButton(
+          //   child: new Text('About'),
+          //   onPressed: _aboutClaimed,
+          // ),
         ],
       ),
     );
   }
 
-  void _loginClaimed() {
-    Person user;
-    try {
-      user = mocklocalUsers.firstWhere((i) => i.username == _uName);
-      if (user == null) {
-        user = Person(username: "<default>", name: "Anonymous", photoURL: "");
-      }
-    } catch (e) {
-      user = Person(username: "<default>", name: "Anonymous", photoURL: "");
-    }
+  void _loginClaimed(BuildContext ct) {
+    Navigator.pop(ct);
+    // Person user;
+    // try {
+    //   user = [].firstWhere((i) => i.username == _uName);
+    //   if (user == null) {
+    //     user = Person(username: "<default>", name: "Anonymous", photoURL: "");
+    //   }
+    // } catch (e) {
+    //   user = Person(username: "<default>", name: "Anonymous", photoURL: "");
+    // }
 
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => BoardPage(userLoggedin: user)),
-    );
+    // Navigator.push(
+    //   context,
+    //   MaterialPageRoute(builder: (context) => BoardPage(userLoggedin: user)),
+    // );
   }
 
-  void _createAccountClaimed() {
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => RegisterPage()),
-    );
-  }
+  // void _createAccountClaimed() {
+  //   Navigator.push(
+  //     context,
+  //     MaterialPageRoute(builder: (context) => RegisterPage()),
+  //   );
+  // }
 
-  void _aboutClaimed() {
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => AboutPage()),
-    );
-  }
+  // void _aboutClaimed() {
+  //   Navigator.push(
+  //     context,
+  //     MaterialPageRoute(builder: (context) => AboutPage()),
+  //   );
+  // }
 }

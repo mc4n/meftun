@@ -1,29 +1,15 @@
-// -- external libs
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-// --
 
-// -- model uses
-import 'models/msg.dart';
-import 'models/mock_repo.dart';
-import 'models/draft.dart';
+import 'models/message.dart';
 import 'models/person.dart';
-// --
 
-// -- pages
-import 'pages/create_msg.dart';
-import 'pages/inbox_msgs.dart';
-import 'pages/saved_msgs.dart';
-import 'pages/draft_list.dart';
-import 'pages/people_list.dart';
-// --
-//
+import 'pages/chat_list.dart';
 
 class BoardPage extends StatefulWidget {
-  final Person userLoggedin;
+  final Person userLoggedin = Person("mcan", "Mustafa Can");
   BoardPage({
     Key key,
-    this.userLoggedin,
   }) : super(key: key);
 
   @override
@@ -32,26 +18,12 @@ class BoardPage extends StatefulWidget {
 
 class BoardPageState extends State<BoardPage> {
   final Person userLoggedIn;
-  List<Message> newMessages;
-  List<Message> savedMessages;
-  List<Draft> drafts;
-  List<Person> contacts;
 
   BoardPageState(this.userLoggedIn);
 
   @override
   void initState() {
     super.initState();
-
-    newMessages = [];
-    savedMessages = [];
-    drafts = [];
-    contacts = [];
-
-    newMessages.addAll(mockNewMessages);
-    savedMessages.addAll(mockSavedMessages);
-    contacts.addAll(mocklocalUsers);
-    drafts.addAll(mockLocalDrafts);
   }
 
   static BoardPageState of(BuildContext context) {
@@ -61,42 +33,35 @@ class BoardPageState extends State<BoardPage> {
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-      length: 4,
+      length: 2,
       child: Scaffold(
         appBar: AppBar(
-          title: Text("${this.userLoggedIn.name}'s Message Board"),
+          //title: Text("${this.userLoggedIn.name}'s Message Board"),
           backgroundColor: Colors.grey,
           bottom: TabBar(
             isScrollable: true,
             tabs: [
-              _buildCategoryTab("Inbox"),
-              _buildCategoryTab("Saved"),
-              _buildCategoryTab("Drafts"),
+              _buildCategoryTab("Chats"),
               _buildCategoryTab("People"),
             ],
           ),
         ),
         body: TabBarView(
-          children: [
-            InboxMessagesList(inboxMsgs: newMessages),
-            SavedMessagesList(savedMsgs: savedMessages),
-            DraftList(drafts: drafts),
-            PeopleList(buddies: contacts)
-          ],
+          children: [DraftList(), DraftList()],
         ),
-        floatingActionButton: FloatingActionButton(
-          onPressed: () {
-            Navigator.of(context).push(
-              MaterialPageRoute(
-                builder: (context) => CreateMessagePage(
-                  buddys: mocklocalUsers,
-                ),
-              ),
-            );
-          },
-          tooltip: 'Post a message.',
-          child: Icon(Icons.add),
-        ),
+        // floatingActionButton: FloatingActionButton(
+        //   onPressed: () {
+        //     Navigator.of(context).push(
+        //       MaterialPageRoute(
+        //         builder: (context) => CreateMessagePage(
+        //           draft: Draft("", null, userLoggedIn),
+        //         ),
+        //       ),
+        //     );
+        //   },
+        //   tooltip: 'start a chat.',
+        //   child: Icon(Icons.add),
+        // ),
       ),
     );
   }
@@ -107,31 +72,21 @@ class BoardPageState extends State<BoardPage> {
     );
   }
 
-  void ignore(Message inboxMsg) {
+  void deleteChat(Message _lastMsg) {
     setState(() {
-      if (inboxMsg.isSaved) {
-        savedMessages.remove(inboxMsg);
-      } else {
-        newMessages.remove(inboxMsg);
-      }
+      //
     });
   }
 
-  void save(Message inboxMsg) {
+  void archieveChat(Message _lastMsg) {
     setState(() {
-      newMessages.remove(inboxMsg);
-      savedMessages.add(inboxMsg.copyWith(
-        saved: true,
-      ));
+      //
     });
   }
 
-  void unsave(Message savedMsg) {
+  void unarchieveChat(Message _lastMsg) {
     setState(() {
-      savedMessages.remove(savedMsg);
-      newMessages.add(savedMsg.copyWith(
-        saved: false,
-      ));
+      //
     });
   }
 }

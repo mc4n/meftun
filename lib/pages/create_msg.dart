@@ -1,3 +1,5 @@
+import 'package:me_flutting/models/draft.dart';
+
 import '../models/person.dart';
 //
 import 'package:flutter/services.dart';
@@ -7,22 +9,24 @@ import 'package:flutter/rendering.dart';
 
 class CreateMessagePage extends StatefulWidget {
   final List<Person> buddys;
+  final Draft draft;
 
-  CreateMessagePage({Key key, this.buddys}) : super(key: key);
+  CreateMessagePage({Key key, this.buddys, this.draft}) : super(key: key);
 
   @override
   CreateMessagePageState createState() {
-    return new CreateMessagePageState();
+    return new CreateMessagePageState(this.draft);
   }
 }
 
 class CreateMessagePageState extends State<CreateMessagePage> {
   final _formKey = GlobalKey<FormState>();
-  Person _selectedPerson;
+
+  final Draft _draftToSend;
+  CreateMessagePageState(this._draftToSend);
 
   static CreateMessagePageState of(BuildContext context) {
-    return context.findAncestorStateOfType<
-        CreateMessagePageState>(); //(TypeMatcher<CreateMessagePageState>());
+    return context.findAncestorStateOfType<CreateMessagePageState>();
   }
 
   @override
@@ -31,7 +35,11 @@ class CreateMessagePageState extends State<CreateMessagePage> {
       appBar: AppBar(
         backgroundColor: Colors.grey,
         title: Text("Post a message."),
-        leading: CloseButton(),
+        leading: CloseButton(
+          onPressed: () {
+            // save draft here!
+          },
+        ),
         actions: <Widget>[
           Builder(
             builder: (context) => TextButton(
@@ -55,10 +63,10 @@ class CreateMessagePageState extends State<CreateMessagePage> {
               Text("Receipt:"),
               DropdownButtonFormField<Person>(
                 hint: Text("Select a buddy"),
-                value: _selectedPerson,
+                value: _draftToSend.to,
                 onChanged: (buddy) {
                   setState(() {
-                    _selectedPerson = buddy;
+                    // change the value of 'to' field here!
                   });
                 },
                 items: widget.buddys
@@ -102,7 +110,7 @@ class CreateMessagePageState extends State<CreateMessagePage> {
 
   void save() {
     if (_formKey.currentState.validate()) {
-      // store the inbox_msg request on firebase
+      // send msg here!
       Navigator.pop(context);
     }
   }

@@ -1,25 +1,19 @@
+import 'package:uuid/uuid.dart';
+
+import 'message.dart';
 import 'person.dart';
 
 class Draft {
-  final String uuid;
+  static Uuid uuid = Uuid();
   final String body;
-  final Person to;
+  final Person to, from;
 
-  Draft({
-    this.uuid,
-    this.body,
-    this.to,
-  });
+  Draft(this.body, this.to, this.from);
 
-  Draft copyWith({
-    String uuid,
-    String body,
-    Person receipt,
-  }) {
-    return Draft(
-      uuid: uuid ?? this.uuid,
-      body: body ?? this.body,
-      to: receipt ?? this.to,
-    );
+  Message toMessage() {
+    var _msg = Message(body, to, from, uuid.v4());
+    print("msg created!");
+    print(_msg);
+    return _msg;
   }
 }
