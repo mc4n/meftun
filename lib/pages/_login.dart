@@ -1,14 +1,12 @@
-// -- external libs
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-// --
 
-class LoginPage extends StatefulWidget {
+class _LoginPage extends StatefulWidget {
   @override
   State<StatefulWidget> createState() => new _LoginPageState();
 }
 
-class _LoginPageState extends State<LoginPage> {
+class _LoginPageState extends State<_LoginPage> {
   // final TextEditingController _uNameFilter = new TextEditingController();
   // String _uName = "";
 
