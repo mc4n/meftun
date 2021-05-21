@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 
+import 'models/draft.dart';
 import 'models/message.dart';
 import 'models/person.dart';
 
@@ -21,8 +22,25 @@ class BoardPageState extends State<BoardPage> {
 
   BoardPageState(this.userLoggedIn);
 
+  final List<Draft> allDrafts = [];
+
+  final List<Person> people = [
+    Person('2pac'),
+    Person('ali'),
+    Person('veli'),
+    Person('deli'),
+    Person('peri')
+  ];
+
   @override
   void initState() {
+    allDrafts.addAll([
+      Draft('whatsup bro!', people[0], userLoggedIn, people[0]),
+      Draft('hehehe', people[1], userLoggedIn, people[1]),
+      Draft('ada daps dqpweq wdw lpqwld', people[2], userLoggedIn, people[2]),
+      Draft('ben deli degilim nokta.', people[3], userLoggedIn, people[3]),
+      Draft('periphery', people[4], userLoggedIn, people[4])
+    ]);
     super.initState();
   }
 
@@ -33,35 +51,24 @@ class BoardPageState extends State<BoardPage> {
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-      length: 2,
+      length: 1,
       child: Scaffold(
         appBar: AppBar(
-          //title: Text("${this.userLoggedIn.name}'s Message Board"),
           backgroundColor: Colors.grey,
           bottom: TabBar(
             isScrollable: true,
             tabs: [
               _buildCategoryTab("Chats"),
-              _buildCategoryTab("People"),
             ],
           ),
         ),
         body: TabBarView(
-          children: [DraftList(), DraftList()],
+          children: [
+            DraftList(
+              drafts: allDrafts,
+            )
+          ],
         ),
-        // floatingActionButton: FloatingActionButton(
-        //   onPressed: () {
-        //     Navigator.of(context).push(
-        //       MaterialPageRoute(
-        //         builder: (context) => CreateMessagePage(
-        //           draft: Draft("", null, userLoggedIn),
-        //         ),
-        //       ),
-        //     );
-        //   },
-        //   tooltip: 'start a chat.',
-        //   child: Icon(Icons.add),
-        // ),
       ),
     );
   }
