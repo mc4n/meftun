@@ -15,7 +15,7 @@ class DraftList extends StatelessWidget {
       mainAxisSize: MainAxisSize.max,
       children: <Widget>[
         Padding(
-          child: Text("Drafts"),
+          //child: Text("Chats"),
           padding: EdgeInsets.only(top: 16.0),
         ),
         drafts.length > 0
@@ -34,7 +34,7 @@ class DraftList extends StatelessWidget {
                               )
                             },
                         child: Text(
-                            "${drafts[index].to} : ${drafts[index].body}"));
+                            "${drafts[index].chatGroup?.id} : ${drafts[index].body}"));
                   },
                 ),
               )

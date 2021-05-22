@@ -6,14 +6,16 @@ import 'person.dart';
 
 class Draft {
   static Uuid uuid = Uuid();
-  final String body;
-  final Person to, from;
+  String body;
+  final Person from;
   final Chat chatGroup;
 
-  Draft(this.body, this.to, this.from, this.chatGroup);
+  Draft(this.from, this.chatGroup);
+
+  set setBody(String body) => this.body = body;
 
   Message toMessage() {
-    var _msg = Message(body, to, from, uuid.v4(), chatGroup);
+    var _msg = Message(body, from, uuid.v4(), chatGroup);
     print("msg created!");
     print(_msg);
     return _msg;
@@ -21,6 +23,6 @@ class Draft {
 
   @override
   String toString() {
-    return '[Draft]\n body: $body \n to?.username : ${to?.username}\n chatgroup.id?: ${chatGroup?.id}';
+    return '[Draft]\n body: $body \n chatgroup.id?: ${chatGroup?.id}';
   }
 }

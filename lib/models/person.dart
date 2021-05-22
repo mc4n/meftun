@@ -4,10 +4,5 @@ class Person extends Chat {
   final String username;
 
   Person(this.username, [name = '', photoURL = ''])
-      : super(null, name, photoURL);
-
-  @override
-  String toString() {
-    return '[User]\nusername : ${username ?? ""} \n name: $name??""';
-  }
+      : super(Chat.uuid.v4(), name, photoURL);
 }
