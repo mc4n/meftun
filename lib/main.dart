@@ -49,14 +49,16 @@ class MainPageState extends State<MainPage> {
   @override
   void initState() {
     allDrafts.addAll(people.map((e) => e.createDraft(userLoggedIn)));
-    var randomWords = ['lorem', 
-        'lorem ipsum :D',
-        'iyidir',
-        'come on!',
-    	'the world is yours!',
-    	'moooooo',
-    	'i love the way you do it',
-    	'what do you do?'];
+    var randomWords = [
+      'lorem',
+      'lorem ipsum :D',
+      'iyidir',
+      'come on!',
+      'the world is yours!',
+      'moooooo',
+      'i love the way you do it',
+      'what do you do?'
+    ];
     var rnd = Random();
     allDrafts.forEach((element) {
       element.setBody = randomWords[rnd.nextInt(randomWords.length)];
