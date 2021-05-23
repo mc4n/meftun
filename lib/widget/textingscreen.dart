@@ -9,12 +9,11 @@ class TextingScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-        home: Column(mainAxisSize: MainAxisSize.max, children: <Widget>[
+    return Column(mainAxisSize: MainAxisSize.max, children: <Widget>[
       Expanded(
         child: _lv(messages.length, _single),
       )
-    ]));
+    ]);
   }
 
   Widget _lv(int ct, Widget Function(BuildContext context, int index) bItem) {
@@ -35,6 +34,9 @@ class TextingScreen extends StatelessWidget {
   }
 
   Widget _msgBalloon(BuildContext _c, String tx, [isLeft = false]) {
-    return Text(tx, textAlign: isLeft ? TextAlign.left : TextAlign.right);
+    //chip, card
+
+    return Container(
+        child: Text(tx, textAlign: isLeft ? TextAlign.left : TextAlign.right));
   }
 }
