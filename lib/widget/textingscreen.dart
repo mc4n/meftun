@@ -36,9 +36,10 @@ class TextingScreen extends StatelessWidget {
     // Card();
     return Container(
         padding: EdgeInsets.symmetric(horizontal: 20),
-        child: Column(children: [
-          Text(usr, textAlign: isLeft ? TextAlign.left : TextAlign.right),
-          Text(msg.body, textAlign: isLeft ? TextAlign.left : TextAlign.right)
-        ]));
+        child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment:
+                isLeft ? CrossAxisAlignment.start : CrossAxisAlignment.end,
+            children: [Text(usr), Text(msg.body)]));
   }
 }
