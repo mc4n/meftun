@@ -15,6 +15,6 @@ class Chat {
   }
 
   Draft createDraft(Person from) {
-    return Draft(from, this);
+    return Draft(null, from, this);
   }
 }

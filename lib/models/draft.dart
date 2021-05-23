@@ -10,7 +10,7 @@ class Draft {
   final Person from;
   final Chat chatGroup;
 
-  Draft(this.from, this.chatGroup);
+  Draft(this.body, this.from, this.chatGroup);
 
   set setBody(String body) => this.body = body;
 
