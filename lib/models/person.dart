@@ -6,3 +6,13 @@ class Person extends Chat {
   Person(this.username, [name = '', photoURL = ''])
       : super(Chat.uuid.v4(), name, photoURL);
 }
+
+final Person me = Person("mcan", "Mustafa Can");
+const ITEM_C = 5;
+final List<Person> contacts = [
+  Person('2pac'),
+  Person('ali'),
+  Person('veli'),
+  Person('deli'),
+  Person('peri')
+];

@@ -1,12 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-
 import 'dart:math';
-
 import 'models/draft.dart';
-import 'models/message.dart';
 import 'models/person.dart';
-
 import 'pages/chat_list.dart';
 
 void main() => runApp(MyApp());
@@ -22,13 +18,12 @@ class MyApp extends StatelessWidget {
 }
 
 class MainPage extends StatefulWidget {
-  final Person userLoggedin = Person("mcan", "Mustafa Can");
   MainPage({
     Key key,
   }) : super(key: key);
 
   @override
-  State<StatefulWidget> createState() => MainPageState(this.userLoggedin);
+  State<StatefulWidget> createState() => MainPageState(me);
 }
 
 class MainPageState extends State<MainPage> {
@@ -38,17 +33,9 @@ class MainPageState extends State<MainPage> {
 
   final List<Draft> allDrafts = [];
 
-  final List<Person> people = [
-    Person('2pac'),
-    Person('ali'),
-    Person('veli'),
-    Person('deli'),
-    Person('peri')
-  ];
-
   @override
   void initState() {
-    allDrafts.addAll(people.map((e) => e.createDraft(userLoggedIn)));
+    allDrafts.addAll(contacts.map((e) => e.createDraft(userLoggedIn)));
     var randomWords = [
       'lorem',
       'lorem ipsum :D',
@@ -80,7 +67,9 @@ class MainPageState extends State<MainPage> {
           bottom: TabBar(
             isScrollable: true,
             tabs: [
-              _buildCategoryTab("Chats"),
+              Tab(
+                child: Text('Chats'),
+              ),
             ],
           ),
         ),
@@ -93,29 +82,5 @@ class MainPageState extends State<MainPage> {
         ),
       ),
     );
-  }
-
-  Widget _buildCategoryTab(String title) {
-    return Tab(
-      child: Text(title),
-    );
-  }
-
-  void deleteChat(Message _lastMsg) {
-    setState(() {
-      //
-    });
-  }
-
-  void archieveChat(Message _lastMsg) {
-    setState(() {
-      //
-    });
-  }
-
-  void unarchieveChat(Message _lastMsg) {
-    setState(() {
-      //
-    });
   }
 }

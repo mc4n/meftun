@@ -1,6 +1,7 @@
 import 'package:me_flutting/models/draft.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:me_flutting/widget/textingscreen.dart';
 
 class CreateMessagePage extends StatefulWidget {
   final Draft selectedLastMsg;
@@ -30,23 +31,6 @@ class CreateMessagePageState extends State<CreateMessagePage> {
             Text('grop-id -> ${selectedLastMsg.chatGroup?.id}'),
           ],
         ),
-        body: Column(children: [
-          Expanded(
-              child: ListWheelScrollView(
-            itemExtent: 50,
-            children:
-                selectedLastMsg.body.characters.map((e) => Text(e)).toList(),
-          )),
-          Padding(padding: EdgeInsetsDirectional.only(bottom: 20)),
-          Row(children: <Widget>[
-            Expanded(
-                child:
-                    TextFormField(initialValue: selectedLastMsg?.body ?? '')),
-            ElevatedButton(
-              child: Text('SEND'),
-              onPressed: () => {print('not sent!')},
-            )
-          ])
-        ]));
+        body: TextingScreen());
   }
 }
