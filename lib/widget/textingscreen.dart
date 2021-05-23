@@ -28,15 +28,17 @@ class TextingScreen extends StatelessWidget {
 
   Widget _single(BuildContext c, int i) {
     var msg = messages[i];
-    var usr = msg.from?.username ?? '';
-    var fr = '$usr:\n  ${msg?.body}';
-    return Container(child: _msgBalloon(c, fr, msg?.from?.id != me.id));
+    return Container(child: _msgBalloon(msg, msg?.from?.id != me.id));
   }
 
-  Widget _msgBalloon(BuildContext _c, String tx, [isLeft = false]) {
-    //chip, card
-
+  Widget _msgBalloon(Message msg, [isLeft = false]) {
+    var usr = msg.from?.username ?? '';
+    // Card();
     return Container(
-        child: Text(tx, textAlign: isLeft ? TextAlign.left : TextAlign.right));
+        padding: EdgeInsets.symmetric(horizontal: 20),
+        child: Column(children: [
+          Text(usr, textAlign: isLeft ? TextAlign.left : TextAlign.right),
+          Text(msg.body, textAlign: isLeft ? TextAlign.left : TextAlign.right)
+        ]));
   }
 }
