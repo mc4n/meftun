@@ -1,6 +1,7 @@
 import 'package:me_flutting/models/draft.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:me_flutting/models/message.dart';
 import 'package:me_flutting/widget/textingscreen.dart';
 
 class CreateMessagePage extends StatefulWidget {
@@ -28,9 +29,13 @@ class CreateMessagePageState extends State<CreateMessagePage> {
             },
           ),
           actions: <Widget>[
-            Text('grop-id -> ${selectedLastMsg.chatGroup?.id}'),
+            Text(
+              'last seen : 1231 231 e qwe qwe ',
+              textAlign: TextAlign.left,
+            )
+            //Text('grop-id -> ${selectedLastMsg.chatGroup?.id}'),
           ],
         ),
-        body: TextingScreen());
+        body: TextingScreen(messages: myMessages));
   }
 }

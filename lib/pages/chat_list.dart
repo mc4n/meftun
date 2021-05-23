@@ -28,8 +28,7 @@ class DraftList extends StatelessWidget {
                         onPressed: () => {
                               Navigator.of(context).push(
                                 MaterialPageRoute(
-                                  builder: (context) => CreateMessagePage(
-                                      selectedLastMsg: drafts[index]),
+                                  builder: (context) => CreateMessagePage(),
                                 ),
                               )
                             },
@@ -38,7 +37,7 @@ class DraftList extends StatelessWidget {
                   },
                 ),
               )
-            : Text("No draft was found."),
+            : Text("No chat."),
       ],
     );
   }
