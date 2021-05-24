@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/rendering.dart';
-import 'package:me_flutting/models/person.dart';
 import 'package:me_flutting/pages/create_msg.dart';
 import 'package:me_flutting/widget/chatitem.dart';
-import 'package:me_flutting/widget/contactitem.dart';
 import '../models/chat.dart';
 
 class ChatList extends StatelessWidget {

@@ -15,47 +15,40 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class MainPage extends StatefulWidget {
+class MainPage extends StatelessWidget {
   MainPage({
     Key key,
   }) : super(key: key);
 
-  @override
-  State<StatefulWidget> createState() => MainPageState(me);
-}
-
-class MainPageState extends State<MainPage> {
-  final Person userLoggedIn;
-
-  MainPageState(this.userLoggedIn);
-
-  @override
-  void initState() {
-    super.initState();
-  }
-
-  static MainPageState of(BuildContext context) {
-    return context.findAncestorStateOfType<MainPageState>();
-  }
+  // static MainPageState of(BuildContext context) {
+  //   return context.findAncestorStateOfType<MainPageState>();
+  // }
 
   @override
   Widget build(BuildContext context) {
-    return DefaultTabController(
-      length: 1,
-      child: Scaffold(
-        appBar: AppBar(
-          backgroundColor: Colors.grey,
-          bottom: TabBar(
-            isScrollable: true,
-            tabs: [
+    return _tabCon(
+        () => [
               Tab(
                 child: Text('Chats'),
               ),
             ],
-          ),
+        () => [ChatList(chats: contacts)]);
+  }
+
+  Widget _tabCon(List<Tab> Function() head, List<Widget> Function() tail) {
+    var _r = tail();
+    return DefaultTabController(
+      length: _r.length,
+      child: Scaffold(
+        appBar: AppBar(
+          backgroundColor: Colors.red.shade200,
+          bottom: TabBar(
+              labelStyle: TextStyle(fontSize: 20),
+              isScrollable: true,
+              tabs: head()),
         ),
         body: TabBarView(
-          children: [ChatList(chats: contacts)],
+          children: _r,
         ),
       ),
     );
