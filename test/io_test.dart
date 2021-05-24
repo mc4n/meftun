@@ -5,7 +5,8 @@ import 'package:me_flutting/widget/contactitem.dart';
 
 void main() {
   testWidgets('testContactItemWidget', (WidgetTester tester) async {
-    await tester.pumpWidget(MaterialApp(home: ContactItem(contacts)));
+    await tester
+        .pumpWidget(MaterialApp(home: ContactItem(dormantContacts: contacts)));
   });
 
   // testWidgets('testTextingWidget', (WidgetTester tester) async {

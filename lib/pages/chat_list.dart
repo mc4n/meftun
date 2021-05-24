@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/rendering.dart';
-import 'package:me_flutting/pages/create_msg.dart';
+import 'package:me_flutting/pages/texting.dart';
 import 'package:me_flutting/widget/chatitem.dart';
 import '../models/chat.dart';
 
@@ -29,8 +29,8 @@ class ChatList extends StatelessWidget {
                       onPressed: () => {
                             Navigator.of(context).push(
                               MaterialPageRoute(
-                                builder: (context) => CreateMessagePage(
-                                    messages: selChat.getMessages()),
+                                builder: (context) =>
+                                    TextingPage(selChat: selChat),
                               ),
                             )
                           },

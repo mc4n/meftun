@@ -3,7 +3,7 @@ import 'package:me_flutting/models/person.dart';
 
 class ContactItem extends StatefulWidget {
   final List<Person> dormantContacts;
-  ContactItem(this.dormantContacts);
+  ContactItem({Key key, this.dormantContacts});
 
   @override
   State<StatefulWidget> createState() {
