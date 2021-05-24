@@ -54,7 +54,7 @@ class ContactItemState extends State<ContactItem> {
 
   @override
   Widget build(BuildContext context) {
-    return Row(mainAxisSize: MainAxisSize.max, children: <Widget>[
+    return Column(children: <Widget>[
       dormantContacts == null || dormantContacts.length == 0
           ? Spacer()
           : Expanded(child: _lv(dormantContacts.length, _single))

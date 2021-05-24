@@ -40,7 +40,7 @@ class ChatList extends StatelessWidget {
                 },
               ))
             : Text("No chat."),
-        ContactItem(contacts), // all the contacts for now.
+        //ContactItem(contacts), // error! :(
       ],
     );
   }
