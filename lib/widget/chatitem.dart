@@ -14,25 +14,38 @@ class ChatItem extends StatelessWidget {
     var lastMsg = chatItem.getLastMessage();
 
     var isMe = lastMsg.from.id == me.id;
-
     var isEmpty = lastMsg.body.trim() == '';
+
+    Widget avatarName() {
+      return Column(children: [
+        Text('${lastMsg.from.username} :'),
+        Padding(padding: EdgeInsets.symmetric(vertical: 2)),
+        CircleAvatar(backgroundImage: AssetImage('assets/avatar.png'))
+      ]);
+    }
+
+    List<Widget> afterAvatar() {
+      return [
+        Padding(padding: EdgeInsets.symmetric(vertical: 6.0, horizontal: 15.0)),
+        Padding(padding: EdgeInsets.only(left: 25.0)),
+        Text("${lastMsg.body}")
+      ];
+    }
+
+    var avatarAndText = <Widget>[];
+    avatarAndText.add(avatarName());
+    avatarAndText.addAll(afterAvatar());
+
+    var colorPicked = isEmpty
+        ? Colors.white
+        : (isMe ? Colors.lightGreen.shade100 : Colors.blueGrey.shade200);
 
     return Card(
       key: ValueKey(chatItem.id),
-      color: isMe ? Colors.lightGreen.shade100 : Colors.blueGrey.shade200,
+      color: colorPicked,
       margin: EdgeInsets.symmetric(vertical: 15.0, horizontal: 15.0),
       child: Padding(
-        child: Row(children: [
-          Column(children: [
-            Text('${lastMsg.from.username} :'),
-            Padding(padding: EdgeInsets.symmetric(vertical: 2)),
-            CircleAvatar(backgroundImage: AssetImage('assets/avatar.png'))
-          ]),
-          Padding(
-              padding: EdgeInsets.symmetric(vertical: 6.0, horizontal: 15.0)),
-          Padding(padding: EdgeInsets.only(left: 25.0)),
-          Text("${lastMsg.body}")
-        ]),
+        child: Row(children: avatarAndText),
         padding: EdgeInsets.all(15.0),
       ),
     );
