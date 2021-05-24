@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/rendering.dart';
 import 'package:me_flutting/models/chat.dart';
+import '../models/person.dart';
 
 class ChatItem extends StatelessWidget {
   final Chat chatItem;
@@ -10,17 +11,29 @@ class ChatItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var lastMsg = chatItem.getLastMessage();
+
+    var isMe = lastMsg.from.id == me.id;
+
+    var isEmpty = lastMsg.body.trim() == '';
+
     return Card(
       key: ValueKey(chatItem.id),
-      color: Colors.lightGreen.shade100,
-      margin: EdgeInsets.symmetric(vertical: 10.0, horizontal: 25.0),
+      color: isMe ? Colors.lightGreen.shade100 : Colors.blueGrey.shade200,
+      margin: EdgeInsets.symmetric(vertical: 15.0, horizontal: 15.0),
       child: Padding(
-        child: Column(
-          children: <Widget>[
-            Text("${chatItem.id} : ${chatItem.getLastMessage().body}"),
-          ],
-        ),
-        padding: EdgeInsets.all(8.0),
+        child: Row(children: [
+          Column(children: [
+            Text('${lastMsg.from.username} :'),
+            Padding(padding: EdgeInsets.symmetric(vertical: 2)),
+            CircleAvatar(backgroundImage: AssetImage('assets/avatar.png'))
+          ]),
+          Padding(
+              padding: EdgeInsets.symmetric(vertical: 6.0, horizontal: 15.0)),
+          Padding(padding: EdgeInsets.only(left: 25.0)),
+          Text("${lastMsg.body}")
+        ]),
+        padding: EdgeInsets.all(15.0),
       ),
     );
   }

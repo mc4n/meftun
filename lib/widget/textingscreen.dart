@@ -40,19 +40,18 @@ class TextingScreen extends StatelessWidget {
     var usr = msg.from?.username ?? '';
 
     return Card(
-      key: ValueKey(msg.id),
-      color: !isLeft ? Colors.lightGreen.shade100 : Colors.blueGrey.shade200,
-      margin: EdgeInsets.symmetric(vertical: 12),
-      child: Padding(
-        child: Column(
-          children: <Widget>[
-            Text('$usr:'),
-            Padding(padding: EdgeInsets.symmetric(vertical:2)),
-            Text('${msg.body}'),
-          ],
-        ),
-        padding: EdgeInsets.symmetric(vertical:6.0, horizontal:12.0),
-      )
-    );
+        key: ValueKey(msg.id),
+        color: !isLeft ? Colors.lightGreen.shade100 : Colors.blueGrey.shade200,
+        margin: EdgeInsets.symmetric(vertical: 12),
+        child: Padding(
+          child: Column(
+            children: <Widget>[
+              Text('$usr:'),
+              Padding(padding: EdgeInsets.symmetric(vertical: 2)),
+              Text('${msg.body}'),
+            ],
+          ),
+          padding: EdgeInsets.symmetric(vertical: 6.0, horizontal: 12.0),
+        ));
   }
 }
