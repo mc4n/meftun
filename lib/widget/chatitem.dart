@@ -16,25 +16,29 @@ class ChatItem extends StatelessWidget {
     var isMe = lastMsg.from.id == me.id;
     var isEmpty = lastMsg.body.trim() == '';
 
-    Widget avatarName() {
+    Widget avatarName(String tx, [String av = 'assets/avatar.png']) {
       return Column(children: [
-        Text('${lastMsg.from.username} :'),
+        Text('$tx:'),
         Padding(padding: EdgeInsets.symmetric(vertical: 2)),
-        CircleAvatar(backgroundImage: AssetImage('assets/avatar.png'))
+        CircleAvatar(backgroundImage: AssetImage(av))
       ]);
     }
 
-    List<Widget> afterAvatar() {
+    List<Widget> afterAvatar(String body) {
       return [
         Padding(padding: EdgeInsets.symmetric(vertical: 6.0, horizontal: 15.0)),
         Padding(padding: EdgeInsets.only(left: 25.0)),
-        Text("${lastMsg.body}")
+        Text("${body.length <= 280 ? body : body.substring(0, 280)}")
       ];
     }
 
     var avatarAndText = <Widget>[];
-    avatarAndText.add(avatarName());
-    avatarAndText.addAll(afterAvatar());
+    avatarAndText.add(avatarName((lastMsg.chatGroup is Person)
+        ? (isMe
+            ? (lastMsg.chatGroup as Person).username
+            : lastMsg.from.username)
+        : (lastMsg.chatGroup?.name)));
+    avatarAndText.addAll(afterAvatar(lastMsg.body));
 
     var colorPicked = isEmpty
         ? Colors.white
