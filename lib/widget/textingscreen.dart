@@ -28,18 +28,31 @@ class TextingScreen extends StatelessWidget {
 
   Widget _single(BuildContext c, int i) {
     var msg = messages[i];
-    return Container(child: _msgBalloon(msg, msg?.from?.id != me.id));
+    return TextButton(
+        onPressed: () {
+          //
+        },
+        //padding: EdgeInsets.symmetric(horizontal: 20),
+        child: _msgCard(msg, msg?.from?.id != me.id));
   }
 
-  Widget _msgBalloon(Message msg, [isLeft = false]) {
+  Widget _msgCard(Message msg, [isLeft = false]) {
     var usr = msg.from?.username ?? '';
-    // Card();
-    return Container(
-        padding: EdgeInsets.symmetric(horizontal: 20),
+
+    return Card(
+      key: ValueKey(msg.id),
+      color: !isLeft ? Colors.lightGreen.shade100 : Colors.blueGrey.shade200,
+      margin: EdgeInsets.symmetric(vertical: 12),
+      child: Padding(
         child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment:
-                isLeft ? CrossAxisAlignment.start : CrossAxisAlignment.end,
-            children: [Text(usr), Text(msg.body)]));
+          children: <Widget>[
+            Text('$usr:'),
+            Padding(padding: EdgeInsets.symmetric(vertical:2)),
+            Text('${msg.body}'),
+          ],
+        ),
+        padding: EdgeInsets.symmetric(vertical:6.0, horizontal:12.0),
+      )
+    );
   }
 }

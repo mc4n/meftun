@@ -24,7 +24,6 @@ final myMessages = [
   _simulateMsg('thanks'),
   _simulateMsg(':)', false),
   _simulateMsg('asd asda adl qwew e \n woe qwoe r53 \n teorterot'),
-  _simulateMsg('', false),
   _simulateMsg('are you there?', false, 2),
   _simulateMsg('cooool!', true, 1),
   _simulateMsg(':-)', false, 3),
