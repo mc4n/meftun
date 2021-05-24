@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/rendering.dart';
 import 'package:me_flutting/pages/create_msg.dart';
+import 'package:me_flutting/widget/chatitem.dart';
 import '../models/chat.dart';
 
 class ChatList extends StatelessWidget {
@@ -20,24 +21,22 @@ class ChatList extends StatelessWidget {
         chats.length > 0
             ? Expanded(
                 child: ListView.builder(
-                  physics: BouncingScrollPhysics(),
-                  itemCount: chats.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    var selChat = chats[index];
-                    return TextButton(
-                        onPressed: () => {
-                              Navigator.of(context).push(
-                                MaterialPageRoute(
-                                  builder: (context) => CreateMessagePage(
-                                      messages: selChat.getMessages()),
-                                ),
-                              )
-                            },
-                        child: Text(
-                            "${chats[index]?.id} : ${chats[index].getLastMessage().body}"));
-                  },
-                ),
-              )
+                physics: BouncingScrollPhysics(),
+                itemCount: chats.length,
+                itemBuilder: (BuildContext context, int index) {
+                  var selChat = chats[index];
+                  return TextButton(
+                      onPressed: () => {
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (context) => CreateMessagePage(
+                                    messages: selChat.getMessages()),
+                              ),
+                            )
+                          },
+                      child: ChatItem(chatItem: chats[index]));
+                },
+              ))
             : Text("No chat."),
       ],
     );
