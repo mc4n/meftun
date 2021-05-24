@@ -37,7 +37,7 @@ class TextingScreen extends StatelessWidget {
   }
 
   Widget _msgCard(Message msg, [isLeft = false]) {
-    var usr = msg.from?.username ?? '';
+    var usr = !isLeft? 'YOU' : msg.from?.username ?? '';
 
     return Card(
         key: ValueKey(msg.id),
