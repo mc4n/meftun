@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:uuid/uuid.dart';
 
 import 'chat.dart';
@@ -26,3 +28,18 @@ class Draft {
     return '[Draft]\n body: $body \n chatgroup.id?: ${chatGroup?.id}';
   }
 }
+
+final Random rnd = Random();
+
+final List<Draft> allDrafts = [
+  'lorem',
+  'lorem ipsum :D',
+  'iyidir',
+  'come on!',
+  'the world is yours!',
+  'moooooo',
+  'i love the way you do it',
+  'what do you do?'
+].map((bd) {
+  return Draft(bd, me, contacts[rnd.nextInt(contacts.length)]);
+});

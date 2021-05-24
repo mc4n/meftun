@@ -17,12 +17,15 @@ Message _simulateMsg(String msgText,
         : Message(msgText, me, me.id, contacts[contactIndex]);
 
 final myMessages = [
-  _simulateMsg('it is okey', false),
+  _simulateMsg('it is okey', false, 0),
   _simulateMsg('you know.', false),
   _simulateMsg('yeah'),
   _simulateMsg('i know.'),
   _simulateMsg('thanks'),
   _simulateMsg(':)', false),
   _simulateMsg('asd asda adl qwew e \n woe qwoe r53 \n teorterot'),
-  _simulateMsg(' or oror\n wrworwor', false)
+  _simulateMsg('', false),
+  _simulateMsg('are you there?', false, 2),
+  _simulateMsg('cooool!', true, 1),
+  _simulateMsg(':-)', false, 3),
 ];

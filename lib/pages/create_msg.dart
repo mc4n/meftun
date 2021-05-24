@@ -1,22 +1,21 @@
-import 'package:me_flutting/models/draft.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:me_flutting/models/message.dart';
 import 'package:me_flutting/widget/textingscreen.dart';
 
 class CreateMessagePage extends StatefulWidget {
-  final Draft selectedLastMsg;
+  final Iterable<Message> messages;
 
-  CreateMessagePage({Key key, this.selectedLastMsg}) : super(key: key);
+  CreateMessagePage({Key key, this.messages}) : super(key: key);
 
   @override
   CreateMessagePageState createState() =>
-      new CreateMessagePageState(this.selectedLastMsg);
+      new CreateMessagePageState(this.messages);
 }
 
 class CreateMessagePageState extends State<CreateMessagePage> {
-  final Draft selectedLastMsg;
-  CreateMessagePageState(this.selectedLastMsg);
+  final Iterable<Message> messages;
+  CreateMessagePageState(this.messages);
 
   @override
   Widget build(BuildContext context) {
@@ -36,6 +35,6 @@ class CreateMessagePageState extends State<CreateMessagePage> {
             //Text('grop-id -> ${selectedLastMsg.chatGroup?.id}'),
           ],
         ),
-        body: TextingScreen(messages: myMessages));
+        body: TextingScreen(messages: messages.toList()));
   }
 }

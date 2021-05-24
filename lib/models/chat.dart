@@ -1,4 +1,5 @@
 import 'package:me_flutting/models/draft.dart';
+import 'package:me_flutting/models/message.dart';
 import 'package:me_flutting/models/person.dart';
 import 'package:uuid/uuid.dart';
 
@@ -16,5 +17,21 @@ class Chat {
 
   Draft createDraft(Person from) {
     return Draft(null, from, this);
+  }
+
+  Iterable<Message> getMessages() {
+    var recv = (Message element) =>
+        element.from.id == this.id && element.chatGroup.id == me.id;
+    var sent = (Message element) =>
+        element.from.id == me.id && element.chatGroup.id == this.id;
+    return myMessages.where((element) => recv(element) || sent(element));
+  }
+
+  Message getLastMessage() {
+    try {
+      return getMessages()?.last;
+    } catch (e) {
+      return Draft('', me, this).toMessage();
+    }
   }
 }

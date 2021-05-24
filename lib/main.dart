@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-import 'dart:math';
-import 'models/draft.dart';
+import 'package:me_flutting/pages/chat_list.dart';
 import 'models/person.dart';
-import 'pages/chat_list.dart';
 
 void main() => runApp(MyApp());
 
@@ -31,25 +29,8 @@ class MainPageState extends State<MainPage> {
 
   MainPageState(this.userLoggedIn);
 
-  final List<Draft> allDrafts = [];
-
   @override
   void initState() {
-    allDrafts.addAll(contacts.map((e) => e.createDraft(userLoggedIn)));
-    var randomWords = [
-      'lorem',
-      'lorem ipsum :D',
-      'iyidir',
-      'come on!',
-      'the world is yours!',
-      'moooooo',
-      'i love the way you do it',
-      'what do you do?'
-    ];
-    var rnd = Random();
-    allDrafts.forEach((element) {
-      element.setBody = randomWords[rnd.nextInt(randomWords.length)];
-    });
     super.initState();
   }
 
@@ -74,11 +55,7 @@ class MainPageState extends State<MainPage> {
           ),
         ),
         body: TabBarView(
-          children: [
-            DraftList(
-              drafts: allDrafts,
-            )
-          ],
+          children: [ChatList(chats: contacts)],
         ),
       ),
     );
