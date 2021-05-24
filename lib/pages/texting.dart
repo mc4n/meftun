@@ -19,6 +19,6 @@ class TextingPage extends StatelessWidget {
           ),
           title: Text('${selChat.id}'),
         ),
-        body: TextingScreen(messages: selChat.getMessages()));
+        body: TextingScreen(messages: selChat.getMessages().toList()));
   }
 }
