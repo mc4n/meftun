@@ -10,15 +10,36 @@ class TextingPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          backgroundColor: Colors.grey,
-          leading: BackButton(
-            onPressed: () {
-              Navigator.pop(context);
-            },
-          ),
-          title: Text('${selChat.id}'),
+      appBar: AppBar(
+        backgroundColor: Colors.green.shade300,
+        leading: BackButton(
+          onPressed: () {
+            Navigator.pop(context);
+          },
         ),
-        body: TextingScreen(messages: selChat.getMessages().toList()));
+        title: Text('${selChat.id}'),
+      ),
+      // body
+      body: Column(children: [
+        Expanded(
+            child: TextingScreen(messages: selChat.getMessages().toList())),
+        _butt(),
+      ]),
+      //
+    );
+  }
+
+  Card _butt() {
+    return Card(
+        color: Colors.grey.shade100,
+        margin: EdgeInsets.all(4),
+        child: Row(children: [
+          Expanded(child: TextField()),
+          ElevatedButton(
+              onPressed: () => {
+                    // send the message.
+                  },
+              child: Text('SEND'))
+        ]));
   }
 }

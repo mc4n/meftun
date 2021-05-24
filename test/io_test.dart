@@ -1,14 +1,8 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_test/flutter_test.dart';
-import 'package:me_flutting/models/person.dart';
-import 'package:me_flutting/widget/contactitem.dart';
+// import 'package:flutter/material.dart';
+// import 'package:flutter_test/flutter_test.dart';
+// import 'package:me_flutting/models/person.dart';
 
 void main() {
-  testWidgets('testContactItemWidget', (WidgetTester tester) async {
-    await tester
-        .pumpWidget(MaterialApp(home: ContactItem(dormantContacts: contacts)));
-  });
-
   // testWidgets('testTextingWidget', (WidgetTester tester) async {
   //   await tester.pumpWidget(MaterialApp(
   //       home: TextingScreen(

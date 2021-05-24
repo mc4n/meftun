@@ -14,7 +14,7 @@ class ChatList extends StatelessWidget {
   Widget build(BuildContext context) {
     return _col();
   }
-  
+
   Column _col() {
     return Column(mainAxisSize: MainAxisSize.max, children: <Widget>[
       Padding(
