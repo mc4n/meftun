@@ -5,6 +5,10 @@ class Person extends Chat {
 
   Person(this.username, [name = '', photoURL = ''])
       : super(Chat.uuid.v4(), name, photoURL);
+
+  @override
+  String toTitle() => username;
+
 }
 
 final Person me = Person("mcan", "Mustafa Can");
