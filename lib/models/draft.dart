@@ -18,8 +18,6 @@ class Draft {
 
   Message toMessage() {
     var _msg = Message(body, from, uuid.v4(), chatGroup);
-    print("msg created!");
-    print(_msg);
     return _msg;
   }
 
