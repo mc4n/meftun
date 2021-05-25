@@ -11,13 +11,13 @@ class TextingPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.green.shade300,
+        backgroundColor: Colors.red.shade300,
         leading: BackButton(
           onPressed: () {
             Navigator.pop(context);
           },
         ),
-        title: Text('${selChat.id}'),
+        title: Text('${selChat.toTitle()}'),
       ),
       // body
       body: Column(children: [
