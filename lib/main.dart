@@ -41,9 +41,9 @@ class MainPage extends StatelessWidget {
       length: _r.length,
       child: Scaffold(
         appBar: AppBar(
-          backgroundColor: Colors.red.shade200,
+          backgroundColor: Colors.red.shade300,
           bottom: TabBar(
-              labelStyle: TextStyle(fontSize: 20),
+              labelStyle: TextStyle(fontSize: 18),
               isScrollable: true,
               tabs: head()),
         ),
