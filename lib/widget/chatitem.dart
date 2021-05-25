@@ -20,7 +20,7 @@ class ChatItem extends StatelessWidget {
       return Column(children: [
         Text('$tx:'),
         Padding(padding: EdgeInsets.symmetric(vertical: 2)),
-        CircleAvatar(backgroundImage: AssetImage(av))
+        //CircleAvatar(backgroundImage: AssetImage(av))
       ]);
     }
 
@@ -33,16 +33,12 @@ class ChatItem extends StatelessWidget {
     }
 
     var avatarAndText = <Widget>[];
-    avatarAndText.add(avatarName((lastMsg.chatGroup is Person)
-        ? (isMe
-            ? (lastMsg.chatGroup as Person).username
-            : lastMsg.from.username)
-        : (lastMsg.chatGroup?.name)));
+    avatarAndText.add(avatarName('${lastMsg.from.toTitle()} --> ${lastMsg.chatGroup.toTitle()}'));
     avatarAndText.addAll(afterAvatar(lastMsg.body));
 
     var colorPicked = isEmpty
         ? Colors.white
-        : (isMe ? Colors.lightGreen.shade100 : Colors.blueGrey.shade200);
+        : (isMe ? Colors.green.shade100 : Colors.grey.shade300);
 
     return Card(
       key: ValueKey(chatItem.id),
