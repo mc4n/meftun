@@ -3,7 +3,7 @@ import 'package:me_flutting/models/message.dart';
 import 'package:me_flutting/models/person.dart';
 import 'package:uuid/uuid.dart';
 
-class Chat {
+abstract class Chat {
   static Uuid uuid = Uuid();
   final String id;
   final String name;
@@ -18,6 +18,8 @@ class Chat {
   Draft createDraft(Person from) {
     return Draft(null, from, this);
   }
+
+  //String toTitle();
 
   Iterable<Message> getMessages() {
     var recv = (Message element) =>
