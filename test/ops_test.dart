@@ -1,10 +1,24 @@
+import 'dart:io';
+
 import 'package:flutter_test/flutter_test.dart';
-import 'package:path_provider/path_provider.dart';
+import 'package:me_flutting/helpers/filehelpers.dart';
 
 void main() {
-  test('testFileOps', () async {
-    var dir = getApplicationDocumentsDirectory();
+  test('testFileTempDir', () async {
+    var fsEnt = await fileOpsInTempDir((temp) async {
+      print('dir: ${temp.path} created.');
 
-    expect(dir, isNotNull);
+      //brda $temp ile biseler yap
+      var f = File('${temp.path}/new_file.txt');
+
+      f.writeAsStringSync('hello world!');
+
+      f.deleteSync();
+
+      expect(temp, isNotNull);
+    });
+    var isNotDeleted = await fsEnt.exists();
+    expect(isNotDeleted, false);
+    print(fsEnt.path + '> temp deleted succesfully');
   });
 }
