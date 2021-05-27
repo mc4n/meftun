@@ -4,11 +4,26 @@ import 'package:flutter/rendering.dart';
 import 'package:me_flutting/models/chat.dart';
 import '../models/person.dart';
 
-class ChatItem extends StatelessWidget {
+class ChatItem extends StatefulWidget {
   final Chat chatItem;
 
   const ChatItem({Key key, this.chatItem}) : super(key: key);
 
+  @override
+  State<StatefulWidget> createState() => ChatItemState(chatItem: chatItem);
+}
+
+class ChatItemState extends State<ChatItem> {
+  final Chat chatItem;
+  String avatarPaths = 'pac.jpg';
+  set switchAvatar(bool reset)  {
+   setState(() {
+        
+      });
+      avatarPaths = reset ? 'avatar.png' : 'pac.jpg';
+       }
+
+  ChatItemState({Key key, this.chatItem});
   @override
   Widget build(BuildContext context) {
     var lastMsg = chatItem.getLastMessage();
@@ -16,11 +31,11 @@ class ChatItem extends StatelessWidget {
     var isMe = lastMsg.from.id == me.id;
     var isEmpty = lastMsg.body.trim() == '';
 
-    Widget avatarName(String tx, [String av = 'assets/avatar.png']) {
+    Widget avatarName(String tx, [String av = 'pac.jpg']) {
       return Column(children: [
         Text('$tx:'),
         Padding(padding: EdgeInsets.symmetric(vertical: 2)),
-        //CircleAvatar(backgroundImage: AssetImage(av))
+        CircleAvatar(backgroundImage: AssetImage(av))
       ]);
     }
 
@@ -33,7 +48,9 @@ class ChatItem extends StatelessWidget {
     }
 
     var avatarAndText = <Widget>[];
-    avatarAndText.add(avatarName('${lastMsg.from.toTitle()} --> ${lastMsg.chatGroup.toTitle()}'));
+    avatarAndText.add(avatarName(
+      '${lastMsg.from.toTitle()} --> ${lastMsg.chatGroup.toTitle()}', avatarPaths
+    ));
     avatarAndText.addAll(afterAvatar(lastMsg.body));
 
     var colorPicked = isEmpty
@@ -45,7 +62,20 @@ class ChatItem extends StatelessWidget {
       color: colorPicked,
       margin: EdgeInsets.symmetric(vertical: 15.0, horizontal: 15.0),
       child: Padding(
-        child: Row(children: avatarAndText),
+        child: GestureDetector(
+            child: Row(children: avatarAndText),
+            onHorizontalDragStart: (d) {
+              print('onHorizontalDragStart-> ' + d.kind.toString());
+            },
+            onHorizontalDragEnd: (d) {
+              switchAvatar = false;
+              print('onHorizontalDragEnd-> ' +
+                  d.velocity.pixelsPerSecond.toString());
+            },
+            onLongPress: () {
+              switchAvatar = true;
+              print('onLongPress ');
+            }),
         padding: EdgeInsets.all(15.0),
       ),
     );
