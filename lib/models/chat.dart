@@ -7,7 +7,7 @@ abstract class Chat {
   final String id;
   final String name;
   final String photoURL;
-  Chat(this.id, this.name, [this.photoURL= 'avatar.png']);
+  Chat(this.id, this.name, [this.photoURL = 'avatar.png']);
 
   @override
   String toString() {

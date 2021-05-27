@@ -16,7 +16,7 @@ class ChatItem extends StatefulWidget {
 
 class ChatItemState extends State<ChatItem> {
   final Chat chatItem;
-  
+
   ChatItemState({Key key, this.chatItem});
   @override
   Widget build(BuildContext context) {
@@ -45,8 +45,8 @@ class ChatItemState extends State<ChatItem> {
     }
 
     var avatarAndText = <Widget>[];
-    avatarAndText.add(avatarName(
-        '${lastMsg.from.caption} --> ${lastMsg.chatGroup.caption}'));
+    avatarAndText.add(
+        avatarName('${lastMsg.from.caption} --> ${lastMsg.chatGroup.caption}'));
     avatarAndText.addAll(afterAvatar(lastMsg.body));
 
     var colorPicked = isMe ? Colors.green.shade100 : Colors.grey.shade300;
@@ -62,7 +62,7 @@ class ChatItemState extends State<ChatItem> {
               print('onHorizontalDragStart-> ' + d.kind.toString());
             },
             onHorizontalDragEnd: (d) {
-               //super.setState(()=>null);
+              //super.setState(()=>null);
               print('onHorizontalDragEnd-> ' +
                   d.velocity.pixelsPerSecond.toString());
             },
