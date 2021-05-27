@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/rendering.dart';
 import 'package:me_flutting/helpers/msghelper.dart';
 import 'package:me_flutting/models/chat.dart';
+import 'package:me_flutting/pages/texting.dart';
 
 class ChatItem extends StatefulWidget {
   final Chat chatItem;
@@ -55,7 +56,7 @@ class ChatItemState extends State<ChatItem> {
         ? Colors.white
         : (isMe ? Colors.green.shade100 : Colors.grey.shade300);
 
-    return Card(
+    var card_ = Card(
       key: ValueKey(chatItem.id),
       color: colorPicked,
       margin: EdgeInsets.symmetric(vertical: 15.0, horizontal: 15.0),
@@ -77,5 +78,15 @@ class ChatItemState extends State<ChatItem> {
         padding: EdgeInsets.all(15.0),
       ),
     );
+
+    return TextButton(
+        onPressed: () => {
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (context) => TextingPage(selChat: chatItem),
+                ),
+              )
+            },
+        child: card_);
   }
 }

@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/rendering.dart';
-import 'package:me_flutting/pages/texting.dart';
 import 'package:me_flutting/widget/chatitem.dart';
 import '../models/chat.dart';
 
 class ChatList extends StatelessWidget {
   final List<Chat> chats;
-
   ChatList({Key key, this.chats}) : super(key: key);
 
   @override
@@ -30,19 +28,7 @@ class ChatList extends StatelessWidget {
       physics: BouncingScrollPhysics(),
       itemCount: chats.length,
       itemBuilder: (BuildContext context, int index) =>
-          _txBut(context, chats[index]),
+          ChatItem(chatItem: chats[index]),
     ));
-  }
-
-  TextButton _txBut(BuildContext context, Chat chat) {
-    return TextButton(
-        onPressed: () => {
-              Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (context) => TextingPage(selChat: chat),
-                ),
-              )
-            },
-        child: ChatItem(chatItem: chat));
   }
 }

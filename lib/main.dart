@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:me_flutting/pages/chat_list.dart';
+import 'package:me_flutting/pages/contact_list.dart';
 import 'helpers/msghelper.dart';
 
 void main() => runApp(MyApp());
@@ -27,8 +28,11 @@ class MainPage extends StatelessWidget {
               Tab(
                 child: Text('Chats'),
               ),
+              Tab(
+                child: Text('Contacts'),
+              ),
             ],
-        () => [ChatList(chats: contacts)]);
+        () => [ChatList(chats: contacts), ContactList(contacts: contacts)]);
   }
 
   Widget _tabCon(List<Tab> Function() head, List<Widget> Function() tail) {

@@ -2,11 +2,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:me_flutting/helpers/msghelper.dart';
 import 'package:me_flutting/models/message.dart';
-import 'package:me_flutting/models/directchat.dart';
 
-class TextingScreen extends StatelessWidget {
+class MessageDialogs extends StatelessWidget {
   final List<Message> messages;
-  const TextingScreen({Key key, this.messages}) : super(key: key);
+  const MessageDialogs({Key key, this.messages}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -30,11 +29,7 @@ class TextingScreen extends StatelessWidget {
   Widget _single(BuildContext c, int i) {
     var msg = messages[i];
     return TextButton(
-        onPressed: () {
-          //
-        },
-        //padding: EdgeInsets.symmetric(horizontal: 20),
-        child: _msgCard(msg, msg?.from?.id != me.id));
+        onPressed: () => null, child: _msgCard(msg, msg?.from?.id != me.id));
   }
 
   Widget _msgCard(Message msg, [isLeft = false]) {
