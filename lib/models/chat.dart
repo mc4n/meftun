@@ -1,5 +1,4 @@
 import 'package:me_flutting/models/draft.dart';
-import 'package:me_flutting/models/message.dart';
 import 'package:me_flutting/models/directchat.dart';
 import 'package:uuid/uuid.dart';
 
@@ -20,20 +19,4 @@ abstract class Chat {
   }
 
   String get caption;
-
-  Iterable<Message> getMessages() {
-    var recv = (Message element) =>
-        element.from.id == this.id && element.chatGroup.id == me.id;
-    var sent = (Message element) =>
-        element.from.id == me.id && element.chatGroup.id == this.id;
-    return myMessages.where((element) => recv(element) || sent(element));
-  }
-
-  Message getLastMessage() {
-    try {
-      return getMessages()?.last;
-    } catch (e) {
-      return Draft('', me, this).toMessage();
-    }
-  }
 }

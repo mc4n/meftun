@@ -9,13 +9,3 @@ class DirectChat extends Chat {
   @override
   String get caption => username;
 }
-
-final DirectChat me = DirectChat("mcan", "Mustafa Can");
-const ITEM_C = 5;
-final List<DirectChat> contacts = [
-  DirectChat('2pac'),
-  DirectChat('ali'),
-  DirectChat('veli'),
-  DirectChat('deli'),
-  DirectChat('peri')
-];

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:me_flutting/helpers/msghelper.dart';
 import 'package:me_flutting/models/chat.dart';
 import 'package:me_flutting/widget/textingscreen.dart';
 
@@ -21,8 +22,7 @@ class TextingPage extends StatelessWidget {
       ),
       // body
       body: Column(children: [
-        Expanded(
-            child: TextingScreen(messages: selChat.getMessages().toList())),
+        Expanded(child: TextingScreen(messages: getMessages(selChat).toList())),
         _butt(),
       ]),
       //

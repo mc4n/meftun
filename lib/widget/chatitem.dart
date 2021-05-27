@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/rendering.dart';
+import 'package:me_flutting/helpers/msghelper.dart';
 import 'package:me_flutting/models/chat.dart';
-import '../models/directchat.dart';
 
 class ChatItem extends StatefulWidget {
   final Chat chatItem;
@@ -24,7 +24,7 @@ class ChatItemState extends State<ChatItem> {
   ChatItemState({Key key, this.chatItem});
   @override
   Widget build(BuildContext context) {
-    var lastMsg = chatItem.getLastMessage();
+    var lastMsg = getLastMessage(chatItem);
 
     var isMe = lastMsg.from.id == me.id;
     var isEmpty = lastMsg.body.trim() == '';

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:me_flutting/pages/chat_list.dart';
-import 'models/directchat.dart';
+import 'helpers/msghelper.dart';
 
 void main() => runApp(MyApp());
 
@@ -19,10 +19,6 @@ class MainPage extends StatelessWidget {
   MainPage({
     Key key,
   }) : super(key: key);
-
-  // static MainPageState of(BuildContext context) {
-  //   return context.findAncestorStateOfType<MainPageState>();
-  // }
 
   @override
   Widget build(BuildContext context) {
