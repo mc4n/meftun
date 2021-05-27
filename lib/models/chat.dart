@@ -19,7 +19,7 @@ abstract class Chat {
     return Draft(null, from, this);
   }
 
-  String toTitle();
+  String get caption;
 
   Iterable<Message> getMessages() {
     var recv = (Message element) =>

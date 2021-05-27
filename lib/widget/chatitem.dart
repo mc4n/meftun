@@ -16,12 +16,10 @@ class ChatItem extends StatefulWidget {
 class ChatItemState extends State<ChatItem> {
   final Chat chatItem;
   String avatarPaths = 'pac.jpg';
-  set switchAvatar(bool reset)  {
-   setState(() {
-        
-      });
-      avatarPaths = reset ? 'avatar.png' : 'pac.jpg';
-       }
+  set switchAvatar(bool reset) {
+    setState(() {});
+    avatarPaths = reset ? 'avatar.png' : 'pac.jpg';
+  }
 
   ChatItemState({Key key, this.chatItem});
   @override
@@ -49,8 +47,8 @@ class ChatItemState extends State<ChatItem> {
 
     var avatarAndText = <Widget>[];
     avatarAndText.add(avatarName(
-      '${lastMsg.from.toTitle()} --> ${lastMsg.chatGroup.toTitle()}', avatarPaths
-    ));
+        '${lastMsg.from.caption} --> ${lastMsg.chatGroup.caption}',
+        avatarPaths));
     avatarAndText.addAll(afterAvatar(lastMsg.body));
 
     var colorPicked = isEmpty

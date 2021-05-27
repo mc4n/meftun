@@ -17,7 +17,7 @@ class TextingPage extends StatelessWidget {
             Navigator.pop(context);
           },
         ),
-        title: Text('${selChat.toTitle()}'),
+        title: Text('${selChat.caption}'),
       ),
       // body
       body: Column(children: [

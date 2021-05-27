@@ -7,8 +7,7 @@ class Person extends Chat {
       : super(Chat.uuid.v4(), name, photoURL);
 
   @override
-  String toTitle() => username;
-
+  String get caption => username;
 }
 
 final Person me = Person("mcan", "Mustafa Can");
