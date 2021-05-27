@@ -16,7 +16,7 @@ class ContactList extends StatelessWidget {
   Widget _col(BuildContext context) {
     return Container(
         height: 84,
-        color: Colors.yellow.shade200,
+        color: Colors.yellow.shade100,
         child: Padding(
           padding: EdgeInsets.all(10.0),
           child: Row(children: [

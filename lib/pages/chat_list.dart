@@ -16,7 +16,7 @@ class ChatList extends StatelessWidget {
   Expanded _expan() {
     return Expanded(
       child: Container(
-          color: Colors.blue.shade200,
+          //color: Colors.blue.shade400,
           child: ListView.builder(
             scrollDirection: Axis.vertical,
             shrinkWrap: true,
