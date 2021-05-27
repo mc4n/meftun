@@ -28,7 +28,10 @@ class ChatItemState extends State<ChatItem> {
     var lastMsg = getLastMessage(chatItem);
 
     var isMe = lastMsg.from.id == me.id;
-    var isEmpty = lastMsg.body.trim() == '';
+
+    if (lastMsg.body.trim() == '') {
+      return Card();
+    }
 
     Widget avatarName(String tx, [String av = 'pac.jpg']) {
       return Column(children: [
@@ -52,9 +55,7 @@ class ChatItemState extends State<ChatItem> {
         avatarPaths));
     avatarAndText.addAll(afterAvatar(lastMsg.body));
 
-    var colorPicked = isEmpty
-        ? Colors.white
-        : (isMe ? Colors.green.shade100 : Colors.grey.shade300);
+    var colorPicked = isMe ? Colors.green.shade100 : Colors.grey.shade300;
 
     var card_ = Card(
       key: ValueKey(chatItem.id),
