@@ -38,23 +38,29 @@ class ChatItemState extends State<ChatItem> {
 
     List<Widget> afterAvatar(String body) {
       return [
-        Padding(padding: EdgeInsets.symmetric(vertical: 6.0, horizontal: 15.0)),
-        Padding(padding: EdgeInsets.only(left: 25.0)),
+        Padding(padding: EdgeInsets.symmetric(vertical: 6.0, horizontal: 11.0)),
+        Padding(padding: EdgeInsets.only(left: 15.0)),
         Text("${body.length <= 280 ? body : body.substring(0, 280)}")
       ];
     }
 
     var avatarAndText = <Widget>[];
-    avatarAndText.add(
-        avatarName('${lastMsg.from.caption} --> ${lastMsg.chatGroup.caption}'));
-    avatarAndText.addAll(afterAvatar(lastMsg.body));
+    avatarAndText.add(avatarName('${lastMsg.from.caption}'));
+
+    avatarAndText.add(Text('   --->   '));
+
+    avatarAndText.add(avatarName('${lastMsg.chatGroup.caption}'));
+
+    avatarAndText.add(Padding(padding: EdgeInsets.symmetric(horizontal: 28.0)));
+
+    avatarAndText.addAll(afterAvatar('"${lastMsg.body}"'));
 
     var colorPicked = isMe ? Colors.green.shade100 : Colors.grey.shade300;
 
     var card_ = Card(
       key: ValueKey(chatItem.id),
       color: colorPicked,
-      margin: EdgeInsets.symmetric(vertical: 15.0, horizontal: 15.0),
+      margin: EdgeInsets.symmetric(vertical: 7.0, horizontal: 3),
       child: Padding(
         child: GestureDetector(
             child: Row(children: avatarAndText),
@@ -70,7 +76,7 @@ class ChatItemState extends State<ChatItem> {
               //super.setState(() => null);
               print('onLongPress ');
             }),
-        padding: EdgeInsets.all(15.0),
+        padding: EdgeInsets.all(13.0),
       ),
     );
 
