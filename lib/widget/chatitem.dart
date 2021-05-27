@@ -57,7 +57,7 @@ class ChatItemState extends State<ChatItem> {
 
     var colorPicked = isMe ? Colors.green.shade100 : Colors.grey.shade300;
 
-    var card_ = Card(
+    var card = Card(
       key: ValueKey(chatItem.id),
       color: colorPicked,
       margin: EdgeInsets.symmetric(vertical: 7.0, horizontal: 3),
@@ -88,6 +88,6 @@ class ChatItemState extends State<ChatItem> {
                 ),
               )
             },
-        child: card_);
+        child: card);
   }
 }
