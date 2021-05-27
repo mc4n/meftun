@@ -18,13 +18,13 @@ class ChatList extends StatelessWidget {
       child: Container(
           //color: Colors.blue.shade400,
           child: ListView.builder(
-            scrollDirection: Axis.vertical,
-            shrinkWrap: true,
-            physics: BouncingScrollPhysics(),
-            itemCount: chats.length,
-            itemBuilder: (BuildContext context, int index) =>
-                ChatItem(chatItem: chats[index]),
-          )),
+        scrollDirection: Axis.vertical,
+        shrinkWrap: true,
+        physics: BouncingScrollPhysics(),
+        itemCount: chats.length,
+        itemBuilder: (BuildContext context, int index) =>
+            ChatItem(chatItem: chats[index]),
+      )),
     );
   }
 }
