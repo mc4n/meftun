@@ -15,7 +15,7 @@ abstract class Chat {
     return '[Chat]\nid : ${id ?? ""} \n name: $name??""';
   }
 
-  Draft createDraft(Person from) {
+  Draft createDraft(DirectChat from) {
     return Draft(null, from, this);
   }
 

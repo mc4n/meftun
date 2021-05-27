@@ -1,21 +1,21 @@
 import 'package:me_flutting/models/chat.dart';
 
-class Person extends Chat {
+class DirectChat extends Chat {
   final String username;
 
-  Person(this.username, [name = '', photoURL = ''])
+  DirectChat(this.username, [name = '', photoURL = ''])
       : super(Chat.uuid.v4(), name, photoURL);
 
   @override
   String get caption => username;
 }
 
-final Person me = Person("mcan", "Mustafa Can");
+final DirectChat me = DirectChat("mcan", "Mustafa Can");
 const ITEM_C = 5;
-final List<Person> contacts = [
-  Person('2pac'),
-  Person('ali'),
-  Person('veli'),
-  Person('deli'),
-  Person('peri')
+final List<DirectChat> contacts = [
+  DirectChat('2pac'),
+  DirectChat('ali'),
+  DirectChat('veli'),
+  DirectChat('deli'),
+  DirectChat('peri')
 ];

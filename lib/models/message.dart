@@ -4,7 +4,7 @@ import 'draft.dart';
 
 class Message extends Draft {
   final String id;
-  Message(String body, Person from, this.id, Chat c) : super(body, from, c);
+  Message(String body, DirectChat from, this.id, Chat c) : super(body, from, c);
 
   @override
   set setBody(String body) => throw Exception('message already sent :(');

@@ -9,7 +9,7 @@ import 'directchat.dart';
 class Draft {
   static Uuid uuid = Uuid();
   String body;
-  final Person from;
+  final DirectChat from;
   final Chat chatGroup;
 
   Draft(this.body, this.from, this.chatGroup);
