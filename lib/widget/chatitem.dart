@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/rendering.dart';
 import 'package:me_flutting/models/chat.dart';
-import '../models/person.dart';
+import '../models/directchat.dart';
 
 class ChatItem extends StatefulWidget {
   final Chat chatItem;

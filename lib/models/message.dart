@@ -1,4 +1,4 @@
-import 'package:me_flutting/models/person.dart';
+import 'package:me_flutting/models/directchat.dart';
 import 'chat.dart';
 import 'draft.dart';
 

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:me_flutting/pages/chat_list.dart';
-import 'models/person.dart';
+import 'models/directchat.dart';
 
 void main() => runApp(MyApp());
 

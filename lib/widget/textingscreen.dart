@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:me_flutting/models/message.dart';
-import 'package:me_flutting/models/person.dart';
+import 'package:me_flutting/models/directchat.dart';
 
 class TextingScreen extends StatelessWidget {
   final List<Message> messages;
@@ -37,7 +37,7 @@ class TextingScreen extends StatelessWidget {
   }
 
   Widget _msgCard(Message msg, [isLeft = false]) {
-    var usr = !isLeft? 'YOU' : msg.from?.username ?? '';
+    var usr = !isLeft ? 'YOU' : msg.from?.username ?? '';
 
     return Card(
         key: ValueKey(msg.id),
