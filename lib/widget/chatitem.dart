@@ -16,12 +16,7 @@ class ChatItem extends StatefulWidget {
 
 class ChatItemState extends State<ChatItem> {
   final Chat chatItem;
-  String avatarPaths = 'pac.jpg';
-  set switchAvatar(bool reset) {
-    setState(() {});
-    avatarPaths = reset ? 'avatar.png' : 'pac.jpg';
-  }
-
+  
   ChatItemState({Key key, this.chatItem});
   @override
   Widget build(BuildContext context) {
@@ -51,8 +46,7 @@ class ChatItemState extends State<ChatItem> {
 
     var avatarAndText = <Widget>[];
     avatarAndText.add(avatarName(
-        '${lastMsg.from.caption} --> ${lastMsg.chatGroup.caption}',
-        avatarPaths));
+        '${lastMsg.from.caption} --> ${lastMsg.chatGroup.caption}'));
     avatarAndText.addAll(afterAvatar(lastMsg.body));
 
     var colorPicked = isMe ? Colors.green.shade100 : Colors.grey.shade300;
@@ -68,12 +62,12 @@ class ChatItemState extends State<ChatItem> {
               print('onHorizontalDragStart-> ' + d.kind.toString());
             },
             onHorizontalDragEnd: (d) {
-              switchAvatar = false;
+               //super.setState(()=>null);
               print('onHorizontalDragEnd-> ' +
                   d.velocity.pixelsPerSecond.toString());
             },
             onLongPress: () {
-              switchAvatar = true;
+              //super.setState(() => null);
               print('onLongPress ');
             }),
         padding: EdgeInsets.all(15.0),
