@@ -28,11 +28,20 @@ class MainPage extends StatelessWidget {
               Tab(
                 child: Text('Chats'),
               ),
-              Tab(
-                child: Text('Contacts'),
-              ),
             ],
-        () => [ChatList(chats: contacts), ContactList(contacts: contacts)]);
+        () => [
+              Container(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: <Widget>[
+                    ContactList(contacts: contacts),
+                    Padding(padding: EdgeInsets.symmetric(vertical: 4.0)),
+                    ChatList(chats: contacts)
+                  ],
+                ),
+              ),
+            ]);
   }
 
   Widget _tabCon(List<Tab> Function() head, List<Widget> Function() tail) {

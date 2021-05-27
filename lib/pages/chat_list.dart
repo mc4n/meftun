@@ -10,25 +10,21 @@ class ChatList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return _col();
-  }
-
-  Column _col() {
-    return Column(mainAxisSize: MainAxisSize.max, children: <Widget>[
-      Padding(
-        padding: EdgeInsets.only(top: 16.0),
-      ),
-      _expan()
-    ]);
+    return _expan();
   }
 
   Expanded _expan() {
     return Expanded(
-        child: ListView.builder(
-      physics: BouncingScrollPhysics(),
-      itemCount: chats.length,
-      itemBuilder: (BuildContext context, int index) =>
-          ChatItem(chatItem: chats[index]),
-    ));
+      child: Container(
+          color: Colors.blue.shade200,
+          child: ListView.builder(
+            scrollDirection: Axis.vertical,
+            shrinkWrap: true,
+            physics: BouncingScrollPhysics(),
+            itemCount: chats.length,
+            itemBuilder: (BuildContext context, int index) =>
+                ChatItem(chatItem: chats[index]),
+          )),
+    );
   }
 }
