@@ -32,7 +32,7 @@ class ChatItemState extends State<ChatItem> {
       return Card();
     }
 
-    Widget avatarName(String tx, [String av = 'pac.jpg']) {
+    Widget avatarName(String tx, String av) {
       return Column(children: [
         Text('$tx'),
         Padding(padding: EdgeInsets.symmetric(vertical: 2)),
@@ -50,12 +50,14 @@ class ChatItemState extends State<ChatItem> {
 
     var avatarAndText = <Widget>[];
     avatarAndText.add(avatarName(
-        '${lastMsg.from == msgFactory.owner ? 'YOU' : lastMsg.from.caption}'));
+        '${lastMsg.from == msgFactory.owner ? 'YOU' : lastMsg.from.caption}',
+        lastMsg.from.photoURL));
 
     avatarAndText.add(Text('   --->   '));
 
     avatarAndText.add(avatarName(
-        '${lastMsg.chatGroup == msgFactory.owner ? 'YOU' : lastMsg.chatGroup.caption}'));
+        '${lastMsg.chatGroup == msgFactory.owner ? 'YOU' : lastMsg.chatGroup.caption}',
+        lastMsg.chatGroup.photoURL));
 
     avatarAndText.add(Padding(padding: EdgeInsets.symmetric(horizontal: 20.0)));
 

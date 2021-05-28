@@ -5,7 +5,8 @@ import 'package:me_flutting/pages/contact_list.dart';
 import 'helpers/msghelper.dart';
 import 'models/directchat.dart';
 
-MessageFactory msgFactory = MessageFactory(DirectChat("mcan", "Mustafa Can"));
+MessageFactory msgFactory =
+    MessageFactory(DirectChat('mcan', 'Mustafa Can', 'pac.jpg'));
 
 void main() {
   msgFactory.addPerson('2pac');
@@ -18,6 +19,7 @@ void main() {
   msgFactory.addPerson('obama');
 
   msgFactory.sendMessage(msgFactory.contacts.first, "fooozoaoa");
+  msgFactory.receiveMessage(msgFactory.contacts.last, "long live");
   msgFactory.sendMessage(msgFactory.contacts.last, "e qpwe oqwe q");
   msgFactory.sendMessage(msgFactory.contacts.first, ":D :D");
   msgFactory.receiveMessage(msgFactory.contacts.first, "whut homie?");

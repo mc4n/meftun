@@ -3,7 +3,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:me_flutting/main.dart';
 import 'package:me_flutting/models/chat.dart';
 import 'package:me_flutting/widget/msgdialogs.dart';
-import 'package:me_flutting/models/message.dart';
 
 class TextingPage extends StatefulWidget {
   final Chat selChat;
@@ -40,11 +39,7 @@ class TextingPageState extends State<TextingPage> {
         Expanded(
           child: MessageDialogs(
               me: msgFactory.owner,
-              messages: msgFactory
-                  .getMessages(selChat)
-                  .where((m) => m is Message)
-                  .map((m) => m as Message)
-                  .toList()),
+              messages: msgFactory.getMessages(selChat).toList()),
         ),
         _butt(),
       ]),

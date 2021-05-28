@@ -4,6 +4,7 @@ import 'draft.dart';
 
 class Message extends Draft {
   final String id;
+  final int epoch = DateTime.now().millisecondsSinceEpoch;
   Message(String body, DirectChat from, this.id, Chat c) : super(body, from, c);
 
   @override
