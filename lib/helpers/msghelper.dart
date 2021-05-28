@@ -1,5 +1,7 @@
 import 'dart:math';
 
+import 'package:flutter_test/flutter_test.dart';
+
 import 'package:me_flutting/models/chat.dart';
 import 'package:me_flutting/models/directchat.dart';
 import 'package:me_flutting/models/draft.dart';
@@ -24,21 +26,21 @@ final myMessages = [
   _simulateMsg(':-)', false, 3),
 ];
 
-Iterable<Message> getMessages(Chat chat) {
+bool predMyMsg(Chat chat, Message msg) {
   var recv = (Message element) =>
       element.from.id == chat.id && element.chatGroup.id == me.id;
   var sent = (Message element) =>
       element.from.id == me.id && element.chatGroup.id == chat.id;
-  return myMessages.where((element) => recv(element) || sent(element));
+
+  return recv(msg) || sent(msg);
 }
 
-Message getLastMessage(Chat chat) {
-  try {
-    return getMessages(chat)?.last;
-  } catch (e) {
-    return Draft('', me, chat).toMessage();
-  }
-}
+Iterable<Message> getMessages(Chat chat) =>
+    myMessages.where((element) => predMyMsg(chat, element));
+
+Message getLastMessage(Chat chat) =>
+    myMessages.lastWhere((element) => predMyMsg(chat, element),
+        orElse: () => Draft('', me, chat).toMessage());
 
 final DirectChat me = DirectChat("mcan", "Mustafa Can");
 const ITEM_C = 5;
@@ -53,7 +55,6 @@ final List<DirectChat> contacts = [
 final Random rnd = Random();
 
 final List<Draft> allDrafts = [
-  'lorem',
   'lorem ipsum :D',
   'iyidir',
   'come on!',
@@ -64,3 +65,21 @@ final List<Draft> allDrafts = [
 ].map((bd) {
   return Draft(bd, me, contacts[rnd.nextInt(contacts.length)]);
 });
+
+void main() {
+  test('testCreateMsg', () async {
+    var draft = contacts[0].createDraft(me);
+    var msg = draft.toMessage();
+    expect(msg.id, isNotNull);
+  });
+
+  test('testgetLastMsgs', () async {
+    var chatList = contacts.map((e) => getLastMessage(e)).toList();
+
+    chatList.forEach((element) {
+      print(element);
+    });
+
+    expect(chatList, isNotNull);
+  });
+}
