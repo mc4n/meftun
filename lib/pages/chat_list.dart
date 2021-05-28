@@ -17,8 +17,8 @@ class ChatListState extends State<ChatList> {
   final List<Chat> chats;
   void Function(String) onMsgSent;
   ChatListState(this.chats) {
-    onMsgSent = (_) { 
-		setState(() => null);
+    onMsgSent = (_) {
+      setState(() => null);
     };
   }
 

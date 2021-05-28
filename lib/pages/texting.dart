@@ -5,13 +5,24 @@ import 'package:me_flutting/models/chat.dart';
 import 'package:me_flutting/widget/msgdialogs.dart';
 import 'package:me_flutting/models/message.dart';
 
-class TextingPage extends StatelessWidget {
+class TextingPage extends StatefulWidget {
   final Chat selChat;
-  final TextEditingController teC = TextEditingController();
 
   final void Function(String) onMsgSent;
 
   TextingPage({Key key, this.selChat, this.onMsgSent}) : super(key: key);
+
+  @override
+  State<StatefulWidget> createState() => TextingPageState(selChat, onMsgSent);
+}
+
+class TextingPageState extends State<TextingPage> {
+  final Chat selChat;
+  final TextEditingController teC = TextEditingController();
+  final void Function(String) onMsgSent;
+
+  TextingPageState(this.selChat, this.onMsgSent);
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -60,6 +71,9 @@ class TextingPage extends StatelessWidget {
                   msgFactory.sendMessage(selChat, data);
                   if (onMsgSent != null) {
                     onMsgSent(data);
+                    setState(() {
+                      //
+                    });
                   }
                 }
               },
