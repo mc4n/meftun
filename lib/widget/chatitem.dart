@@ -42,7 +42,7 @@ class ChatItemState extends State<ChatItem> {
 
     List<Widget> afterAvatar(String body) {
       return [
-        Padding(padding: EdgeInsets.symmetric(vertical: 6.0, horizontal: 11.0)),
+        Padding(padding: EdgeInsets.symmetric(horizontal: 11.0)),
         Padding(padding: EdgeInsets.only(left: 15.0)),
         Text("${body.length <= 280 ? body : body.substring(0, 280)}")
       ];
@@ -66,23 +66,22 @@ class ChatItemState extends State<ChatItem> {
     var card = Card(
       key: ValueKey(chatItem.id),
       color: colorPicked,
-      //margin: EdgeInsets.symmetric(vertical: 7.0, horizontal: 3),
       child: Padding(
         child: GestureDetector(
             child: Row(children: avatarAndText),
             onHorizontalDragStart: (d) {
-              print('onHorizontalDragStart-> ' + d.kind.toString());
+              //print('onHorizontalDragStart-> ' + d.kind.toString());
             },
             onHorizontalDragEnd: (d) {
               //super.setState(()=>null);
-              print('onHorizontalDragEnd-> ' +
-                  d.velocity.pixelsPerSecond.toString());
+              //print('onHorizontalDragEnd-> ' +
+              //  d.velocity.pixelsPerSecond.toString());
             },
             onLongPress: () {
               //super.setState(() => null);
-              print('onLongPress ');
+              //print('onLongPress ');
             }),
-        padding: EdgeInsets.all(10.0),
+        padding: EdgeInsets.symmetric(vertical: 10.0),
       ),
     );
 

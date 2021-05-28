@@ -35,10 +35,22 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class MainPage extends StatelessWidget {
+class MainPage extends StatefulWidget {
   MainPage({
     Key key,
   }) : super(key: key);
+
+  @override
+  State<StatefulWidget> createState() => MainPageState();
+}
+
+class MainPageState extends State<MainPage> {
+  void Function(String) onMsgSent;
+  MainPageState() {
+    onMsgSent = (_) {
+      setState(() => null);
+    };
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -54,9 +66,15 @@ class MainPage extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: <Widget>[
-                    ContactList(contacts: msgFactory.contacts.toList()),
+                    ContactList(
+                      contacts: msgFactory.contacts.toList(),
+                      onMsgSent: onMsgSent,
+                    ),
                     Padding(padding: EdgeInsets.symmetric(vertical: 4.0)),
-                    ChatList(chats: msgFactory.contacts.toList()),
+                    ChatList(
+                      chats: msgFactory.contacts.toList(),
+                      onMsgSent: onMsgSent,
+                    ),
                   ],
                 ),
               ),

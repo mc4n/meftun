@@ -7,20 +7,18 @@ import '../models/chat.dart';
 class ChatList extends StatefulWidget {
   final List<Chat> chats;
 
-  ChatList({Key key, this.chats});
+  final void Function(String) onMsgSent;
+
+  ChatList({Key key, this.chats, this.onMsgSent});
 
   @override
-  State<StatefulWidget> createState() => ChatListState(chats);
+  State<StatefulWidget> createState() => ChatListState(chats, onMsgSent);
 }
 
 class ChatListState extends State<ChatList> {
   final List<Chat> chats;
-  void Function(String) onMsgSent;
-  ChatListState(this.chats) {
-    onMsgSent = (_) {
-      setState(() => null);
-    };
-  }
+  final void Function(String) onMsgSent;
+  ChatListState(this.chats, this.onMsgSent);
 
   @override
   Widget build(BuildContext context) {

@@ -6,7 +6,8 @@ import '../pages/texting.dart';
 
 class ContactList extends StatelessWidget {
   final List<Chat> contacts;
-  ContactList({Key key, this.contacts}) : super(key: key);
+  final void Function(String) onMsgSent;
+  ContactList({Key key, this.contacts, this.onMsgSent}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -36,7 +37,8 @@ class ContactList extends StatelessWidget {
           itemBuilder: (BuildContext _, int index) => TextButton(
               onPressed: () {
                 Navigator.of(context).push(MaterialPageRoute(
-                  builder: (context) => TextingPage(selChat: contacts[index]),
+                  builder: (context) => TextingPage(
+                      selChat: contacts[index], onMsgSent: onMsgSent),
                 ));
               },
               child: Column(children: [
