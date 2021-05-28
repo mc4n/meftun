@@ -8,19 +8,20 @@ import 'models/directchat.dart';
 MessageFactory msgFactory = MessageFactory(DirectChat("mcan", "Mustafa Can"));
 
 void main() {
-  msgFactory.addPerson("2pac");
-  msgFactory.addPerson("bigg");
-  msgFactory.addPerson("fooo");
-  msgFactory.addPerson("ali");
-  msgFactory.addPerson("veli");
-  msgFactory.addPerson("ayse");
-  msgFactory.addPerson("fatma");
-  msgFactory.addPerson("obama");
-  
-  msgFactory.addMessage(msgFactory.contacts.first, "fooozoaoa");
-  msgFactory.addMessage(msgFactory.contacts.last, "e qpwe oqwe q");
-  msgFactory.addMessage(msgFactory.contacts.first, "lorem");
-  
+  msgFactory.addPerson('2pac');
+  msgFactory.addPerson('bigg');
+  msgFactory.addPerson('fooo');
+  msgFactory.addPerson('ali');
+  msgFactory.addPerson('veli');
+  msgFactory.addPerson('ayse');
+  msgFactory.addPerson('fatma');
+  msgFactory.addPerson('obama');
+
+  msgFactory.sendMessage(msgFactory.contacts.first, "fooozoaoa");
+  msgFactory.sendMessage(msgFactory.contacts.last, "e qpwe oqwe q");
+  msgFactory.sendMessage(msgFactory.contacts.first, ":D :D");
+  msgFactory.receiveMessage(msgFactory.contacts.first, "whut homie?");
+
   runApp(MyApp());
 }
 

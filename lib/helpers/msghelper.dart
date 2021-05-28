@@ -22,9 +22,11 @@ void main() {
       msgFact.addPerson(element);
     });
 
-    msgFact.addMessage(msgFact.contacts.first, "looooooo");
+    msgFact.sendMessage(msgFact.contacts.first, "looooooo");
 
-    expect(msgFact.getMessages(msgFact.contacts.first).length, 2);
+    msgFact.receiveMessage(msgFact.contacts.first, "??");
+
+    expect(msgFact.getMessages(msgFact.contacts.first).length, 3);
 
     expect(msgFact.getMessages(msgFact.contacts.first).last is Message, true);
   });
@@ -34,21 +36,37 @@ class MessageFactory {
   Map<Chat, List<Draft>> _items = Map();
   final DirectChat _owner;
 
-  MessageFactory(this._owner);
+  MessageFactory(this._owner) {
+    addContact(owner);
+  }
 
   DirectChat get owner => _owner;
 
-  Iterable<Draft> getMessages(Chat target) => _items[target];
+  Iterable<Draft> getMessages(Chat target) {
+    var list = _items[target].toList() ?? [];
+    var twoo = (_items[owner].toList() ?? <Draft>[])
+        .where((element) => element.from == target)
+        .toList();
+    list.addAll(twoo);
+    return list;
+  }
 
   Draft getLastMessage(Chat target) => getMessages(target)
       .lastWhere((element) => true, orElse: () => target.createDraft(_owner));
 
-  Iterable<Chat> get contacts => _items.keys;
+  Iterable<Chat> get contacts =>
+      _items.keys.where((element) => element != owner);
 
-  void addMessage(Chat target, String body) {
+  void sendMessage(Chat target, String body) {
     var dr = target.createDraft(_owner);
     dr.setBody = body;
     _items[target].add(dr.toMessage());
+  }
+
+  void receiveMessage(Chat from, String body) {
+    var dr = owner.createDraft(from);
+    dr.setBody = body;
+    _items[owner].add(dr.toMessage());
   }
 
   void addContact(Chat target) {

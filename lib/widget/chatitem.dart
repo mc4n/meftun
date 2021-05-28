@@ -31,7 +31,7 @@ class ChatItemState extends State<ChatItem> {
 
     Widget avatarName(String tx, [String av = 'pac.jpg']) {
       return Column(children: [
-        Text('$tx:'),
+        Text('$tx'),
         Padding(padding: EdgeInsets.symmetric(vertical: 2)),
         CircleAvatar(backgroundImage: AssetImage(av))
       ]);
@@ -46,13 +46,15 @@ class ChatItemState extends State<ChatItem> {
     }
 
     var avatarAndText = <Widget>[];
-    avatarAndText.add(avatarName('${lastMsg.from.caption}'));
+    avatarAndText.add(avatarName(
+        '${lastMsg.from == msgFactory.owner ? 'YOU' : lastMsg.from.caption}'));
 
     avatarAndText.add(Text('   --->   '));
 
-    avatarAndText.add(avatarName('${lastMsg.chatGroup.caption}'));
+    avatarAndText.add(avatarName(
+        '${lastMsg.chatGroup == msgFactory.owner ? 'YOU' : lastMsg.chatGroup.caption}'));
 
-    avatarAndText.add(Padding(padding: EdgeInsets.symmetric(horizontal: 28.0)));
+    avatarAndText.add(Padding(padding: EdgeInsets.symmetric(horizontal: 20.0)));
 
     avatarAndText.addAll(afterAvatar('"${lastMsg.body}"'));
 
@@ -61,7 +63,7 @@ class ChatItemState extends State<ChatItem> {
     var card = Card(
       key: ValueKey(chatItem.id),
       color: colorPicked,
-      margin: EdgeInsets.symmetric(vertical: 7.0, horizontal: 3),
+      //margin: EdgeInsets.symmetric(vertical: 7.0, horizontal: 3),
       child: Padding(
         child: GestureDetector(
             child: Row(children: avatarAndText),
@@ -77,7 +79,7 @@ class ChatItemState extends State<ChatItem> {
               //super.setState(() => null);
               print('onLongPress ');
             }),
-        padding: EdgeInsets.all(13.0),
+        padding: EdgeInsets.all(10.0),
       ),
     );
 
