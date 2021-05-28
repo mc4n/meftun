@@ -3,8 +3,26 @@ import 'package:flutter/cupertino.dart';
 import 'package:me_flutting/pages/chat_list.dart';
 import 'package:me_flutting/pages/contact_list.dart';
 import 'helpers/msghelper.dart';
+import 'models/directchat.dart';
 
-void main() => runApp(MyApp());
+MessageFactory msgFactory = MessageFactory(DirectChat("mcan", "Mustafa Can"));
+
+void main() {
+  msgFactory.addPerson("2pac");
+  msgFactory.addPerson("bigg");
+  msgFactory.addPerson("fooo");
+  msgFactory.addPerson("ali");
+  msgFactory.addPerson("veli");
+  msgFactory.addPerson("ayse");
+  msgFactory.addPerson("fatma");
+  msgFactory.addPerson("obama");
+  
+  msgFactory.addMessage(msgFactory.contacts.first, "fooozoaoa");
+  msgFactory.addMessage(msgFactory.contacts.last, "e qpwe oqwe q");
+  msgFactory.addMessage(msgFactory.contacts.first, "lorem");
+  
+  runApp(MyApp());
+}
 
 class MyApp extends StatelessWidget {
   @override
@@ -35,9 +53,9 @@ class MainPage extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: <Widget>[
-                    ContactList(contacts: contacts),
+                    ContactList(contacts: msgFactory.contacts.toList()),
                     Padding(padding: EdgeInsets.symmetric(vertical: 4.0)),
-                    ChatList(chats: contacts)
+                    ChatList(chats: msgFactory.contacts.toList()),
                   ],
                 ),
               ),

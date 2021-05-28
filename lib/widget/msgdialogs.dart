@@ -1,11 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:me_flutting/helpers/msghelper.dart';
+import 'package:me_flutting/models/directchat.dart';
 import 'package:me_flutting/models/message.dart';
 
 class MessageDialogs extends StatelessWidget {
   final List<Message> messages;
-  const MessageDialogs({Key key, this.messages}) : super(key: key);
+  final DirectChat me;
+  const MessageDialogs({Key key, this.messages, this.me}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

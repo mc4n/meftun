@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:me_flutting/helpers/msghelper.dart';
+import 'package:me_flutting/main.dart';
 import 'package:me_flutting/models/chat.dart';
 import 'package:me_flutting/widget/msgdialogs.dart';
+import 'package:me_flutting/models/message.dart';
 
 class TextingPage extends StatelessWidget {
   final Chat selChat;
@@ -23,7 +24,14 @@ class TextingPage extends StatelessWidget {
       // body
       body: Column(children: [
         Expanded(
-            child: MessageDialogs(messages: getMessages(selChat).toList())),
+          child: MessageDialogs(
+              me: msgFactory.owner,
+              messages: msgFactory
+                  .getMessages(selChat)
+                  .where((m) => m is Message)
+                  .map((m) => m as Message)
+                  .toList()),
+        ),
         _butt(),
       ]),
       //

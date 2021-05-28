@@ -1,85 +1,62 @@
-import 'dart:math';
-
 import 'package:flutter_test/flutter_test.dart';
-
 import 'package:me_flutting/models/chat.dart';
 import 'package:me_flutting/models/directchat.dart';
 import 'package:me_flutting/models/draft.dart';
 import 'package:me_flutting/models/message.dart';
 
-Message _simulateMsg(String msgText,
-        [bool direction = true, int contactIndex = 0]) =>
-    !direction
-        ? Message(msgText, contacts[contactIndex], me.id, me)
-        : Message(msgText, me, me.id, contacts[contactIndex]);
-
-final myMessages = [
-  _simulateMsg('it is okey', false, 0),
-  _simulateMsg('you know.', false),
-  _simulateMsg('yeah'),
-  _simulateMsg('i know.'),
-  _simulateMsg('thanks'),
-  _simulateMsg(':)', false),
-  _simulateMsg('asd asda adl qwew e \n woe qwoe r53 \n teorterot'),
-  _simulateMsg('are you there?', false, 2),
-  _simulateMsg('cooool!', true, 1),
-  _simulateMsg(':-)', false, 3),
-];
-
-bool predMyMsg(Chat chat, Message msg) {
-  var recv = (Message element) =>
-      element.from.id == chat.id && element.chatGroup.id == me.id;
-  var sent = (Message element) =>
-      element.from.id == me.id && element.chatGroup.id == chat.id;
-
-  return recv(msg) || sent(msg);
-}
-
-Iterable<Message> getMessages(Chat chat) =>
-    myMessages.where((element) => predMyMsg(chat, element));
-
-Message getLastMessage(Chat chat) =>
-    myMessages.lastWhere((element) => predMyMsg(chat, element),
-        orElse: () => Draft('', me, chat).toMessage());
-
-final DirectChat me = DirectChat("mcan", "Mustafa Can");
-const ITEM_C = 5;
-final List<DirectChat> contacts = [
-  DirectChat('2pac'),
-  DirectChat('ali'),
-  DirectChat('veli'),
-  DirectChat('deli'),
-  DirectChat('peri')
-];
-
-final Random rnd = Random();
-
-final List<Draft> allDrafts = [
-  'lorem ipsum :D',
-  'iyidir',
-  'come on!',
-  'the world is yours!',
-  'moooooo',
-  'i love the way you do it',
-  'what do you do?'
-].map((bd) {
-  return Draft(bd, me, contacts[rnd.nextInt(contacts.length)]);
-});
-
 void main() {
-  test('testCreateMsg', () async {
-    var draft = contacts[0].createDraft(me);
-    var msg = draft.toMessage();
-    expect(msg.id, isNotNull);
-  });
+  test('test contacts', () async {
+    var msgFact = MessageFactory(DirectChat('admin', 'adamin dibi'));
+    var peeps = ['2pac', 'bigg', 'cube', 'ali', 'ayse'];
 
-  test('testgetLastMsgs', () async {
-    var chatList = contacts.map((e) => getLastMessage(e)).toList();
-
-    chatList.forEach((element) {
-      print(element);
+    peeps.forEach((element) {
+      msgFact.addPerson(element);
     });
 
-    expect(chatList, isNotNull);
+    expect(msgFact.contacts.map((e) => (e as DirectChat).username), peeps);
   });
+
+  test('test contacts', () async {
+    var msgFact = MessageFactory(DirectChat('admin', 'adamin dibi'));
+    ['2pac', 'bigg', 'cube', 'ali', 'ayse'].forEach((element) {
+      msgFact.addPerson(element);
+    });
+
+    msgFact.addMessage(msgFact.contacts.first, "looooooo");
+
+    expect(msgFact.getMessages(msgFact.contacts.first).length, 2);
+
+    expect(msgFact.getMessages(msgFact.contacts.first).last is Message, true);
+  });
+}
+
+class MessageFactory {
+  Map<Chat, List<Draft>> _items = Map();
+  final DirectChat _owner;
+
+  MessageFactory(this._owner);
+
+  DirectChat get owner => _owner;
+
+  Iterable<Draft> getMessages(Chat target) => _items[target];
+
+  Draft getLastMessage(Chat target) => getMessages(target)
+      .lastWhere((element) => true, orElse: () => target.createDraft(_owner));
+
+  Iterable<Chat> get contacts => _items.keys;
+
+  void addMessage(Chat target, String body) {
+    var dr = target.createDraft(_owner);
+    dr.setBody = body;
+    _items[target].add(dr.toMessage());
+  }
+
+  void addContact(Chat target) {
+    _items.putIfAbsent(target, () => [target.createDraft(_owner)]);
+  }
+
+  void addPerson(String userName) {
+    var target = DirectChat(userName);
+    _items.putIfAbsent(target, () => [target.createDraft(owner)]);
+  }
 }

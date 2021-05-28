@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/rendering.dart';
-import 'package:me_flutting/helpers/msghelper.dart';
 import 'package:me_flutting/models/chat.dart';
 import 'package:me_flutting/pages/texting.dart';
+
+import '../main.dart';
 
 class ChatItem extends StatefulWidget {
   final Chat chatItem;
@@ -20,11 +21,11 @@ class ChatItemState extends State<ChatItem> {
   ChatItemState({Key key, this.chatItem});
   @override
   Widget build(BuildContext context) {
-    var lastMsg = getLastMessage(chatItem);
+    var lastMsg = msgFactory.getLastMessage(chatItem);
 
-    var isMe = lastMsg.from.id == me.id;
+    var isMe = lastMsg.from.id == msgFactory.owner.id;
 
-    if (lastMsg.body.trim() == '') {
+    if (lastMsg.body == null) {
       return Card();
     }
 

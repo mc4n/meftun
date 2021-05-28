@@ -19,4 +19,13 @@ abstract class Chat {
   }
 
   String get caption;
+
+  @override
+  bool operator ==(Object other) {
+    // ignore: test_types_in_equals
+    return id == (other as Chat).id;
+  }
+
+  @override
+  int get hashCode => id.hashCode;
 }
