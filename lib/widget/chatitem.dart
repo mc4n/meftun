@@ -8,17 +8,20 @@ import '../main.dart';
 
 class ChatItem extends StatefulWidget {
   final Chat chatItem;
+  final void Function(String) onMsgSent;
 
-  const ChatItem({Key key, this.chatItem}) : super(key: key);
+  const ChatItem({Key key, this.chatItem, this.onMsgSent}) : super(key: key);
 
   @override
-  State<StatefulWidget> createState() => ChatItemState(chatItem: chatItem);
+  State<StatefulWidget> createState() =>
+      ChatItemState(chatItem: chatItem, onMsgSent: onMsgSent);
 }
 
 class ChatItemState extends State<ChatItem> {
   final Chat chatItem;
+  final void Function(String) onMsgSent;
 
-  ChatItemState({Key key, this.chatItem});
+  ChatItemState({Key key, this.chatItem, this.onMsgSent});
   @override
   Widget build(BuildContext context) {
     var lastMsg = msgFactory.getLastMessage(chatItem);
@@ -87,7 +90,8 @@ class ChatItemState extends State<ChatItem> {
         onPressed: () => {
               Navigator.of(context).push(
                 MaterialPageRoute(
-                  builder: (context) => TextingPage(selChat: chatItem),
+                  builder: (context) =>
+                      TextingPage(selChat: chatItem, onMsgSent: onMsgSent),
                 ),
               )
             },

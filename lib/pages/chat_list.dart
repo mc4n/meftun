@@ -4,9 +4,23 @@ import 'package:flutter/rendering.dart';
 import 'package:me_flutting/widget/chatitem.dart';
 import '../models/chat.dart';
 
-class ChatList extends StatelessWidget {
+class ChatList extends StatefulWidget {
   final List<Chat> chats;
-  ChatList({Key key, this.chats}) : super(key: key);
+
+  ChatList({Key key, this.chats});
+
+  @override
+  State<StatefulWidget> createState() => ChatListState(chats);
+}
+
+class ChatListState extends State<ChatList> {
+  final List<Chat> chats;
+  void Function(String) onMsgSent;
+  ChatListState(this.chats) {
+    onMsgSent = (_) { 
+		setState(() => null);
+    };
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +37,7 @@ class ChatList extends StatelessWidget {
         physics: BouncingScrollPhysics(),
         itemCount: chats.length,
         itemBuilder: (BuildContext context, int index) =>
-            ChatItem(chatItem: chats[index]),
+            ChatItem(chatItem: chats[index], onMsgSent: onMsgSent),
       )),
     );
   }

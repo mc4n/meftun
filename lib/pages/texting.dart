@@ -7,8 +7,11 @@ import 'package:me_flutting/models/message.dart';
 
 class TextingPage extends StatelessWidget {
   final Chat selChat;
+  final TextEditingController teC = TextEditingController();
 
-  TextingPage({Key key, this.selChat}) : super(key: key);
+  final void Function(String) onMsgSent;
+
+  TextingPage({Key key, this.selChat, this.onMsgSent}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -43,11 +46,23 @@ class TextingPage extends StatelessWidget {
         color: Colors.grey.shade100,
         margin: EdgeInsets.all(4),
         child: Row(children: [
-          Expanded(child: TextField()),
+          Expanded(
+              child: TextField(
+            controller: teC,
+            onSubmitted: (_) {
+              msgFactory.sendMessage(selChat, teC.text);
+            },
+          )),
           ElevatedButton(
-              onPressed: () => {
-                    // send the message.
-                  },
+              onPressed: () {
+                var data = teC.text;
+                if (data.trim() != '') {
+                  msgFactory.sendMessage(selChat, data);
+                  if (onMsgSent != null) {
+                    onMsgSent(data);
+                  }
+                }
+              },
               child: Text('SEND'))
         ]));
   }
