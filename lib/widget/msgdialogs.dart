@@ -29,6 +29,7 @@ class MessageDialogs extends StatelessWidget {
 
   Widget _single(BuildContext c, int i) {
     var msg = messages[i];
+    if (msg.body == null) return Row();
     return TextButton(
         onPressed: () => null, child: _msgCard(msg, msg?.from?.id != me.id));
   }

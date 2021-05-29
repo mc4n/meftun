@@ -23,9 +23,9 @@ void main() {
 
   msgFactory.sendMessage(p1, 'word da f up!');
   msgFactory.receiveMessage(p2, me, 'hi');
-
   msgFactory.sendMessage(g1, 'morning!');
   msgFactory.receiveMessage(p1, g1, 'thug life bay behh!');
+  msgFactory.receiveMessage(p1, g2, '?');
 
   runApp(MyApp());
 }

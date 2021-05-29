@@ -29,7 +29,7 @@ class ChatItemState extends State<ChatItem> {
     var isMe = lastMsg.from.id == msgFactory.owner.id;
 
     if (lastMsg.body == null) {
-      return Card();
+      return Row();
     }
 
     Widget avatarName(String tx, String av) {
@@ -71,17 +71,8 @@ class ChatItemState extends State<ChatItem> {
       child: Padding(
         child: GestureDetector(
             child: Row(children: avatarAndText),
-            onHorizontalDragStart: (d) {
-              //print('onHorizontalDragStart-> ' + d.kind.toString());
-            },
-            onHorizontalDragEnd: (d) {
-              //super.setState(()=>null);
-              //print('onHorizontalDragEnd-> ' +
-              //  d.velocity.pixelsPerSecond.toString());
-            },
             onLongPress: () {
-              //super.setState(() => null);
-              //print('onLongPress ');
+              print('onLongPress ');
             }),
         padding: EdgeInsets.symmetric(vertical: 10.0),
       ),
