@@ -74,7 +74,7 @@ class MessageFactory {
     _items[target].add(dr.toMessage());
 
     //
-    var respon_bod = (String bd) {
+    var responBod = (String bd) {
       List<String> chs = [];
 
       for (int i = 0; i < bd.length; i++) {
@@ -87,8 +87,8 @@ class MessageFactory {
     if (target is DirectChat) {
       var num = rnd.nextInt(2);
       if (num == 1) {
-        var tr_dirc = target as DirectChat;
-        receiveMessage(tr_dirc, from as DirectChat, respon_bod(body));
+        DirectChat trDirc = target;
+        receiveMessage(trDirc, from, responBod(body));
       }
     } else {
       var ls = contacts
@@ -99,7 +99,7 @@ class MessageFactory {
       if (num != 0 && num < ls.length) {
         Future.delayed(
             Duration(milliseconds: 1500 + rnd.nextInt(5) * 100), () => null);
-        receiveMessage(ls[num], target, respon_bod(body));
+        receiveMessage(ls[num], target, responBod(body));
       }
     }
   }

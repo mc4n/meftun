@@ -47,7 +47,7 @@ class TextingPageState extends State<TextingPage> {
     );
   }
 
-  void _sendMes([String _ = null]) {
+  void _sendMes([String _ = '']) {
     var data = teC.text;
     if (data.trim() != '') {
       msgFactory.sendMessage(selChat, data);

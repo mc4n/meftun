@@ -26,8 +26,6 @@ class ChatItemState extends State<ChatItem> {
   Widget build(BuildContext context) {
     var lastMsg = msgFactory.getLastMessage(chatItem);
 
-    var isMe = lastMsg.from.id == msgFactory.owner.id;
-
     if (lastMsg.body == null) {
       return Row();
     }

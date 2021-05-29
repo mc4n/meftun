@@ -6,22 +6,27 @@ import 'package:me_flutting/models/message.dart';
 class MessageDialogs extends StatelessWidget {
   final List<Message> messages;
   final DirectChat me;
-  const MessageDialogs({Key key, this.messages, this.me}) : super(key: key);
+  MessageDialogs({Key key, this.messages, this.me}) : super(key: key);
+
+  //final ScrollController sc = ScrollController();
 
   @override
   Widget build(BuildContext context) {
-    return Column(mainAxisSize: MainAxisSize.max, children: <Widget>[
+    var col = Column(mainAxisSize: MainAxisSize.max, children: <Widget>[
       Expanded(
         child: _lv(messages.length, _single),
       )
     ]);
+    return col;
   }
 
   Widget _lv(int ct, Widget Function(BuildContext context, int index) bItem) {
     return ListView.builder(
       physics: BouncingScrollPhysics(),
+      //controller: sc,
       itemCount: ct,
       itemBuilder: (BuildContext context, int index) {
+        //sc?.jumpTo(sc?.position.maxScrollExtent);
         return bItem(context, index);
       },
     );
