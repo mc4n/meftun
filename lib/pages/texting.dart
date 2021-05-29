@@ -47,6 +47,17 @@ class TextingPageState extends State<TextingPage> {
     );
   }
 
+  void _sendMes() {
+    var data = teC.text;
+    if (data.trim() != '') {
+      msgFactory.sendMessage(selChat, data);
+      if (onMsgSent != null) {
+        onMsgSent(data);
+        setState(() => null);
+      }
+    }
+  }
+
   Card _butt() {
     return Card(
         color: Colors.grey.shade100,
@@ -56,21 +67,12 @@ class TextingPageState extends State<TextingPage> {
               child: TextField(
             controller: teC,
             onSubmitted: (_) {
-              msgFactory.sendMessage(selChat, teC.text);
+              _sendMes();
             },
           )),
           ElevatedButton(
               onPressed: () {
-                var data = teC.text;
-                if (data.trim() != '') {
-                  msgFactory.sendMessage(selChat, data);
-                  if (onMsgSent != null) {
-                    onMsgSent(data);
-                    setState(() {
-                      //
-                    });
-                  }
-                }
+                _sendMes();
               },
               child: Text('SEND'))
         ]));

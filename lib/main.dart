@@ -9,20 +9,23 @@ MessageFactory msgFactory =
     MessageFactory(DirectChat('mcan', 'Mustafa Can', 'pac.jpg'));
 
 void main() {
-  msgFactory.addPerson('2pac');
-  msgFactory.addPerson('bigg');
-  msgFactory.addPerson('fooo');
+  var me = msgFactory.owner;
+  var p1 = msgFactory.addPerson('2pac');
+  var p2 = msgFactory.addPerson('bigg');
+  var g1 = msgFactory.addGroup('THUGS');
   msgFactory.addPerson('ali');
   msgFactory.addPerson('veli');
   msgFactory.addPerson('ayse');
   msgFactory.addPerson('fatma');
+  msgFactory.addGroup('MALLAR');
+  var g2 = msgFactory.addGroup('Mentals');
   msgFactory.addPerson('obama');
 
-  msgFactory.sendMessage(msgFactory.contacts.first, "fooozoaoa");
-  msgFactory.receiveMessage(msgFactory.contacts.last, "long live");
-  msgFactory.sendMessage(msgFactory.contacts.last, "e qpwe oqwe q");
-  msgFactory.sendMessage(msgFactory.contacts.first, ":D :D");
-  msgFactory.receiveMessage(msgFactory.contacts.first, "whut homie?");
+  msgFactory.sendMessage(p1, 'word da f up!');
+  msgFactory.receiveMessage(p2, me, 'hi');
+
+  msgFactory.sendMessage(g1, 'morning!');
+  msgFactory.receiveMessage(p1, g1, 'thug life bay behh!');
 
   runApp(MyApp());
 }

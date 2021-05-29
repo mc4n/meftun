@@ -1,17 +1,16 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:me_flutting/models/chat.dart';
 import 'package:me_flutting/models/directchat.dart';
+import 'package:me_flutting/models/groupchat.dart';
 import 'package:me_flutting/models/message.dart';
 
 void main() {
   test('test contacts', () async {
     var msgFact = MessageFactory(DirectChat('admin', 'adamin dibi'));
     var peeps = ['2pac', 'bigg', 'cube', 'ali', 'ayse'];
-
     peeps.forEach((element) {
       msgFact.addPerson(element);
     });
-
     expect(msgFact.contacts.map((e) => (e as DirectChat).username), peeps);
   });
 
@@ -20,13 +19,9 @@ void main() {
     ['2pac', 'bigg', 'cube', 'ali', 'ayse'].forEach((element) {
       msgFact.addPerson(element);
     });
-
     msgFact.sendMessage(msgFact.contacts.first, "looooooo");
-
-    msgFact.receiveMessage(msgFact.contacts.first, "??");
-
+    msgFact.receiveMessage(msgFact.contacts.last, msgFact.contacts.first, "??");
     expect(msgFact.getMessages(msgFact.contacts.first).length, 3);
-
     expect(msgFact.getMessages(msgFact.contacts.first).last is Message, true);
   });
 }
@@ -34,7 +29,6 @@ void main() {
 class MessageFactory {
   Map<Chat, List<Message>> _items = Map();
   final DirectChat _owner;
-
   MessageFactory(this._owner) {
     addContact(owner);
   }
@@ -67,24 +61,28 @@ class MessageFactory {
   Iterable<Chat> get contacts =>
       _items.keys.where((element) => element != owner);
 
-  void sendMessage(Chat target, String body) {
-    var dr = target.createDraft(_owner);
+  void sendMessage(Chat target, String body) =>
+      receiveMessage(owner, target, body);
+
+  void receiveMessage(DirectChat from, Chat target, String body) {
+    var dr = target.createDraft(from);
     dr.setBody = body;
     _items[target].add(dr.toMessage());
   }
 
-  void receiveMessage(Chat from, String body) {
-    var dr = owner.createDraft(from);
-    dr.setBody = body;
-    _items[owner].add(dr.toMessage());
-  }
-
   void addContact(Chat target) {
-    _items.putIfAbsent(target, () => [target.createDraft(_owner).toMessage()]);
+    _items.putIfAbsent(target, () => [target.createDraft(owner).toMessage()]);
   }
 
-  void addPerson(String userName) {
-    var target = DirectChat(userName);
-    _items.putIfAbsent(target, () => [target.createDraft(owner).toMessage()]);
+  DirectChat addPerson(String userName) {
+    var buddy = DirectChat(userName);
+    addContact(buddy);
+    return buddy;
+  }
+
+  GroupChat addGroup(String name) {
+    var gro = GroupChat(name);
+    addContact(gro);
+    return gro;
   }
 }

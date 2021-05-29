@@ -43,7 +43,8 @@ class ContactList extends StatelessWidget {
               },
               child: Column(children: [
                 Text(contacts[index].caption),
-                CircleAvatar(backgroundImage: AssetImage('avatar.png')),
+                CircleAvatar(
+                    backgroundImage: AssetImage(contacts[index].photoURL)),
               ]))),
     );
   }
