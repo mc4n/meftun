@@ -1,7 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:me_flutting/models/chat.dart';
 import 'package:me_flutting/models/directchat.dart';
-import 'package:me_flutting/models/draft.dart';
 import 'package:me_flutting/models/message.dart';
 
 void main() {

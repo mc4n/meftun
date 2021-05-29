@@ -26,5 +26,6 @@ flutter:
   uses-material-design: true
   assets:
     - avatar.png
+    - group_avatar.png
     - pac.jpg
     
