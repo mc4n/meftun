@@ -92,9 +92,14 @@ class MainPageState extends State<MainPage> {
       length: _r.length,
       child: Scaffold(
         appBar: AppBar(
-          backgroundColor: Colors.red.shade300,
+          backgroundColor: Colors.grey.shade700,
+          leading: TextButton(
+			  onPressed: () => null,
+			  child:Icon(Icons.search, color: Colors.white)),		
+          title : Text('Meflutin', style : TextStyle(fontSize: 24, color: Colors.white)),
+          //actions : <Widget>[],
           bottom: TabBar(
-              labelStyle: TextStyle(fontSize: 18),
+              labelStyle: TextStyle(fontSize: 19),
               isScrollable: true,
               tabs: head()),
         ),

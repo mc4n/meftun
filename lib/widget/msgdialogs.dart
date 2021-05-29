@@ -39,7 +39,7 @@ class MessageDialogs extends StatelessWidget {
 
     return Card(
         key: ValueKey(msg.id),
-        color: !isLeft ? Colors.green.shade100 : Colors.grey.shade300,
+        color: !isLeft ? Colors.green.shade200 : Colors.grey.shade100,
         margin: EdgeInsets.symmetric(vertical: 12),
         child: Padding(
           child: Column(

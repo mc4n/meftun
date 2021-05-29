@@ -26,7 +26,7 @@ class TextingPageState extends State<TextingPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.red.shade300,
+        backgroundColor: Colors.grey.shade800,
         leading: BackButton(
           onPressed: () {
             Navigator.pop(context);
@@ -37,9 +37,10 @@ class TextingPageState extends State<TextingPage> {
       // body
       body: Column(children: [
         Expanded(
-          child: MessageDialogs(
-              me: msgFactory.owner,
-              messages: msgFactory.getMessages(selChat).toList()),
+             child: MessageDialogs(
+				  me: msgFactory.owner,
+				  messages: msgFactory.getMessages(selChat).toList()
+		     ),
         ),
         _butt(),
       ]),
@@ -47,7 +48,7 @@ class TextingPageState extends State<TextingPage> {
     );
   }
 
-  void _sendMes() {
+  void _sendMes([String _ = null]) {
     var data = teC.text;
     if (data.trim() != '') {
       msgFactory.sendMessage(selChat, data);
@@ -55,6 +56,7 @@ class TextingPageState extends State<TextingPage> {
         onMsgSent(data);
         setState(() => null);
       }
+      teC.text = '';
     }
   }
 
@@ -63,18 +65,20 @@ class TextingPageState extends State<TextingPage> {
         color: Colors.grey.shade100,
         margin: EdgeInsets.all(4),
         child: Row(children: [
-          Expanded(
-              child: TextField(
-            controller: teC,
-            onSubmitted: (_) {
-              _sendMes();
-            },
-          )),
-          ElevatedButton(
-              onPressed: () {
-                _sendMes();
-              },
-              child: Text('SEND'))
+          Expanded(child: 
+				 TextField(
+					controller: teC,
+					onSubmitted: _sendMes,
+					style: TextStyle(fontSize:16),
+					autofocus : true,
+				 )
+          ),
+          
+          TextButton(
+              onPressed: _sendMes
+              ,
+              child: Icon(Icons.send, color: Colors.black),
+          )
         ]));
   }
 }

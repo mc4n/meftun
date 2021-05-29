@@ -16,14 +16,14 @@ class ContactList extends StatelessWidget {
 
   Widget _col(BuildContext context) {
     return Container(
-        height: 84,
+        height: 80,
         color: Colors.yellow.shade100,
         child: Padding(
           padding: EdgeInsets.all(10.0),
           child: Row(children: [
-            TextButton(onPressed: () => null, child: Text('<')),
+            TextButton(onPressed: () => null, child: Text('<', style: TextStyle(color: Colors.black))),
             _expan(context),
-            TextButton(onPressed: () => null, child: Text('>')),
+            TextButton(onPressed: () => null, child: Text('>', style: TextStyle(color: Colors.black))),
           ]),
         ));
   }
@@ -42,7 +42,7 @@ class ContactList extends StatelessWidget {
                 ));
               },
               child: Column(children: [
-                Text(contacts[index].caption),
+                Text(contacts[index].caption, style: TextStyle(color: Colors.grey.shade800)),
                 CircleAvatar(
                     backgroundImage: AssetImage(contacts[index].photoURL)),
               ]))),
