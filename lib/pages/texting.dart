@@ -37,10 +37,9 @@ class TextingPageState extends State<TextingPage> {
       // body
       body: Column(children: [
         Expanded(
-             child: MessageDialogs(
-				  me: msgFactory.owner,
-				  messages: msgFactory.getMessages(selChat).toList()
-		     ),
+          child: MessageDialogs(
+              me: msgFactory.owner,
+              messages: msgFactory.getMessages(selChat).toList()),
         ),
         _butt(),
       ]),
@@ -65,19 +64,16 @@ class TextingPageState extends State<TextingPage> {
         color: Colors.grey.shade100,
         margin: EdgeInsets.all(4),
         child: Row(children: [
-          Expanded(child: 
-				 TextField(
-					controller: teC,
-					onSubmitted: _sendMes,
-					style: TextStyle(fontSize:16),
-					autofocus : true,
-				 )
-          ),
-          
+          Expanded(
+              child: TextField(
+            controller: teC,
+            onSubmitted: _sendMes,
+            style: TextStyle(fontSize: 16),
+            autofocus: true,
+          )),
           TextButton(
-              onPressed: _sendMes
-              ,
-              child: Icon(Icons.send, color: Colors.black),
+            onPressed: _sendMes,
+            child: Icon(Icons.send, color: Colors.black),
           )
         ]));
   }

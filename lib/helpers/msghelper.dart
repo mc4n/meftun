@@ -4,6 +4,8 @@ import 'package:me_flutting/models/directchat.dart';
 import 'package:me_flutting/models/groupchat.dart';
 import 'package:me_flutting/models/message.dart';
 
+import 'dart:math';
+
 void main() {
   test('test contacts', () async {
     var msgFact = MessageFactory(DirectChat('admin', 'adamin dibi'));
@@ -54,6 +56,8 @@ class MessageFactory {
     return list;
   }
 
+  static Random rnd = Random();
+
   Message getLastMessage(Chat target) =>
       getMessages(target).lastWhere((element) => true,
           orElse: () => target.createDraft(_owner).toMessage());
@@ -68,6 +72,36 @@ class MessageFactory {
     var dr = target.createDraft(from);
     dr.setBody = body;
     _items[target].add(dr.toMessage());
+
+    //
+    var respon_bod = (String bd) {
+      List<String> chs = [];
+
+      for (int i = 0; i < bd.length; i++) {
+        chs.add(bd[i]);
+      }
+      chs.shuffle();
+      return chs.join(); //'len: ${body.length.toString()}';
+    };
+
+    if (target is DirectChat) {
+      var num = rnd.nextInt(2);
+      if (num == 1) {
+        var tr_dirc = target as DirectChat;
+        receiveMessage(tr_dirc, from as DirectChat, respon_bod(body));
+      }
+    } else {
+      var ls = contacts
+          .where((i) => i is DirectChat)
+          .map((i) => i as DirectChat)
+          .toList();
+      var num = rnd.nextInt(ls.length * 2);
+      if (num != 0 && num < ls.length) {
+        Future.delayed(
+            Duration(milliseconds: 1500 + rnd.nextInt(5) * 100), () => null);
+        receiveMessage(ls[num], target, respon_bod(body));
+      }
+    }
   }
 
   void addContact(Chat target) {

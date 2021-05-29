@@ -94,9 +94,10 @@ class MainPageState extends State<MainPage> {
         appBar: AppBar(
           backgroundColor: Colors.grey.shade700,
           leading: TextButton(
-			  onPressed: () => null,
-			  child:Icon(Icons.search, color: Colors.white)),		
-          title : Text('Meflutin', style : TextStyle(fontSize: 24, color: Colors.white)),
+              onPressed: () => null,
+              child: Icon(Icons.search, color: Colors.white)),
+          title: Text('Meflutin',
+              style: TextStyle(fontSize: 24, color: Colors.white)),
           //actions : <Widget>[],
           bottom: TabBar(
               labelStyle: TextStyle(fontSize: 19),
