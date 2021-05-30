@@ -11,15 +11,11 @@ class TextingPage extends StatefulWidget {
   TextingPage({Key key, this.selChat, this.onMsgSent}) : super(key: key);
 
   @override
-  State<StatefulWidget> createState() => TextingPageState(selChat, onMsgSent);
+  State<StatefulWidget> createState() => TextingPageState();
 }
 
 class TextingPageState extends State<TextingPage> {
-  final Chat selChat;
   final TextEditingController teC = TextEditingController();
-  final void Function(String) onMsgSent;
-
-  TextingPageState(this.selChat, this.onMsgSent);
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +27,7 @@ class TextingPageState extends State<TextingPage> {
             Navigator.pop(context);
           },
         ),
-        title: Text('${selChat.caption}'),
+        title: Text('${widget.selChat.caption}'),
       ),
       // body
       body: _body(),
@@ -42,9 +38,9 @@ class TextingPageState extends State<TextingPage> {
   void _sendMes([String _ = '']) {
     var data = teC.text;
     if (data.trim() != '') {
-      msgFactory.sendMessage(selChat, data);
-      if (onMsgSent != null) {
-        onMsgSent(data);
+      msgFactory.sendMessage(widget.selChat, data);
+      if (widget.onMsgSent != null) {
+        widget.onMsgSent(data);
         setState(() => null);
       }
       teC.text = '';
@@ -54,7 +50,7 @@ class TextingPageState extends State<TextingPage> {
   Column _body() => Column(children: [
         Expanded(
           child: MessageDialogs(
-            selChat: selChat,
+            selChat: widget.selChat,
           ),
         ),
         _butt(),

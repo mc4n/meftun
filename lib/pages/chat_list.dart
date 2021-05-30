@@ -12,14 +12,10 @@ class ChatList extends StatefulWidget {
   ChatList({Key key, this.chats, this.onMsgSent});
 
   @override
-  State<StatefulWidget> createState() => ChatListState(chats, onMsgSent);
+  State<StatefulWidget> createState() => ChatListState();
 }
 
 class ChatListState extends State<ChatList> {
-  final List<Chat> chats;
-  final void Function(String) onMsgSent;
-  ChatListState(this.chats, this.onMsgSent);
-
   @override
   Widget build(BuildContext context) {
     return _expan();
@@ -33,9 +29,9 @@ class ChatListState extends State<ChatList> {
         scrollDirection: Axis.vertical,
         shrinkWrap: true,
         physics: BouncingScrollPhysics(),
-        itemCount: chats.length,
-        itemBuilder: (BuildContext context, int index) =>
-            ChatItem(chatItem: chats[index], onMsgSent: onMsgSent),
+        itemCount: widget.chats.length,
+        itemBuilder: (BuildContext context, int index) => ChatItem(
+            chatItem: widget.chats[index], onMsgSent: widget.onMsgSent),
       )),
     );
   }

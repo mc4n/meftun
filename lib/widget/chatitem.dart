@@ -13,18 +13,13 @@ class ChatItem extends StatefulWidget {
   const ChatItem({Key key, this.chatItem, this.onMsgSent}) : super(key: key);
 
   @override
-  State<StatefulWidget> createState() =>
-      ChatItemState(chatItem: chatItem, onMsgSent: onMsgSent);
+  State<StatefulWidget> createState() => ChatItemState();
 }
 
 class ChatItemState extends State<ChatItem> {
-  final Chat chatItem;
-  final void Function(String) onMsgSent;
-
-  ChatItemState({Key key, this.chatItem, this.onMsgSent});
   @override
   Widget build(BuildContext context) {
-    var lastMsg = msgFactory.getLastMessage(chatItem);
+    var lastMsg = msgFactory.getLastMessage(widget.chatItem);
 
     if (lastMsg.body == null) {
       return Row();
@@ -62,7 +57,7 @@ class ChatItemState extends State<ChatItem> {
     avatarAndText.addAll(afterAvatar('"${lastMsg.body}"'));
 
     var card = Card(
-      key: ValueKey(chatItem.id),
+      key: ValueKey(widget.chatItem.id),
       child: Padding(
         child: GestureDetector(
             child: Row(children: avatarAndText),
@@ -77,8 +72,8 @@ class ChatItemState extends State<ChatItem> {
         onPressed: () => {
               Navigator.of(context).push(
                 MaterialPageRoute(
-                  builder: (context) =>
-                      TextingPage(selChat: chatItem, onMsgSent: onMsgSent),
+                  builder: (context) => TextingPage(
+                      selChat: widget.chatItem, onMsgSent: widget.onMsgSent),
                 ),
               )
             },
