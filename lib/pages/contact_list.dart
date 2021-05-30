@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/rendering.dart';
+import 'package:me_flutting/main.dart';
 import '../models/chat.dart' show Chat;
 import '../pages/texting.dart' show TextingPage;
 
 class ContactList extends StatefulWidget {
-  final List<Chat> contacts;
+  final bool Function(Chat) filter;
   final void Function(String) onMsgSent;
-  ContactList({Key key, this.contacts, this.onMsgSent}) : super(key: key);
+  ContactList({Key key, this.filter, this.onMsgSent}) : super(key: key);
 
   @override
   _ContactListState createState() => _ContactListState();
@@ -16,10 +17,10 @@ class ContactList extends StatefulWidget {
 class _ContactListState extends State<ContactList> {
   @override
   Widget build(BuildContext context) {
-    return _col(context);
+    return _col(context, msgFactory.contacts.where(widget.filter).toList());
   }
 
-  Widget _col(BuildContext context) {
+  Widget _col(BuildContext context, List<Chat> contacts) {
     return Container(
         height: 80,
         color: Colors.yellow.shade100,
@@ -29,7 +30,10 @@ class _ContactListState extends State<ContactList> {
             TextButton(
                 onPressed: () => null,
                 child: Text('<', style: TextStyle(color: Colors.black))),
-            _expan(context),
+            if (contacts.length == 0)
+              Text('No Contact found.')
+            else
+              _expan(context, contacts),
             TextButton(
                 onPressed: () => null,
                 child: Text('>', style: TextStyle(color: Colors.black))),
@@ -37,26 +41,24 @@ class _ContactListState extends State<ContactList> {
         ));
   }
 
-  Expanded _expan(BuildContext context) {
+  Expanded _expan(BuildContext context, List<Chat> contacts) {
     return Expanded(
       child: ListView.builder(
           scrollDirection: Axis.horizontal,
           physics: BouncingScrollPhysics(),
-          itemCount: widget.contacts.length,
+          itemCount: contacts.length,
           itemBuilder: (BuildContext _, int index) => TextButton(
               onPressed: () {
                 Navigator.of(context).push(MaterialPageRoute(
                   builder: (context) => TextingPage(
-                      selChat: widget.contacts[index],
-                      onMsgSent: widget.onMsgSent),
+                      selChat: contacts[index], onMsgSent: widget.onMsgSent),
                 ));
               },
               child: Column(children: [
-                Text(widget.contacts[index].caption,
+                Text(contacts[index].caption,
                     style: TextStyle(color: Colors.grey.shade800)),
                 CircleAvatar(
-                    backgroundImage:
-                        AssetImage(widget.contacts[index].photoURL)),
+                    backgroundImage: AssetImage(contacts[index].photoURL)),
               ]))),
     );
   }

@@ -20,7 +20,6 @@ void main() {
   msgFactory.addPerson('fatma');
   msgFactory.addGroup('MALLAR');
   var g2 = msgFactory.addGroup('Mentals');
-  msgFactory.addPerson('obama');
 
   msgFactory.sendMessage(p1, 'word da f up!');
   msgFactory.receiveMessage(p2, me, 'hi');
@@ -57,10 +56,10 @@ class MainPageState extends State<MainPage> {
       setState(() => null);
     };
   }
-
+  final TextEditingController tedit = TextEditingController();
   @override
   Widget build(BuildContext context) {
-    bool f(Chat c) => msgFactory.getLastMessage(c)?.body != null;
+    bool fNotContact(Chat c) => msgFactory.getLastMessage(c)?.body != null;
 
     return _tabCon(
         () => [
@@ -75,13 +74,23 @@ class MainPageState extends State<MainPage> {
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: <Widget>[
                     ContactList(
-                      contacts:
-                          msgFactory.contacts.where((c) => !f(c)).toList(),
                       onMsgSent: onMsgSent,
+                      filter: (c) {
+                        var ftext = tedit.text.trim();
+                        bool cond = !fNotContact(c) &&
+                            (!isSearching ||
+                                ftext == '' ||
+                                isSearching &&
+                                    ftext != '' &&
+                                    c.caption.contains(ftext));
+                        return cond;
+                      },
                     ),
                     Padding(padding: EdgeInsets.symmetric(vertical: 4.0)),
                     ChatList(
-                      chats: msgFactory.contacts.where((c) => f(c)).toList(),
+                      chats: msgFactory.contacts
+                          .where((c) => fNotContact(c))
+                          .toList(),
                       onMsgSent: onMsgSent,
                     ),
                   ],
@@ -90,6 +99,7 @@ class MainPageState extends State<MainPage> {
             ]);
   }
 
+  bool isSearching = false;
   Widget _tabCon(List<Tab> Function() head, List<Widget> Function() tail) {
     var _r = tail();
     return DefaultTabController(
@@ -98,10 +108,26 @@ class MainPageState extends State<MainPage> {
         appBar: AppBar(
           backgroundColor: Colors.grey.shade700,
           leading: TextButton(
-              onPressed: () => null,
-              child: Icon(Icons.search, color: Colors.white)),
-          title: Text('Meflutin',
-              style: TextStyle(fontSize: 24, color: Colors.white)),
+              onPressed: () {
+                isSearching = !isSearching;
+                tedit.text = '';
+                setState(() => null);
+              },
+              child: !isSearching
+                  ? Icon(Icons.search, color: Colors.white)
+                  : Icon(Icons.cancel, color: Colors.white)),
+
+          title: isSearching
+              ? TextField(
+                  decoration: InputDecoration(
+                    border: OutlineInputBorder(),
+                    hintText: 'Enter a search term',
+                  ),
+                  onSubmitted: onMsgSent,
+                  controller: tedit,
+                  style: TextStyle(fontSize: 22, color: Colors.white))
+              : Text('Meflutin',
+                  style: TextStyle(fontSize: 24, color: Colors.white)),
           //actions : <Widget>[],
           bottom: TabBar(
               labelStyle: TextStyle(fontSize: 19),
