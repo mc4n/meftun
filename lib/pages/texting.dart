@@ -6,7 +6,6 @@ import 'package:me_flutting/widget/msgdialogs.dart';
 
 class TextingPage extends StatefulWidget {
   final Chat selChat;
-
   final void Function(String) onMsgSent;
 
   TextingPage({Key key, this.selChat, this.onMsgSent}) : super(key: key);
@@ -35,14 +34,7 @@ class TextingPageState extends State<TextingPage> {
         title: Text('${selChat.caption}'),
       ),
       // body
-      body: Column(children: [
-        Expanded(
-          child: MessageDialogs(
-              me: msgFactory.owner,
-              messages: msgFactory.getMessages(selChat).toList()),
-        ),
-        _butt(),
-      ]),
+      body: _body(),
       //
     );
   }
@@ -58,6 +50,15 @@ class TextingPageState extends State<TextingPage> {
       teC.text = '';
     }
   }
+
+  Column _body() => Column(children: [
+        Expanded(
+          child: MessageDialogs(
+            selChat: selChat,
+          ),
+        ),
+        _butt(),
+      ]);
 
   Card _butt() {
     return Card(

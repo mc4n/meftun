@@ -1,20 +1,23 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:me_flutting/models/directchat.dart';
+import 'package:me_flutting/main.dart';
+import 'package:me_flutting/models/chat.dart';
 import 'package:me_flutting/models/message.dart';
 
-class MessageDialogs extends StatelessWidget {
-  final List<Message> messages;
-  final DirectChat me;
-  MessageDialogs({Key key, this.messages, this.me}) : super(key: key);
+class MessageDialogs extends StatefulWidget {
+  final Chat selChat;
+  MessageDialogs({Key key, this.selChat}) : super(key: key);
 
-  //final ScrollController sc = ScrollController();
+  @override
+  _MessageDialogsState createState() => _MessageDialogsState();
+}
 
+class _MessageDialogsState extends State<MessageDialogs> {
   @override
   Widget build(BuildContext context) {
     var col = Column(mainAxisSize: MainAxisSize.max, children: <Widget>[
       Expanded(
-        child: _lv(messages.length, _single),
+        child: _lv(msgFactory.getMessages(widget.selChat).length, _single),
       )
     ]);
     return col;
@@ -33,10 +36,11 @@ class MessageDialogs extends StatelessWidget {
   }
 
   Widget _single(BuildContext c, int i) {
-    var msg = messages[i];
+    var msg = msgFactory.getMessages(widget.selChat).elementAt(i);
     if (msg.body == null) return Row();
     return TextButton(
-        onPressed: () => null, child: _msgCard(msg, msg?.from?.id != me.id));
+        onPressed: () => null,
+        child: _msgCard(msg, msg?.from?.id != msgFactory.owner.id));
   }
 
   Widget _msgCard(Message msg, [isLeft = false]) {
