@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/rendering.dart';
-import 'package:me_flutting/widget/chatitem.dart';
-import '../models/chat.dart';
+import '../widget/chatitem.dart' show ChatItem;
+import '../models/chat.dart' show Chat;
 
 class ChatList extends StatefulWidget {
   final List<Chat> chats;
-
   final void Function(String) onMsgSent;
 
   ChatList({Key key, this.chats, this.onMsgSent});
@@ -24,7 +23,6 @@ class ChatListState extends State<ChatList> {
   Expanded _expan() {
     return Expanded(
       child: Container(
-          //color: Colors.blue.shade400,
           child: ListView.builder(
         scrollDirection: Axis.vertical,
         shrinkWrap: true,

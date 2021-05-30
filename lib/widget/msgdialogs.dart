@@ -16,8 +16,8 @@ class _MessageDialogsState extends State<MessageDialogs> {
   final ScrollController sc = ScrollController();
   @override
   Widget build(BuildContext context) {
-    WidgetsBinding.instance.addPostFrameCallback((i) {      
-      if (sc?.hasClients) sc.jumpTo(sc.position.maxScrollExtent);
+    WidgetsBinding.instance.addPostFrameCallback((i) {
+      if (sc.hasClients) sc.jumpTo(sc.position.maxScrollExtent);
     });
     var col = Column(mainAxisSize: MainAxisSize.max, children: <Widget>[
       Expanded(
@@ -30,7 +30,6 @@ class _MessageDialogsState extends State<MessageDialogs> {
   @override
   void initState() {
     super.initState();
-    
   }
 
   Widget _lv(int ct, Widget Function(BuildContext context, int index) bItem) {
