@@ -13,8 +13,12 @@ class MessageDialogs extends StatefulWidget {
 }
 
 class _MessageDialogsState extends State<MessageDialogs> {
+  final ScrollController sc = ScrollController();
   @override
   Widget build(BuildContext context) {
+    WidgetsBinding.instance.addPostFrameCallback((i) {      
+      if (sc?.hasClients) sc.jumpTo(sc.position.maxScrollExtent);
+    });
     var col = Column(mainAxisSize: MainAxisSize.max, children: <Widget>[
       Expanded(
         child: _lv(msgFactory.getMessages(widget.selChat).length, _single),
@@ -23,13 +27,18 @@ class _MessageDialogsState extends State<MessageDialogs> {
     return col;
   }
 
+  @override
+  void initState() {
+    super.initState();
+    
+  }
+
   Widget _lv(int ct, Widget Function(BuildContext context, int index) bItem) {
     return ListView.builder(
       physics: BouncingScrollPhysics(),
-      //controller: sc,
+      controller: sc,
       itemCount: ct,
       itemBuilder: (BuildContext context, int index) {
-        //sc?.jumpTo(sc?.position.maxScrollExtent);
         return bItem(context, index);
       },
     );
