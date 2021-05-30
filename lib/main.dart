@@ -63,17 +63,19 @@ class MainPageState extends State<MainPage> {
   Widget build(BuildContext context) {
     bool fNotContact(Chat c) => msgFactory.getLastMessage(c)?.body != null;
 
-    bool fContactsFilter(Chat c) {
-      var ftext = tedit.text.trim();
-      return !fNotContact(c) &&
-          (!isSearching ||
-              ftext == '' ||
-              isSearching && ftext != '' && c.caption.contains(ftext));
-    }
+    var ftext = tedit.text.trim();
+
+    bool fContactsFilter(Chat c) =>
+        !fNotContact(c) &&
+        (!isSearching ||
+            ftext == '' ||
+            isSearching && ftext != '' && c.caption.contains(ftext));
 
     bool fChatsFilter(Chat c) =>
-        //var ftext = tedit.text.trim();
-        fNotContact(c);
+        fNotContact(c) &&
+        (!isSearching ||
+            ftext == '' ||
+            isSearching && ftext != '' && c.caption.contains(ftext));
 
     return _tabCon(
         () => [
