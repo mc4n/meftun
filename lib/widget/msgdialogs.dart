@@ -53,19 +53,21 @@ class _MessageDialogsState extends State<MessageDialogs> {
 
   Widget _msgCard(Message msg, [isLeft = false]) {
     var usr = !isLeft ? 'YOU' : msg.from?.username ?? '';
-
+    var dt = DateTime.fromMillisecondsSinceEpoch(msg.epoch);
     return Card(
         key: ValueKey(msg.id),
         color: !isLeft ? Colors.green.shade200 : Colors.grey.shade100,
         margin: EdgeInsets.symmetric(vertical: 12),
         child: Padding(
-          child: Column(
-            children: <Widget>[
-              Text('$usr:'),
-              Padding(padding: EdgeInsets.symmetric(vertical: 2)),
-              Text('${msg.body}'),
-            ],
-          ),
+          child: Column(children: <Widget>[
+            Text('$usr:'),
+            Padding(padding: EdgeInsets.symmetric(vertical: 2)),
+            Text('${msg.body}'),
+            Padding(padding: EdgeInsets.only(top: 4)),
+            Text(
+                '(${dt.day == DateTime.now().day && dt.month == DateTime.now().month && dt.year == DateTime.now().year ? 'Today' : dt.month} ${dt.hour}:${dt.minute})',
+                style: TextStyle(color: Colors.grey.shade700, fontSize: 12))
+          ]),
           padding: EdgeInsets.symmetric(vertical: 6.0, horizontal: 12.0),
         ));
   }
