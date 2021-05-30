@@ -123,13 +123,13 @@ class MainPageState extends State<MainPage> {
               ? TextField(
                   decoration: InputDecoration(
                     border: OutlineInputBorder(),
-                    hintText: 'Enter a search term',
+                    hintText: 'Search in chats',
                   ),
                   onSubmitted: onMsgSent,
                   controller: tedit,
                   style: TextStyle(fontSize: 22, color: Colors.white))
               : Text('Meflutin',
-                  style: TextStyle(fontSize: 24, color: Colors.white)),
+                  style: TextStyle(fontSize: 22, color: Colors.white)),
           bottom: TabBar(
               labelStyle: TextStyle(fontSize: 19),
               isScrollable: true,

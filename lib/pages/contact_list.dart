@@ -23,22 +23,33 @@ class _ContactListState extends State<ContactList> {
   Widget _col(BuildContext context, List<Chat> contacts) {
     return Container(
         height: 80,
-        color: Colors.yellow.shade100,
+        color: Colors.yellow.shade200,
         child: Padding(
-          padding: EdgeInsets.all(10.0),
-          child: Row(children: [
-            TextButton(
-                onPressed: () => null,
-                child: Text('<', style: TextStyle(color: Colors.black))),
-            if (contacts.length == 0)
-              Text('No Contact found.')
-            else
-              _expan(context, contacts),
-            TextButton(
-                onPressed: () => null,
-                child: Text('>', style: TextStyle(color: Colors.black))),
-          ]),
-        ));
+            padding: EdgeInsets.all(10.0),
+            child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+              contacts.length > 0
+                  ? TextButton(
+                      onPressed: () => null,
+                      child: Icon(Icons.navigate_before_rounded,
+                          color: Colors.black, size: 30),
+                    )
+                  : Row(),
+              contacts.length > 0
+                  ? _expan(context, contacts)
+                  : TextButton(
+                      onPressed: () => null,
+                      child: Row(children: [
+                        Text(' New contact '),
+                        Icon(Icons.person_add_alt, size: 26),
+                      ]),
+                    ),
+              contacts.length > 0
+                  ? TextButton(
+                      onPressed: () => null,
+                      child: Icon(Icons.navigate_next_rounded,
+                          color: Colors.black, size: 30))
+                  : Row(),
+            ])));
   }
 
   Expanded _expan(BuildContext context, List<Chat> contacts) {
