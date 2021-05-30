@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:me_flutting/pages/chat_list.dart';
 import 'package:me_flutting/pages/contact_list.dart';
 import 'helpers/msghelper.dart';
+import 'models/chat.dart';
 import 'models/directchat.dart';
 
 MessageFactory msgFactory =
@@ -59,6 +60,8 @@ class MainPageState extends State<MainPage> {
 
   @override
   Widget build(BuildContext context) {
+    bool f(Chat c) => msgFactory.getLastMessage(c)?.body != null;
+
     return _tabCon(
         () => [
               Tab(
@@ -72,12 +75,13 @@ class MainPageState extends State<MainPage> {
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: <Widget>[
                     ContactList(
-                      contacts: msgFactory.contacts.toList(),
+                      contacts:
+                          msgFactory.contacts.where((c) => !f(c)).toList(),
                       onMsgSent: onMsgSent,
                     ),
                     Padding(padding: EdgeInsets.symmetric(vertical: 4.0)),
                     ChatList(
-                      chats: msgFactory.contacts.toList(),
+                      chats: msgFactory.contacts.where((c) => f(c)).toList(),
                       onMsgSent: onMsgSent,
                     ),
                   ],
