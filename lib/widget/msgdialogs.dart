@@ -19,9 +19,16 @@ class _MessageDialogsState extends State<MessageDialogs> {
     WidgetsBinding.instance.addPostFrameCallback((i) {
       if (sc.hasClients) sc.jumpTo(sc.position.maxScrollExtent);
     });
-
     return Expanded(
-      child: _lv(msgFactory.getMessages(widget.selChat).length, _single),
+      child: ListView.builder(
+        physics: BouncingScrollPhysics(),
+        controller: sc,
+        itemCount: msgFactory.getMessages(widget.selChat).length,
+        itemBuilder: (BuildContext context, int i) {
+          var msg = msgFactory.getMessages(widget.selChat).elementAt(i);
+          return _msgItem(msg);
+        },
+      ),
     );
   }
 
@@ -30,43 +37,26 @@ class _MessageDialogsState extends State<MessageDialogs> {
     super.initState();
   }
 
-  Widget _lv(int ct, Widget Function(BuildContext context, int index) bItem) {
-    return ListView.builder(
-      physics: BouncingScrollPhysics(),
-      controller: sc,
-      itemCount: ct,
-      itemBuilder: (BuildContext context, int index) {
-        return bItem(context, index);
-      },
-    );
-  }
-
-  Widget _single(BuildContext c, int i) {
-    var msg = msgFactory.getMessages(widget.selChat).elementAt(i);
-    if (msg.body == null) return Row();
-    return TextButton(
-        onPressed: () => null,
-        child: _msgCard(msg, msg?.from?.id != msgFactory.owner.id));
-  }
-
-  Widget _msgCard(Message msg, [isLeft = false]) {
-    var usr = !isLeft ? 'YOU' : msg.from?.username ?? '';
+  Widget _msgItem(Message msg) {
+    if (msg.body == null) return Container();
+    var usr = msg.from == msgFactory.owner ? 'YOU' : msg.from.username;
     var dt = DateTime.fromMillisecondsSinceEpoch(msg.epoch);
-    return Card(
-        key: ValueKey(msg.id),
-        color: !isLeft ? Colors.green.shade200 : Colors.grey.shade100,
-        margin: EdgeInsets.symmetric(vertical: 12),
-        child: Padding(
-          child: Column(children: <Widget>[
-            Text('$usr:'),
-            Padding(padding: EdgeInsets.symmetric(vertical: 2)),
-            Text('${msg.body}'),
-            Padding(padding: EdgeInsets.only(top: 4)),
-            Text(
-                '(${dt.day == DateTime.now().day && dt.month == DateTime.now().month && dt.year == DateTime.now().year ? 'Today' : dt.month} ${dt.hour}:${dt.minute})',
-                style: TextStyle(color: Colors.grey.shade700, fontSize: 12))
-          ]),
-          padding: EdgeInsets.symmetric(vertical: 6.0, horizontal: 12.0),
-        ));
+    return Card(child: _pad(msg.body, usr, dt));
   }
+
+  Widget _pad(String body, String name, DateTime dt) => Padding(
+        child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: <Widget>[
+              Text('$name:'),
+              Padding(padding: EdgeInsets.symmetric(vertical: 2)),
+              Text('$body'),
+              Padding(padding: EdgeInsets.only(top: 4)),
+              Text(
+                  '(${dt.day == DateTime.now().day && dt.month == DateTime.now().month && dt.year == DateTime.now().year ? 'Today' : dt.month} ${dt.hour}:${dt.minute})',
+                  style: TextStyle(color: Colors.grey.shade700, fontSize: 12))
+            ]),
+        padding: EdgeInsets.symmetric(vertical: 6.0, horizontal: 12.0),
+      );
 }

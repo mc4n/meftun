@@ -52,12 +52,14 @@ class TextingPageState extends State<TextingPage> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             MessageDialogs(selChat: widget.selChat),
-            _butt(),
+            Padding(
+                padding: EdgeInsets.symmetric(vertical: 3, horizontal: 5),
+                child: _butt()),
           ]);
 
   Card _butt() {
     return Card(
-        color: Colors.grey.shade400,
+        color: Colors.grey.shade200,
         margin: EdgeInsets.all(4),
         child: Row(children: [
           Expanded(
