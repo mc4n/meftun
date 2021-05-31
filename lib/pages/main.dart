@@ -92,7 +92,7 @@ class MainPageState extends State<MainPage> {
                   ),
                   onSubmitted: onMsgSent,
                   controller: tedit,
-                  style: TextStyle(fontSize: 22, color: Colors.white))
+                  style: TextStyle(fontSize: 17, color: Colors.white))
               : Text('Meflutin',
                   style: TextStyle(fontSize: 22, color: Colors.white)),
           bottom: TabBar(
