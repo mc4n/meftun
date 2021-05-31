@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:me_flutting/main.dart';
 import 'package:me_flutting/models/chat.dart';
 import 'package:me_flutting/widget/msgdialogs.dart';
+
+import '../main.dart';
 
 class TextingPage extends StatefulWidget {
   final Chat selChat;

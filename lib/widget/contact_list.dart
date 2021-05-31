@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/rendering.dart';
-import 'package:me_flutting/main.dart';
+import '../main.dart';
 import '../models/chat.dart' show Chat;
 import '../pages/texting.dart' show TextingPage;
 

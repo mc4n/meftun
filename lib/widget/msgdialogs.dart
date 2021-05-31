@@ -1,8 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:me_flutting/main.dart';
 import 'package:me_flutting/models/chat.dart';
 import 'package:me_flutting/models/message.dart';
+
+import '../main.dart';
 
 class MessageDialogs extends StatefulWidget {
   final Chat selChat;
