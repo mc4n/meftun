@@ -1,6 +1,3 @@
-import 'dart:math';
-
-import 'package:flutter_test/flutter_test.dart';
 import 'package:me_flutting/models/chat.dart';
 import 'package:me_flutting/models/directchat.dart';
 import 'package:me_flutting/models/groupchat.dart';
@@ -34,8 +31,6 @@ class MessageFactory {
     return list;
   }
 
-  static Random rnd = Random();
-
   Message getLastMessage(Chat target) =>
       getMessages(target).lastWhere((element) => true,
           orElse: () => target.createDraft(_owner).toMessage());
@@ -47,39 +42,36 @@ class MessageFactory {
       receiveMessage(owner, target, body);
 
   void receiveMessage(DirectChat from, Chat target, String body) {
-    var dr = target.createDraft(from);
-    dr.setBody = body;
-    _items[target].add(dr.toMessage());
+    void func(DirectChat _from, Chat _target, String _body) {
+      final _dr = target.createDraft(_from);
+      _dr.setBody = _body;
+      _items[_target].add(_dr.toMessage());
+    }
 
-    //
-    var responBod = (String bd) {
-      List<String> chs = [];
+    func(from, target, body);
+    // simulate a quick responding----
+    if (true) {
+      final responBod = (String bd) {
+        final List<String> chs = [];
+        for (int i = 0; i < bd.length; i++) chs.add(bd[i]);
+        chs.shuffle();
+        return chs.join();
+      };
 
-      for (int i = 0; i < bd.length; i++) {
-        chs.add(bd[i]);
-      }
-      chs.shuffle();
-      return chs.join(); //'len: ${body.length.toString()}';
-    };
-
-    if (target is DirectChat) {
-      var num = rnd.nextInt(2);
-      if (num == 1) {
-        DirectChat trDirc = target;
-        receiveMessage(trDirc, from, responBod(body));
-      }
-    } else {
-      var ls = contacts
-          .where((i) => i is DirectChat)
-          .map((i) => i as DirectChat)
-          .toList();
-      var num = rnd.nextInt(ls.length * 2);
-      if (num != 0 && num < ls.length) {
-        Future.delayed(
-            Duration(milliseconds: 1500 + rnd.nextInt(5) * 100), () => null);
-        receiveMessage(ls[num], target, responBod(body));
+      if (target is DirectChat) {
+        if (body.length * DateTime.now().millisecond % 2 == 1)
+          func(target, from, responBod(body));
+      } else {
+        final ls = contacts
+            .where((i) => i is DirectChat)
+            .map((i) => i as DirectChat)
+            .toList();
+        final chanceNum =
+            (body.length * DateTime.now().millisecond) % (ls.length * 2);
+        if (chanceNum < ls.length) func(ls[chanceNum], target, responBod(body));
       }
     }
+    // ----------
   }
 
   void addContact(Chat target) {
