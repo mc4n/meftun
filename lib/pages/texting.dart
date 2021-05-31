@@ -47,18 +47,17 @@ class TextingPageState extends State<TextingPage> {
     }
   }
 
-  Column _body() => Column(children: [
-        Expanded(
-          child: MessageDialogs(
-            selChat: widget.selChat,
-          ),
-        ),
-        _butt(),
-      ]);
+  Column _body() => Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            MessageDialogs(selChat: widget.selChat),
+            _butt(),
+          ]);
 
   Card _butt() {
     return Card(
-        color: Colors.grey.shade100,
+        color: Colors.grey.shade400,
         margin: EdgeInsets.all(4),
         child: Row(children: [
           Expanded(

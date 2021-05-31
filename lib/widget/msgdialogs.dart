@@ -19,12 +19,10 @@ class _MessageDialogsState extends State<MessageDialogs> {
     WidgetsBinding.instance.addPostFrameCallback((i) {
       if (sc.hasClients) sc.jumpTo(sc.position.maxScrollExtent);
     });
-    var col = Column(mainAxisSize: MainAxisSize.max, children: <Widget>[
-      Expanded(
-        child: _lv(msgFactory.getMessages(widget.selChat).length, _single),
-      )
-    ]);
-    return col;
+
+    return Expanded(
+      child: _lv(msgFactory.getMessages(widget.selChat).length, _single),
+    );
   }
 
   @override
