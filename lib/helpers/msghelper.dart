@@ -12,22 +12,11 @@ class MessageFactory {
 
   DirectChat get owner => _owner;
 
-  Iterable<Message> getMessages(Chat target) {
-    var list =
-        _items[target].where((element) => element is Message).toList() ?? [];
-    var twoo = (_items[owner].where((element) => element is Message) ?? [])
-        .where((element) => element.from == target)
-        .toList();
-    list.addAll(twoo);
-    list.sort((_d1, _d2) {
-      // comparison
-      var ep1 = _d1.epoch;
-      var ep2 = _d2.epoch;
-      if (ep1 > ep2)
-        return 1;
-      else if (ep2 > ep1) return -1;
-      return 0;
-    });
+  Iterable<Message> getMessages(Chat target) {    
+    final list = <Message>[];
+    list.addAll(_items[target].where((element) => element is Message));
+    list.addAll(_items[owner].where((element) => element is Message &&  element.from == target));
+    list.sort(Message.compareEpoch);
     return list;
   }
 

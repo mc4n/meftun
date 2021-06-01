@@ -9,4 +9,27 @@ class Message extends Draft {
 
   @override
   set setBody(String _) => throw Exception('message already sent :(');
+
+  static int compareEpoch(Message _d1, Message _d2) {
+    var ep1 = _d1.epoch;
+    var ep2 = _d2.epoch;
+    if (ep1 > ep2)
+      return 1;
+    else if (ep2 > ep1) return -1;
+    return 0;
+  }
+
+  @override
+  String toString() {
+    return '[Message]\n id: $id \n body: $body \n';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    // ignore: test_types_in_equals
+    return id == (other as Chat).id;
+  }
+
+  @override
+  int get hashCode => id.hashCode;
 }
