@@ -3,8 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:me_flutting/helpers/msghelper.dart';
 import 'package:me_flutting/models/message.dart';
 
-import '../main.dart';
-
 class MessageDialogs extends StatefulWidget {
   final MessageFactory messageFactory;
   const MessageDialogs(this.messageFactory, [Key key]) : super(key: key);
@@ -35,7 +33,9 @@ class _MessageDialogsState extends State<MessageDialogs> {
 
   Widget _msgItem(Message msg) {
     if (msg.body == null) return Container();
-    var usr = msg.from == chatFactory.owner ? 'YOU' : msg.from.username;
+    var usr = msg.from == widget.messageFactory.chatFactory.owner
+        ? 'YOU'
+        : msg.from.username;
     var dt = DateTime.fromMillisecondsSinceEpoch(msg.epoch);
     return Card(child: _pad(msg.body, usr, dt));
   }

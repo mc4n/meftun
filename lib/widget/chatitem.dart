@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/rendering.dart';
-import 'package:me_flutting/helpers/msghelper.dart';
-import 'package:me_flutting/pages/texting.dart';
-
-import '../main.dart';
+import 'package:me_flutting/helpers/msghelper.dart' show MessageFactory;
+import 'package:me_flutting/pages/texting.dart' show TextingPage;
 
 class ChatItem extends StatefulWidget {
   final MessageFactory messageFactory;
@@ -41,13 +39,13 @@ class ChatItemState extends State<ChatItem> {
 
     var avatarAndText = <Widget>[];
     avatarAndText.add(avatarName(
-        '${lastMsg.from == chatFactory.owner ? 'YOU' : lastMsg.from.caption}',
+        '${lastMsg.from == widget.messageFactory.chatFactory.owner ? 'YOU' : lastMsg.from.caption}',
         lastMsg.from.photoURL));
 
     avatarAndText.add(Text('    ->    '));
 
     avatarAndText.add(avatarName(
-        '${lastMsg.chatGroup == chatFactory.owner ? 'YOU' : lastMsg.chatGroup.caption}',
+        '${lastMsg.chatGroup == widget.messageFactory.chatFactory.owner ? 'YOU' : lastMsg.chatGroup.caption}',
         lastMsg.chatGroup.photoURL));
 
     avatarAndText.add(Padding(padding: EdgeInsets.symmetric(horizontal: 20.0)));

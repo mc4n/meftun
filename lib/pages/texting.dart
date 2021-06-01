@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:me_flutting/helpers/msghelper.dart';
-import 'package:me_flutting/widget/msgdialogs.dart';
+import 'package:me_flutting/helpers/msghelper.dart' show MessageFactory;
+import 'package:me_flutting/widget/msgdialogs.dart' show MessageDialogs;
 
 class TextingPage extends StatefulWidget {
   final void Function(String) onMsgSent;

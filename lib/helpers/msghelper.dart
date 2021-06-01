@@ -49,38 +49,14 @@ class MessageFactory extends Factory<Message> {
 
   Chat get chatItem => _base;
 
-  Iterable<Message> get messages => _items;
-
-  Message get lastMessage => _lastItem();
-  Message receiveMessage(DirectChat from, String body) =>
-      _addItem(_base.createMessage(from, body));
-
-  Message addMessage(String body) {
-    var x = receiveMessage(chatFactory._base, body);
-
-    // simulate a quick responding----
-    final responBod = (String bd) {
-      final List<String> chs = [];
-      for (int i = 0; i < bd.length; i++) chs.add(bd[i]);
-      chs.shuffle();
-      return chs.join();
-    };
-
-    if (_base is DirectChat) {
-      if (body.length * DateTime.now().millisecond % 2 == 1)
-        receiveMessage(chatFactory._base, responBod(body));
-    } else {
-      final ls = chatFactory.contacts
-          .where((i) => i is DirectChat)
-          .map((i) => i as DirectChat)
-          .toList();
-      final chanceNum =
-          (body.length * DateTime.now().millisecond) % (ls.length * 2);
-      if (chanceNum < ls.length) receiveMessage(ls[chanceNum], responBod(body));
-    }
-    // ----------
-    return x;
+  Iterable<Message> get messages {
+    _items.sort(Message.compareEpoch);
+    return _items;
   }
+
+  Message get lastMessage => messages.length > 0 ? messages.last : null;
+
+  Message addMessage(String body) => null;
 
   bool get fNotContact => lastMessage?.body != null;
 

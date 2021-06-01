@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/rendering.dart';
-import 'package:me_flutting/helpers/msghelper.dart';
-import '../main.dart';
+import 'package:me_flutting/helpers/msghelper.dart' show MessageFactory;
+import '../main.dart' show chatFactory;
 import '../models/chat.dart' show Chat;
 import '../pages/texting.dart' show TextingPage;
 

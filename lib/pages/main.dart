@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-import '../widget/chat_list.dart';
-import '../widget/contact_list.dart';
+import '../widget/chat_list.dart' show ChatList;
+import '../widget/contact_list.dart' show ContactList;
 
 class MainPage extends StatefulWidget {
   MainPage({
