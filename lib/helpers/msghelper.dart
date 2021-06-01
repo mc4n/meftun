@@ -72,8 +72,10 @@ class MessageFactory extends Factory<Message> {
       addMessage(chatItem.createMessage(chatFactory.owner, body));
 
   Message addResponse(Message msg) {
-    var newFrom = chatFactory.contacts
-        .elementAt(DateTime.now().millisecond % chatFactory.contacts.length);
+    final cts = chatFactory.contacts
+        .where((x) => x is DirectChat)
+        .map((x) => x as DirectChat);
+    var newFrom = cts.elementAt(DateTime.now().millisecond % cts.length);
     if (msg.chatGroup is GroupChat) {
       return chatFactory.factoryByChat(msg.chatGroup).addMessageBodyFrom(
           newFrom, 'this is an example response by ${newFrom.caption}');
