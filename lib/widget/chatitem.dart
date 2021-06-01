@@ -52,11 +52,9 @@ class ChatItemState extends State<ChatItem> {
 
     avatarAndText.addAll(afterAvatar('"${lastMsg.body}"'));
 
-    var dt = DateTime.fromMillisecondsSinceEpoch(lastMsg.epoch);
     avatarAndText.addAll([
       Padding(padding: EdgeInsets.only(left: 15.0)),
-      Text(
-          '(${dt.day == DateTime.now().day && dt.month == DateTime.now().month && dt.year == DateTime.now().year ? 'Today' : dt.month} ${dt.hour}:${dt.minute})',
+      Text(lastMsg.epochToTimeString(),
           style: TextStyle(color: Colors.grey.shade700, fontSize: 12))
     ]);
 
