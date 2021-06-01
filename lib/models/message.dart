@@ -1,6 +1,6 @@
-import 'package:me_flutting/models/directchat.dart';
-import 'chat.dart';
-import 'draft.dart';
+import 'directchat.dart' show DirectChat;
+import 'chat.dart' show Chat;
+import 'draft.dart' show Draft;
 
 class Message extends Draft {
   final String id;

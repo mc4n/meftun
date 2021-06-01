@@ -1,4 +1,4 @@
-import 'package:me_flutting/models/chat.dart';
+import 'chat.dart' show Chat;
 
 class DirectChat extends Chat {
   final String username;

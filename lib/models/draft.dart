@@ -1,7 +1,7 @@
 import 'package:uuid/uuid.dart';
-import 'chat.dart';
-import 'message.dart';
-import 'directchat.dart';
+import 'chat.dart' show Chat;
+import 'message.dart' show Message;
+import 'directchat.dart' show DirectChat;
 
 class Draft {
   static Uuid uuid = Uuid();

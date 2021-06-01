@@ -1,4 +1,4 @@
-import 'chat.dart';
+import 'chat.dart' show Chat;
 
 class GroupChat extends Chat {
   GroupChat(name, [String photoURL = 'group_avatar.png'])

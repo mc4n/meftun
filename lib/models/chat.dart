@@ -1,6 +1,6 @@
-import 'package:me_flutting/models/draft.dart';
-import 'package:me_flutting/models/directchat.dart';
-import 'package:me_flutting/models/message.dart';
+import 'draft.dart' show Draft;
+import 'directchat.dart' show DirectChat;
+import 'message.dart' show Message;
 import 'package:uuid/uuid.dart';
 
 abstract class Chat {

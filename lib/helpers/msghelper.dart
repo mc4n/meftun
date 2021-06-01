@@ -1,7 +1,7 @@
-import 'package:me_flutting/models/chat.dart';
-import 'package:me_flutting/models/directchat.dart';
-import 'package:me_flutting/models/groupchat.dart';
-import 'package:me_flutting/models/message.dart';
+import '../models/chat.dart' show Chat;
+import '../models/directchat.dart' show DirectChat;
+import '../models/groupchat.dart' show GroupChat;
+import '../models/message.dart' show Message;
 
 class Factory<T> {
   List<T> _items = [];
