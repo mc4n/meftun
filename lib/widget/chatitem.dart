@@ -1,16 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/rendering.dart';
-import 'package:me_flutting/models/chat.dart';
+import 'package:me_flutting/helpers/msghelper.dart';
 import 'package:me_flutting/pages/texting.dart';
 
 import '../main.dart';
 
 class ChatItem extends StatefulWidget {
-  final Chat chatItem;
+  final MessageFactory messageFactory;
   final void Function(String) onMsgSent;
 
-  const ChatItem(this.chatItem, this.onMsgSent, [Key key]) : super(key: key);
+  const ChatItem(this.messageFactory, this.onMsgSent, [Key key])
+      : super(key: key);
 
   @override
   State<StatefulWidget> createState() => ChatItemState();
@@ -19,11 +20,8 @@ class ChatItem extends StatefulWidget {
 class ChatItemState extends State<ChatItem> {
   @override
   Widget build(BuildContext context) {
-    var lastMsg = msgFactory.getLastMessage(widget.chatItem);
-
-    if (lastMsg.body == null) {
-      return Row();
-    }
+    var lastMsg = widget.messageFactory.lastMessage;
+    if (lastMsg.body == null) return Row();
 
     Widget avatarName(String tx, String av) {
       return Column(children: [
@@ -43,13 +41,13 @@ class ChatItemState extends State<ChatItem> {
 
     var avatarAndText = <Widget>[];
     avatarAndText.add(avatarName(
-        '${lastMsg.from == msgFactory.owner ? 'YOU' : lastMsg.from.caption}',
+        '${lastMsg.from == chatFactory.owner ? 'YOU' : lastMsg.from.caption}',
         lastMsg.from.photoURL));
 
     avatarAndText.add(Text('    ->    '));
 
     avatarAndText.add(avatarName(
-        '${lastMsg.chatGroup == msgFactory.owner ? 'YOU' : lastMsg.chatGroup.caption}',
+        '${lastMsg.chatGroup == chatFactory.owner ? 'YOU' : lastMsg.chatGroup.caption}',
         lastMsg.chatGroup.photoURL));
 
     avatarAndText.add(Padding(padding: EdgeInsets.symmetric(horizontal: 20.0)));
@@ -65,7 +63,7 @@ class ChatItemState extends State<ChatItem> {
     ]);
 
     var card = Card(
-      key: ValueKey(widget.chatItem.id),
+      key: ValueKey(widget.messageFactory.chatItem.id),
       child: Padding(
         child: GestureDetector(
             child: Row(children: avatarAndText),
@@ -81,7 +79,7 @@ class ChatItemState extends State<ChatItem> {
               Navigator.of(context).push(
                 MaterialPageRoute(
                   builder: (context) =>
-                      TextingPage(widget.chatItem, widget.onMsgSent),
+                      TextingPage(widget.messageFactory, widget.onMsgSent),
                 ),
               )
             },

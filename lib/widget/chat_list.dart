@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/rendering.dart';
+import 'package:me_flutting/helpers/msghelper.dart';
 import '../main.dart';
 import 'chatitem.dart' show ChatItem;
 import '../models/chat.dart' show Chat;
 
 class ChatList extends StatefulWidget {
-  final bool Function(Chat) filter;
+  final bool Function(MessageFactory) filter;
   final void Function(String) onMsgSent;
 
   const ChatList(this.filter, this.onMsgSent, [Key key]);
@@ -18,7 +19,10 @@ class ChatList extends StatefulWidget {
 class ChatListState extends State<ChatList> {
   @override
   Widget build(BuildContext context) {
-    return _expan(msgFactory.contacts.where(widget.filter).toList());
+    return _expan(chatFactory.msgFactories
+        .where(widget.filter)
+        .map((m) => m.chatItem)
+        .toList());
   }
 
   Expanded _expan(final List<Chat> chats) {
@@ -30,7 +34,7 @@ class ChatListState extends State<ChatList> {
         physics: BouncingScrollPhysics(),
         itemCount: chats.length,
         itemBuilder: (BuildContext context, int index) =>
-            ChatItem(chats[index], widget.onMsgSent),
+            ChatItem(chatFactory.factoryByChat(chats[index]), widget.onMsgSent),
       )),
     );
   }

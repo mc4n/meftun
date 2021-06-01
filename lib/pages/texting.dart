@@ -1,15 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:me_flutting/models/chat.dart';
+import 'package:me_flutting/helpers/msghelper.dart';
 import 'package:me_flutting/widget/msgdialogs.dart';
 
-import '../main.dart';
-
 class TextingPage extends StatefulWidget {
-  final Chat selChat;
   final void Function(String) onMsgSent;
+  final MessageFactory messageFactory;
 
-  const TextingPage(this.selChat, this.onMsgSent, {Key key}) : super(key: key);
+  const TextingPage(this.messageFactory, this.onMsgSent, {Key key})
+      : super(key: key);
 
   @override
   State<StatefulWidget> createState() => TextingPageState();
@@ -28,7 +27,7 @@ class TextingPageState extends State<TextingPage> {
             Navigator.pop(context);
           },
         ),
-        title: Text('${widget.selChat.caption}'),
+        title: Text('${widget.messageFactory.chatItem.caption}'),
       ),
       // body
       body: _body(),
@@ -39,7 +38,7 @@ class TextingPageState extends State<TextingPage> {
   void _sendMes([String _ = '']) {
     var data = teC.text;
     if (data.trim() != '') {
-      msgFactory.sendMessage(widget.selChat, data);
+      widget.messageFactory.addMessage(data);
       if (widget.onMsgSent != null) {
         widget.onMsgSent(data);
         setState(() => null);
@@ -52,7 +51,7 @@ class TextingPageState extends State<TextingPage> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            MessageDialogs(widget.selChat),
+            MessageDialogs(widget.messageFactory),
             Padding(
                 padding: EdgeInsets.symmetric(vertical: 3, horizontal: 5),
                 child: _butt()),

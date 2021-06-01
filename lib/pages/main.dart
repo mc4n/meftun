@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import '../widget/chat_list.dart';
 import '../widget/contact_list.dart';
-import '../main.dart';
 
 class MainPage extends StatefulWidget {
   MainPage({
@@ -40,12 +39,12 @@ class MainPageState extends State<MainPage> {
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: <Widget>[
                     ContactList(
-                      (_) => msgFactory.fContactsFilter(_, isSearching, ftext),
+                      (_) => _.fContactsFilter(isSearching, ftext),
                       onMsgSent,
                     ),
                     Padding(padding: EdgeInsets.symmetric(vertical: 4.0)),
                     ChatList(
-                      (_) => msgFactory.fChatsFilter(_, isSearching, ftext),
+                      (_) => _.fChatsFilter(isSearching, ftext),
                       onMsgSent,
                     ),
                   ],

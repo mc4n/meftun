@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/rendering.dart';
+import 'package:me_flutting/helpers/msghelper.dart';
 import '../main.dart';
 import '../models/chat.dart' show Chat;
 import '../pages/texting.dart' show TextingPage;
 
 class ContactList extends StatefulWidget {
-  final bool Function(Chat) filter;
+  final bool Function(MessageFactory) filter;
   final void Function(String) onMsgSent;
 
   const ContactList(this.filter, this.onMsgSent, [Key key]) : super(key: key);
@@ -18,10 +19,11 @@ class ContactList extends StatefulWidget {
 class _ContactListState extends State<ContactList> {
   @override
   Widget build(BuildContext context) {
-    return _col(context, msgFactory.contacts.where(widget.filter).toList());
-  }
+    var contacts = chatFactory.msgFactories
+        .where(widget.filter)
+        .map((m) => m.chatItem)
+        .toList();
 
-  Widget _col(BuildContext context, List<Chat> contacts) {
     return Container(
         height: 80,
         color: Colors.yellow.shade200,
@@ -62,9 +64,10 @@ class _ContactListState extends State<ContactList> {
           itemBuilder: (BuildContext _, int index) => TextButton(
               onPressed: () {
                 Navigator.of(context).push(MaterialPageRoute(
-                  builder: (context) =>
-                      TextingPage(contacts[index], widget.onMsgSent),
-                ));
+                    builder: (context) => TextingPage(
+                          chatFactory.factoryByChat(contacts[index]),
+                          widget.onMsgSent,
+                        )));
               },
               child: Column(children: [
                 Text(contacts[index].caption,

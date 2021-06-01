@@ -1,13 +1,13 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:me_flutting/models/chat.dart';
+import 'package:me_flutting/helpers/msghelper.dart';
 import 'package:me_flutting/models/message.dart';
 
 import '../main.dart';
 
 class MessageDialogs extends StatefulWidget {
-  final Chat selChat;
-  const MessageDialogs(this.selChat, [Key key]) : super(key: key);
+  final MessageFactory messageFactory;
+  const MessageDialogs(this.messageFactory, [Key key]) : super(key: key);
 
   @override
   _MessageDialogsState createState() => _MessageDialogsState();
@@ -24,9 +24,9 @@ class _MessageDialogsState extends State<MessageDialogs> {
       child: ListView.builder(
         physics: BouncingScrollPhysics(),
         controller: sc,
-        itemCount: msgFactory.getMessages(widget.selChat).length,
+        itemCount: widget.messageFactory.messages.length,
         itemBuilder: (BuildContext context, int i) {
-          var msg = msgFactory.getMessages(widget.selChat).elementAt(i);
+          var msg = widget.messageFactory.messages.elementAt(i);
           return _msgItem(msg);
         },
       ),
@@ -35,7 +35,7 @@ class _MessageDialogsState extends State<MessageDialogs> {
 
   Widget _msgItem(Message msg) {
     if (msg.body == null) return Container();
-    var usr = msg.from == msgFactory.owner ? 'YOU' : msg.from.username;
+    var usr = msg.from == chatFactory.owner ? 'YOU' : msg.from.username;
     var dt = DateTime.fromMillisecondsSinceEpoch(msg.epoch);
     return Card(child: _pad(msg.body, usr, dt));
   }

@@ -3,94 +3,96 @@ import 'package:me_flutting/models/directchat.dart';
 import 'package:me_flutting/models/groupchat.dart';
 import 'package:me_flutting/models/message.dart';
 
-class MessageFactory {
-  Map<Chat, List<Message>> _items = Map();
-  final DirectChat _owner;
-  MessageFactory(this._owner) {
-    addContact(owner);
+class Factory<T> {
+  List<T> _items = [];
+  // ignore: unused_field
+  final Chat _base;
+  Factory(this._base);
+  // ignore: unused_element
+  T _lastItem() => _items.last;
+  // ignore: unused_element
+  T _addItem(T _item) {
+    _items.add(_item);
+    return _item;
+  }
+}
+
+class ChatFactory extends Factory<MessageFactory> {
+  ChatFactory(DirectChat _owner) : super(_owner) {
+    _items.add(MessageFactory(this, _owner));
   }
 
-  DirectChat get owner => _owner;
+  DirectChat get owner => _base;
 
-  Iterable<Message> getMessages(Chat target) {
-    final list = <Message>[];
-    list.addAll(_items[target].where((element) => element is Message));
-    list.addAll(_items[owner]
-        .where((element) => element is Message && element.from == target));
-    list.sort(Message.compareEpoch);
-    return list;
+  MessageFactory get ownerFactory => _items.first;
+
+  MessageFactory factoryByChat(Chat _target) =>
+      _items.singleWhere((m) => m.chatItem == _target);
+
+  Iterable<MessageFactory> get msgFactories => _items.skip(1);
+
+  Iterable<Chat> get contacts => msgFactories.map((m) => m.chatItem);
+
+  Chat addContact(Chat target) =>
+      _addItem(MessageFactory(this, target)).chatItem;
+
+  DirectChat addPerson(String userName) => addContact(DirectChat(userName));
+
+  GroupChat addGroup(String name) => addContact(GroupChat(name));
+}
+
+class MessageFactory extends Factory<Message> {
+  final ChatFactory chatFactory;
+  MessageFactory(this.chatFactory, Chat target) : super(target) {
+    _items.add(target.createMessage(chatFactory.owner, null));
   }
 
-  Message getLastMessage(Chat target) =>
-      getMessages(target).lastWhere((element) => true,
-          orElse: () => target.createDraft(_owner).toMessage());
+  Chat get chatItem => _base;
 
-  Iterable<Chat> get contacts =>
-      _items.keys.where((element) => element != owner);
+  Iterable<Message> get messages => _items;
 
-  void sendMessage(Chat target, String body) =>
-      receiveMessage(owner, target, body);
+  Message get lastMessage => _lastItem();
+  Message receiveMessage(DirectChat from, String body) =>
+      _addItem(_base.createMessage(from, body));
 
-  void receiveMessage(DirectChat from, Chat target, String body) {
-    void func(DirectChat _from, Chat _target, String _body) {
-      final _dr = target.createDraft(_from);
-      _dr.setBody = _body;
-      _items[_target].add(_dr.toMessage());
-    }
+  Message addMessage(String body) {
+    var x = receiveMessage(chatFactory._base, body);
 
-    func(from, target, body);
     // simulate a quick responding----
-    if (true) {
-      final responBod = (String bd) {
-        final List<String> chs = [];
-        for (int i = 0; i < bd.length; i++) chs.add(bd[i]);
-        chs.shuffle();
-        return chs.join();
-      };
+    final responBod = (String bd) {
+      final List<String> chs = [];
+      for (int i = 0; i < bd.length; i++) chs.add(bd[i]);
+      chs.shuffle();
+      return chs.join();
+    };
 
-      if (target is DirectChat) {
-        if (body.length * DateTime.now().millisecond % 2 == 1)
-          func(target, from, responBod(body));
-      } else {
-        final ls = contacts
-            .where((i) => i is DirectChat)
-            .map((i) => i as DirectChat)
-            .toList();
-        final chanceNum =
-            (body.length * DateTime.now().millisecond) % (ls.length * 2);
-        if (chanceNum < ls.length) func(ls[chanceNum], target, responBod(body));
-      }
+    if (_base is DirectChat) {
+      if (body.length * DateTime.now().millisecond % 2 == 1)
+        receiveMessage(chatFactory._base, responBod(body));
+    } else {
+      final ls = chatFactory.contacts
+          .where((i) => i is DirectChat)
+          .map((i) => i as DirectChat)
+          .toList();
+      final chanceNum =
+          (body.length * DateTime.now().millisecond) % (ls.length * 2);
+      if (chanceNum < ls.length) receiveMessage(ls[chanceNum], responBod(body));
     }
     // ----------
+    return x;
   }
 
-  void addContact(Chat target) {
-    _items.putIfAbsent(target, () => [target.createDraft(owner).toMessage()]);
-  }
+  bool get fNotContact => lastMessage?.body != null;
 
-  DirectChat addPerson(String userName) {
-    var buddy = DirectChat(userName);
-    addContact(buddy);
-    return buddy;
-  }
-
-  GroupChat addGroup(String name) {
-    var gro = GroupChat(name);
-    addContact(gro);
-    return gro;
-  }
-
-  bool fNotContact(Chat target) => getLastMessage(target)?.body != null;
-
-  bool fContactsFilter(Chat target, bool isSearching, String ftext) =>
-      !fNotContact(target) &&
+  bool fContactsFilter(bool isSearching, String ftext) =>
+      !fNotContact &&
       (!isSearching ||
           ftext == '' ||
-          isSearching && ftext != '' && target.caption.contains(ftext));
+          isSearching && ftext != '' && _base.caption.contains(ftext));
 
-  bool fChatsFilter(Chat target, bool isSearching, String ftext) =>
-      fNotContact(target) &&
+  bool fChatsFilter(bool isSearching, String ftext) =>
+      fNotContact &&
       (!isSearching ||
           ftext == '' ||
-          isSearching && ftext != '' && target.caption.contains(ftext));
+          isSearching && ftext != '' && _base.caption.contains(ftext));
 }
