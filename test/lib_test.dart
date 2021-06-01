@@ -1,4 +1,4 @@
-// import 'package:flutter_test/flutter_test.dart';
+//import 'package:flutter_test/flutter_test.dart';
 // import 'package:me_flutting/models/directchat.dart';
 // import 'package:me_flutting/models/draft.dart';
 // import 'package:me_flutting/helpers/msghelper.dart';
@@ -39,9 +39,13 @@ void main() {
   // });
 
   // test('test epoch to time', () async {
-  //   var newMsg =
-  //       Draft(null, DirectChat('admin'), DirectChat('2pac')).toMessage();
+  //   var dt = DateTime.fromMillisecondsSinceEpoch(
+  //       DateTime.now().millisecondsSinceEpoch - 4000000000);
 
-  //   expect(newMsg.epochToTimeString(), '');
+  //   var diff = dt.difference(DateTime.now());
+
+  //   print(diff.abs().toString() +
+  //       (diff.isNegative ? diff.inDays.toString() + ' days ago' : ' '));
+  //   //expect(newMsg.epochToTimeString(), '');
   // });
 }

@@ -32,6 +32,6 @@ class Message extends Draft {
 
   String epochToTimeString() {
     var dt = DateTime.fromMillisecondsSinceEpoch(this.epoch);
-    return '${dt.day == DateTime.now().day && dt.month == DateTime.now().month && dt.year == DateTime.now().year ? 'Today' : dt.month} ${dt.hour}:${dt.minute})';
+    return DateTime.now().difference(dt).toString();
   }
 }

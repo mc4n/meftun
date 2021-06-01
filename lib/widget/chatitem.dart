@@ -33,7 +33,7 @@ class ChatItemState extends State<ChatItem> {
       return [
         Padding(padding: EdgeInsets.symmetric(horizontal: 11.0)),
         Padding(padding: EdgeInsets.only(left: 15.0)),
-        Text("${body.length <= 280 ? body : body.substring(0, 280)}")
+        Text("${body.length <= 25 ? body : body.substring(0, 25) + '...'}")
       ];
     }
 
@@ -50,7 +50,7 @@ class ChatItemState extends State<ChatItem> {
 
     avatarAndText.add(Padding(padding: EdgeInsets.symmetric(horizontal: 20.0)));
 
-    avatarAndText.addAll(afterAvatar('"${lastMsg.body}"'));
+    avatarAndText.addAll(afterAvatar('${lastMsg.body}'));
 
     avatarAndText.addAll([
       Padding(padding: EdgeInsets.only(left: 15.0)),
