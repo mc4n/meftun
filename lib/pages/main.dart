@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:me_flutting/widget/chat_list.dart';
-import 'package:me_flutting/widget/contact_list.dart';
+import '../widget/chat_list.dart';
+import '../widget/contact_list.dart';
 import '../main.dart';
-import '../models/chat.dart';
 
 class MainPage extends StatefulWidget {
   MainPage({
@@ -26,21 +25,7 @@ class MainPageState extends State<MainPage> {
   final TextEditingController tedit = TextEditingController();
   @override
   Widget build(BuildContext context) {
-    bool fNotContact(Chat c) => msgFactory.getLastMessage(c)?.body != null;
-
     var ftext = tedit.text.trim();
-
-    bool fContactsFilter(Chat c) =>
-        !fNotContact(c) &&
-        (!isSearching ||
-            ftext == '' ||
-            isSearching && ftext != '' && c.caption.contains(ftext));
-
-    bool fChatsFilter(Chat c) =>
-        fNotContact(c) &&
-        (!isSearching ||
-            ftext == '' ||
-            isSearching && ftext != '' && c.caption.contains(ftext));
 
     return _tabCon(
         () => [
@@ -55,12 +40,12 @@ class MainPageState extends State<MainPage> {
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: <Widget>[
                     ContactList(
-                      fContactsFilter,
+                      (_) => msgFactory.fContactsFilter(_, isSearching, ftext),
                       onMsgSent,
                     ),
                     Padding(padding: EdgeInsets.symmetric(vertical: 4.0)),
                     ChatList(
-                      fChatsFilter,
+                      (_) => msgFactory.fChatsFilter(_, isSearching, ftext),
                       onMsgSent,
                     ),
                   ],

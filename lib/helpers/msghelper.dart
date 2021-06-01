@@ -79,4 +79,18 @@ class MessageFactory {
     addContact(gro);
     return gro;
   }
+
+  bool fNotContact(Chat target) => getLastMessage(target)?.body != null;
+
+  bool fContactsFilter(Chat target, bool isSearching, String ftext) =>
+      !fNotContact(target) &&
+      (!isSearching ||
+          ftext == '' ||
+          isSearching && ftext != '' && target.caption.contains(ftext));
+
+  bool fChatsFilter(Chat target, bool isSearching, String ftext) =>
+      fNotContact(target) &&
+      (!isSearching ||
+          ftext == '' ||
+          isSearching && ftext != '' && target.caption.contains(ftext));
 }
