@@ -17,20 +17,30 @@ void main() {
 }
 
 void _initTempObjects() {
-  //var me = chatFactory.ownerFactory;
-  // var p1 = chatFactory.addPerson('2pac');
-  // var p2 = chatFactory.addPerson('bigg');
-  // var g1 = chatFactory.addGroup('THUGS');
-  chatFactory.addPerson('ali');
-  chatFactory.addPerson('veli');
-  chatFactory.addPerson('ayse');
-  chatFactory.addPerson('fatma');
-  chatFactory.addGroup('MALLAR');
+  final peeps = ['2pac', 'bigg', 'cube', 'ali', 'ayse'];
+  peeps.forEach((element) {
+    chatFactory.addPerson(element);
+  });
 
-  // me.receiveMessage(p1, 'word da f up!');
-  // me.receiveMessage(p2, 'hi');
+  var g1 = chatFactory.addGroup('THUGS');
 
-  // final msgFactory_2 = chatFactory.factoryByChat(g1);
-  // msgFactory_2.addMessage('morning!');
-  // msgFactory_2.receiveMessage(p1, 'thug life bay behh!');
+  final msgFact = chatFactory.msgFactories.elementAt(2);
+
+  final body = 'he';
+
+  var msg = msgFact.addMessageBody(body);
+
+  final _ = msgFact.addResponse(msg);
+
+  chatFactory
+      .factoryByChat(g1)
+      .addMessageBodyFrom(chatFactory.contacts.elementAt(0), 'thug life baby!');
+  chatFactory
+      .factoryByChat(g1)
+      .addMessageBodyFrom(chatFactory.contacts.elementAt(2), 'yeah bro');
+
+  chatFactory.msgFactories.elementAt(0).addMessageBody('pac, are there bro?');
+
+  chatFactory.ownerFactory.addMessageBodyFrom(
+      chatFactory.contacts.elementAt(1), 'it was all a dreeam!');
 }

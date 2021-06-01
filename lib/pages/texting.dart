@@ -38,7 +38,9 @@ class TextingPageState extends State<TextingPage> {
   void _sendMes([String _ = '']) {
     var data = teC.text;
     if (data.trim() != '') {
-      widget.messageFactory.addMessage(data);
+      var msg = widget.messageFactory.addMessageBody(data);
+      if (DateTime.now().second % 3 == 0)
+        widget.messageFactory.addResponse(msg);
       if (widget.onMsgSent != null) {
         widget.onMsgSent(data);
         setState(() => null);

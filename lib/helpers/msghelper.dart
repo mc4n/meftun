@@ -44,20 +44,48 @@ class ChatFactory extends Factory<MessageFactory> {
 class MessageFactory extends Factory<Message> {
   final ChatFactory chatFactory;
   MessageFactory(this.chatFactory, Chat target) : super(target) {
-    _items.add(target.createMessage(chatFactory.owner, null));
+    addMessageBody(null);
   }
 
   Chat get chatItem => _base;
 
   Iterable<Message> get messages {
-    _items.sort(Message.compareEpoch);
-    return _items;
+    var list = <Message>[];
+
+    list.addAll(chatFactory.ownerFactory._items
+        .where((m) => m.body != null && m.from == chatItem));
+
+    list.addAll(_items.where((m) => m.body != null && m.chatGroup == chatItem));
+
+    list.sort(Message.compareEpoch);
+    return list;
   }
 
   Message get lastMessage => messages.length > 0 ? messages.last : null;
 
-  Message addMessage(String body) => null;
+  Message addMessage(Message msg) => _addItem(msg);
 
+  Message addMessageBodyFrom(DirectChat from, String body) =>
+      addMessage(chatItem.createMessage(from, body));
+
+  Message addMessageBody(String body) =>
+      addMessage(chatItem.createMessage(chatFactory.owner, body));
+
+  Message addResponse(Message msg) {
+    var newFrom = chatFactory.contacts
+        .elementAt(DateTime.now().millisecond % chatFactory.contacts.length);
+    if (msg.chatGroup is GroupChat) {
+      return chatFactory.factoryByChat(msg.chatGroup).addMessageBodyFrom(
+          newFrom, 'this is an example response by ${newFrom.caption}');
+    } else {
+      var newFrom = msg.chatGroup as DirectChat;
+      var ownerF = chatFactory.ownerFactory;
+      return ownerF.addMessageBodyFrom(
+          newFrom, 'this is an example response by ${newFrom.caption}');
+    }
+  }
+
+  // ------
   bool get fNotContact => lastMessage?.body != null;
 
   bool fContactsFilter(bool isSearching, String ftext) =>
