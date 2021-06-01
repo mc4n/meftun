@@ -14,9 +14,10 @@ abstract class Chat {
     return '[Chat]\nid : ${id ?? ""} \n name: $name??""';
   }
 
-  Draft createDraft(DirectChat from) {
-    return Draft(null, from, this);
-  }
+  Draft createDraft(DirectChat from, [String body]) => Draft(body, from, this);
+
+  Draft createMessage(DirectChat from, String body) =>
+      createDraft(from, body).toMessage();
 
   String get caption;
 
