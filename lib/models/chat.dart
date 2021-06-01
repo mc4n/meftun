@@ -1,5 +1,6 @@
 import 'package:me_flutting/models/draft.dart';
 import 'package:me_flutting/models/directchat.dart';
+import 'package:me_flutting/models/message.dart';
 import 'package:uuid/uuid.dart';
 
 abstract class Chat {
@@ -16,7 +17,7 @@ abstract class Chat {
 
   Draft createDraft(DirectChat from, [String body]) => Draft(body, from, this);
 
-  Draft createMessage(DirectChat from, String body) =>
+  Message createMessage(DirectChat from, String body) =>
       createDraft(from, body).toMessage();
 
   String get caption;
