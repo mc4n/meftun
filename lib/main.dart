@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:me_flutting/pages/main.dart' show MainPage;
-import '../helpers/msghelper.dart' show ChatFactory;
-import '../models/directchat.dart' show DirectChat;
+import '/pages/main.dart' show MainPage;
+import '/helpers/msghelper.dart' show ChatFactory;
+import '/models/directchat.dart' show DirectChat;
 
 ChatFactory chatFactory =
     ChatFactory(DirectChat('mcan', 'Mustafa Can', 'pac.jpg'));

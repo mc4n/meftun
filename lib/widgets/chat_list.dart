@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/rendering.dart';
-import 'package:me_flutting/helpers/msghelper.dart' show MessageFactory;
-import '../main.dart' show chatFactory;
-import 'chatitem.dart' show ChatItem;
+import '../helpers/msghelper.dart' show MessageFactory;
 import '../models/chat.dart' show Chat;
+import 'chatitem.dart' show ChatItem;
+import '../main.dart' show chatFactory;
 
 class ChatList extends StatefulWidget {
   final bool Function(MessageFactory) filter;

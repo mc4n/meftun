@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/rendering.dart';
-import 'package:me_flutting/helpers/msghelper.dart' show MessageFactory;
-import 'package:me_flutting/pages/texting.dart' show TextingPage;
+import '../helpers/msghelper.dart' show MessageFactory;
+import '../pages/texting.dart' show TextingPage;
 
 class ChatItem extends StatefulWidget {
   final MessageFactory messageFactory;
