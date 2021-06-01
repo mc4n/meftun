@@ -55,13 +55,13 @@ class MainPageState extends State<MainPage> {
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: <Widget>[
                     ContactList(
-                      onMsgSent: onMsgSent,
-                      filter: fContactsFilter,
+                      fContactsFilter,
+                      onMsgSent,
                     ),
                     Padding(padding: EdgeInsets.symmetric(vertical: 4.0)),
                     ChatList(
-                      onMsgSent: onMsgSent,
-                      filter: fChatsFilter,
+                      fChatsFilter,
+                      onMsgSent,
                     ),
                   ],
                 ),

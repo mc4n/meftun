@@ -8,7 +8,8 @@ import '../pages/texting.dart' show TextingPage;
 class ContactList extends StatefulWidget {
   final bool Function(Chat) filter;
   final void Function(String) onMsgSent;
-  ContactList({Key key, this.filter, this.onMsgSent}) : super(key: key);
+
+  const ContactList(this.filter, this.onMsgSent, [Key key]) : super(key: key);
 
   @override
   _ContactListState createState() => _ContactListState();
@@ -61,8 +62,8 @@ class _ContactListState extends State<ContactList> {
           itemBuilder: (BuildContext _, int index) => TextButton(
               onPressed: () {
                 Navigator.of(context).push(MaterialPageRoute(
-                  builder: (context) => TextingPage(
-                      selChat: contacts[index], onMsgSent: widget.onMsgSent),
+                  builder: (context) =>
+                      TextingPage(contacts[index], widget.onMsgSent),
                 ));
               },
               child: Column(children: [

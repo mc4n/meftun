@@ -10,7 +10,7 @@ class ChatItem extends StatefulWidget {
   final Chat chatItem;
   final void Function(String) onMsgSent;
 
-  const ChatItem({Key key, this.chatItem, this.onMsgSent}) : super(key: key);
+  const ChatItem(this.chatItem, this.onMsgSent, [Key key]) : super(key: key);
 
   @override
   State<StatefulWidget> createState() => ChatItemState();
@@ -80,8 +80,8 @@ class ChatItemState extends State<ChatItem> {
         onPressed: () => {
               Navigator.of(context).push(
                 MaterialPageRoute(
-                  builder: (context) => TextingPage(
-                      selChat: widget.chatItem, onMsgSent: widget.onMsgSent),
+                  builder: (context) =>
+                      TextingPage(widget.chatItem, widget.onMsgSent),
                 ),
               )
             },

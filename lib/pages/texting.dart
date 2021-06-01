@@ -9,7 +9,7 @@ class TextingPage extends StatefulWidget {
   final Chat selChat;
   final void Function(String) onMsgSent;
 
-  TextingPage({Key key, this.selChat, this.onMsgSent}) : super(key: key);
+  const TextingPage(this.selChat, this.onMsgSent, {Key key}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() => TextingPageState();
@@ -52,7 +52,7 @@ class TextingPageState extends State<TextingPage> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            MessageDialogs(selChat: widget.selChat),
+            MessageDialogs(widget.selChat),
             Padding(
                 padding: EdgeInsets.symmetric(vertical: 3, horizontal: 5),
                 child: _butt()),

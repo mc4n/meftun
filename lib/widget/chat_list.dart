@@ -9,7 +9,7 @@ class ChatList extends StatefulWidget {
   final bool Function(Chat) filter;
   final void Function(String) onMsgSent;
 
-  const ChatList({Key key, this.filter, this.onMsgSent});
+  const ChatList(this.filter, this.onMsgSent, [Key key]);
 
   @override
   State<StatefulWidget> createState() => ChatListState();
@@ -30,7 +30,7 @@ class ChatListState extends State<ChatList> {
         physics: BouncingScrollPhysics(),
         itemCount: chats.length,
         itemBuilder: (BuildContext context, int index) =>
-            ChatItem(chatItem: chats[index], onMsgSent: widget.onMsgSent),
+            ChatItem(chats[index], widget.onMsgSent),
       )),
     );
   }

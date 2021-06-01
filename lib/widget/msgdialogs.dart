@@ -7,7 +7,7 @@ import '../main.dart';
 
 class MessageDialogs extends StatefulWidget {
   final Chat selChat;
-  MessageDialogs({Key key, this.selChat}) : super(key: key);
+  const MessageDialogs(this.selChat, [Key key]) : super(key: key);
 
   @override
   _MessageDialogsState createState() => _MessageDialogsState();
@@ -31,11 +31,6 @@ class _MessageDialogsState extends State<MessageDialogs> {
         },
       ),
     );
-  }
-
-  @override
-  void initState() {
-    super.initState();
   }
 
   Widget _msgItem(Message msg) {

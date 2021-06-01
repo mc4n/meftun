@@ -12,10 +12,11 @@ class MessageFactory {
 
   DirectChat get owner => _owner;
 
-  Iterable<Message> getMessages(Chat target) {    
+  Iterable<Message> getMessages(Chat target) {
     final list = <Message>[];
     list.addAll(_items[target].where((element) => element is Message));
-    list.addAll(_items[owner].where((element) => element is Message &&  element.from == target));
+    list.addAll(_items[owner]
+        .where((element) => element is Message && element.from == target));
     list.sort(Message.compareEpoch);
     return list;
   }
