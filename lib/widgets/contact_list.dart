@@ -3,14 +3,20 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/rendering.dart';
 import '../helpers/msghelper.dart' show MessageFactory;
 import '../models/chat.dart' show Chat;
+import 'package:me_flutting/models/directchat.dart' show DirectChat;
 import '../pages/texting.dart' show TextingPage;
 import '../main.dart' show chatFactory;
 
 class ContactList extends StatefulWidget {
   final bool Function(MessageFactory) filter;
   final void Function(String) onMsgSent;
+  final void Function(
+          void Function(DirectChat dcAdded, [String errMsg]) callBack)
+      addContactClaimed;
 
-  const ContactList(this.filter, this.onMsgSent, [Key key]) : super(key: key);
+  const ContactList(this.filter, this.onMsgSent, this.addContactClaimed,
+      [Key key])
+      : super(key: key);
 
   @override
   _ContactListState createState() => _ContactListState();
@@ -40,7 +46,11 @@ class _ContactListState extends State<ContactList> {
               contacts.length > 0
                   ? _expan(context, contacts)
                   : TextButton(
-                      onPressed: () => null,
+                      onPressed: () {
+                        widget.addContactClaimed((_, [err]) {
+                          if (err != null) print(err);
+                        });
+                      },
                       child: Row(children: [
                         Text(' New contact '),
                         Icon(Icons.person_add_alt, size: 26),

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:me_flutting/main.dart';
+import 'package:me_flutting/models/directchat.dart';
 import '../widgets/chat_list.dart' show ChatList;
 import '../widgets/contact_list.dart' show ContactList;
 
@@ -15,12 +17,19 @@ class MainPage extends StatefulWidget {
 class MainPageState extends State<MainPage> {
   bool isSearching = false;
   void Function(String) onMsgSent;
+  void Function(void Function(DirectChat dcAdded, [String errMsg]) callBack)
+      addContactClaimed;
 
   MainPageState() {
     onMsgSent = (_) {
       setState(() => null);
     };
+    addContactClaimed = (_) {
+      _(chatFactory.addPerson(tedit.text.trim()));
+      setState(() => null);
+    };
   }
+
   final TextEditingController tedit = TextEditingController();
   @override
   Widget build(BuildContext context) {
@@ -38,10 +47,8 @@ class MainPageState extends State<MainPage> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: <Widget>[
-                    ContactList(
-                      (_) => _.fContactsFilter(isSearching, ftext),
-                      onMsgSent,
-                    ),
+                    ContactList((_) => _.fContactsFilter(isSearching, ftext),
+                        onMsgSent, addContactClaimed),
                     Padding(padding: EdgeInsets.symmetric(vertical: 4.0)),
                     ChatList(
                       (_) => _.fChatsFilter(isSearching, ftext),
