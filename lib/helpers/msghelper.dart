@@ -102,6 +102,8 @@ class MessageFactory extends Factory<Message> {
 
   bool removeMessage(Message item) {
     if (_items.contains(item)) return _removeItem(item);
+    final cf = chatFactory._chatToFactory(item.chatGroup);
+    if (cf._items.contains(item)) return cf._removeItem(item);
     return false;
   }
 

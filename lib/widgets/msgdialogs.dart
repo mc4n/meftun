@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:me_flutting/models/directchat.dart';
+import 'package:me_flutting/pages/texting.dart';
 import '../helpers/msghelper.dart';
 import '../models/message.dart';
 
@@ -46,16 +47,26 @@ class _MessageDialogsState extends State<MessageDialogs> {
         );
       });
 
-  Widget _dialog(Message msg, bool isRight) => Card(
-      color: !isRight ? Colors.grey.shade200 : Colors.lightGreen.shade300,
-      child: Padding(
-        padding: EdgeInsets.all(3),
-        child: Column(children: [
-          Text('${msg.epochToTimeString()}', style: TextStyle(fontSize: 11)),
-          Padding(padding: EdgeInsets.symmetric(vertical: 2)),
-          !isRight ? Text('${msg.from.caption}:') : Row(),
-          Padding(padding: EdgeInsets.symmetric(vertical: 3)),
-          Text('${msg.body}'),
-        ]),
-      ));
+  Widget _dialog(Message msg, bool isRight) => GestureDetector(
+      onDoubleTap: () {
+        if (widget.messageFactory.removeMessage(msg)) {
+          setState(() => context
+              .findAncestorWidgetOfExactType<TextingPage>()
+              .onMsgSent
+              ?.call(null));
+        }
+      },
+      child: Card(
+          color: !isRight ? Colors.grey.shade200 : Colors.lightGreen.shade300,
+          child: Padding(
+            padding: EdgeInsets.all(3),
+            child: Column(children: [
+              Text('${msg.epochToTimeString()}',
+                  style: TextStyle(fontSize: 11)),
+              Padding(padding: EdgeInsets.symmetric(vertical: 2)),
+              !isRight ? Text('${msg.from.caption}:') : Row(),
+              Padding(padding: EdgeInsets.symmetric(vertical: 3)),
+              Text('${msg.body}'),
+            ]),
+          )));
 }

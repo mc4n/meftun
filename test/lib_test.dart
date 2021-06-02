@@ -1,6 +1,6 @@
-import 'package:flutter_test/flutter_test.dart';
-import 'package:me_flutting/models/directchat.dart';
-import 'package:me_flutting/helpers/msghelper.dart';
+// import 'package:flutter_test/flutter_test.dart';
+// import 'package:me_flutting/models/directchat.dart';
+// import 'package:me_flutting/helpers/msghelper.dart';
 
 void main() {
   // test('test contacts', () async {
@@ -65,25 +65,25 @@ void main() {
   //   //expect(newMsg.epochToTimeString(), '');
   // });
 
-  test('test clear messages / remove message', () async {
-    var chatFact = ChatFactory(DirectChat('admin', 'adamin dibi'));
-    final peeps = ['2pac', 'bigg', 'cube', 'ali', 'ayse'];
-    peeps.forEach((element) {
-      chatFact.addPerson(element);
-    });
+  // test('test clear messages / remove message', () async {
+  //   var chatFact = ChatFactory(DirectChat('admin', 'adamin dibi'));
+  //   final peeps = ['2pac', 'bigg', 'cube', 'ali', 'ayse'];
+  //   peeps.forEach((element) {
+  //     chatFact.addPerson(element);
+  //   });
 
-    final msgFact = chatFact.msgFactories.elementAt(2);
+  //   final msgFact = chatFact.msgFactories.elementAt(2);
 
-    var msg = msgFact.addMessageBody('asdsadkaosd');
+  //   var msg = msgFact.addMessageBody('asdsadkaosd');
 
-    expect(msgFact.messages.length, 1);
-    msgFact.removeMessage(msg);
-    expect(msgFact.messages.toList().length, 0);
+  //   expect(msgFact.messages.length, 1);
+  //   msgFact.removeMessage(msg);
+  //   expect(msgFact.messages.toList().length, 0);
 
-    msgFact.addMessageBody('asdsadkaosd');
-    msgFact.addMessageBody('asdsadkaosd');
-    expect(msgFact.messages.toList().length, 2);
-    msgFact.clearMessages();
-    expect(msgFact.messages.toList().length, 0);
-  });
+  //   msgFact.addMessageBody('asdsadkaosd');
+  //   msgFact.addMessageBody('asdsadkaosd');
+  //   expect(msgFact.messages.toList().length, 2);
+  //   msgFact.clearMessages();
+  //   expect(msgFact.messages.toList().length, 0);
+  // });
 }
