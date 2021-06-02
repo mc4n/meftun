@@ -24,9 +24,13 @@ class MainPageState extends State<MainPage> {
     onMsgSent = (_) {
       setState(() => null);
     };
-    addContactClaimed = (_) {
-      _(chatFactory.addPerson(tedit.text.trim()));
-      setState(() => null);
+    addContactClaimed = (callback) {
+      final tsea = tedit.text.trim();
+      if (tsea != '' && !chatFactory.existsPerson(tsea))
+        setState(() => callback(chatFactory.addPerson(tsea)));
+      else
+        callback(null,
+            'person $tsea already exists or an invalid username supplied.');
     };
   }
 

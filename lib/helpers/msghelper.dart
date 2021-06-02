@@ -33,6 +33,11 @@ class ChatFactory extends Factory<MessageFactory> {
 
   Iterable<Chat> get contacts => msgFactories.map((m) => m.chatItem);
 
+  bool _exists(bool Function(Chat) pred) => contacts.where(pred)?.isNotEmpty;
+
+  bool existsPerson(String uName) =>
+      _exists((_) => _ is DirectChat && _.username == uName);
+
   Chat addContact(Chat item) => _addItem(MessageFactory(this, item)).chatItem;
 
   DirectChat addPerson(String userName) => addContact(DirectChat(userName));
@@ -69,7 +74,6 @@ class MessageFactory extends Factory<Message> {
 
   Message addMessageBody(String body) =>
       addMessageBodyFrom(chatFactory.owner, body);
-  //addMessage(chatItem.createMessage(chatFactory.owner, body));
 
   Message addReplyTo(Message msg) => _addResponseFrom(msg.chatGroup);
 
