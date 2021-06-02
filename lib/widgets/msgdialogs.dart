@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:me_flutting/models/directchat.dart';
 import '../helpers/msghelper.dart';
 import '../models/message.dart';
 
@@ -19,38 +20,42 @@ class _MessageDialogsState extends State<MessageDialogs> {
       if (sc.hasClients) sc.jumpTo(sc.position.maxScrollExtent);
     });
     return Expanded(
-      child: ListView.builder(
-        physics: BouncingScrollPhysics(),
-        controller: sc,
-        itemCount: widget.messageFactory.messages.length,
-        itemBuilder: (BuildContext context, int i) {
-          var msg = widget.messageFactory.messages.elementAt(i);
-          return _msgItem(msg);
-        },
-      ),
+      child: _lv(widget.messageFactory.messages,
+          widget.messageFactory.chatFactory.owner),
     );
   }
 
-  Widget _msgItem(Message msg) {
-    if (msg.body == null) return Container();
-    var usr = msg.from == widget.messageFactory.chatFactory.owner
-        ? 'YOU'
-        : msg.from.username;
-    return Card(child: _pad(msg.body, usr, msg.epochToTimeString()));
-  }
+  Widget _lv(List<Message> messages, DirectChat owner) => ListView.builder(
+      //reverse: true,
+      physics: BouncingScrollPhysics(),
+      controller: sc,
+      itemCount: messages.length,
+      shrinkWrap: false,
+      itemBuilder: (_, __) {
+        var msg = messages[__];
+        var isMe = msg.from == owner;
+        return Container(
+          //color: Colors.yellow.shade100,
+          child: Padding(
+              padding: EdgeInsets.symmetric(horizontal: 15),
+              child: Row(
+                mainAxisAlignment:
+                    isMe ? MainAxisAlignment.end : MainAxisAlignment.start,
+                children: [_dialog(msg, isMe)],
+              )),
+        );
+      });
 
-  Widget _pad(String body, String name, String eps) => Padding(
-        child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: <Widget>[
-              Text('$name:'),
-              Padding(padding: EdgeInsets.symmetric(vertical: 2)),
-              Text('$body'),
-              Padding(padding: EdgeInsets.only(top: 4)),
-              Text(eps,
-                  style: TextStyle(color: Colors.grey.shade700, fontSize: 12))
-            ]),
-        padding: EdgeInsets.symmetric(vertical: 6.0, horizontal: 12.0),
-      );
+  Widget _dialog(Message msg, bool isRight) => Card(
+      color: !isRight ? Colors.grey.shade200 : Colors.lightGreen.shade300,
+      child: Padding(
+        padding: EdgeInsets.all(3),
+        child: Column(children: [
+          Text('${msg.epochToTimeString()}', style: TextStyle(fontSize: 11)),
+          Padding(padding: EdgeInsets.symmetric(vertical: 2)),
+          !isRight ? Text('${msg.from.caption}:') : Row(),
+          Padding(padding: EdgeInsets.symmetric(vertical: 3)),
+          Text('${msg.body}'),
+        ]),
+      ));
 }
