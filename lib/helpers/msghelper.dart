@@ -100,6 +100,18 @@ class MessageFactory extends Factory<Message> {
     }
   }
 
+  bool removeMessage(Message item) {
+    if (_items.contains(item)) return _removeItem(item);
+    return false;
+  }
+
+  void clearMessages() {
+    var f = chatFactory._chatToFactory(chatItem);
+    if (chatItem is DirectChat)
+      chatFactory.ownerFactory._items.removeWhere((_) => _.from == chatItem);
+    f._items.removeWhere((m) => m.chatGroup == chatItem);
+  }
+
   // ------
 
   bool fContactsFilter(bool isSearching, String ftext) =>

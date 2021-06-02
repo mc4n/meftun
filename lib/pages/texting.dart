@@ -44,7 +44,9 @@ class TextingPageState extends State<TextingPage> {
                       color: Colors.blue.shade100)),
               TextButton(
                   onPressed: () {
-                    // clear messages here.
+                    widget.messageFactory.clearMessages();
+                    setState(() => null);
+                    widget.onMsgSent(null);
                   },
                   child: Icon(Icons.delete, color: Colors.yellow.shade100)),
             ])

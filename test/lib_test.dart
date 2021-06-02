@@ -13,23 +13,23 @@ void main() {
   //   expect(chatFact.contacts.map((e) => (e as DirectChat).username), peeps);
   // });
 
-  test('test remove contact', () async {
-    var chatFact = ChatFactory(DirectChat('admin', 'adamin dibi'));
-    final peeps = ['ali', 'ayse'];
-    peeps.forEach((element) {
-      chatFact.addPerson(element);
-    });
-    expect(chatFact.contacts.map((e) => (e as DirectChat).username), peeps);
-    expect(chatFact.contacts.length, peeps.length);
-    var celal = chatFact.addPerson('celal');
-    expect(chatFact.contacts.length, peeps.length + 1);
-    expect(chatFact.existsPerson('celal'), true);
-    expect(chatFact.removeContact(celal), true);
-    expect(chatFact.existsPerson('celal'), false);
-    expect(chatFact.contacts.length, peeps.length);
-    expect(chatFact.removeContact(DirectChat('hedehede')), false);
-    expect(chatFact.contacts.length, peeps.length);
-  });
+  // test('test remove contact', () async {
+  //   var chatFact = ChatFactory(DirectChat('admin', 'adamin dibi'));
+  //   final peeps = ['ali', 'ayse'];
+  //   peeps.forEach((element) {
+  //     chatFact.addPerson(element);
+  //   });
+  //   expect(chatFact.contacts.map((e) => (e as DirectChat).username), peeps);
+  //   expect(chatFact.contacts.length, peeps.length);
+  //   var celal = chatFact.addPerson('celal');
+  //   expect(chatFact.contacts.length, peeps.length + 1);
+  //   expect(chatFact.existsPerson('celal'), true);
+  //   expect(chatFact.removeContact(celal), true);
+  //   expect(chatFact.existsPerson('celal'), false);
+  //   expect(chatFact.contacts.length, peeps.length);
+  //   expect(chatFact.removeContact(DirectChat('hedehede')), false);
+  //   expect(chatFact.contacts.length, peeps.length);
+  // });
 
   // test('test messages', () async {
   //   var chatFact = ChatFactory(DirectChat('admin', 'adamin dibi'));
@@ -46,7 +46,7 @@ void main() {
 
   //   expect(msg.body, body);
 
-  //   final resp = msgFact.addResponse(msg);
+  //   final resp = msgFact.addReplyTo(msg);
 
   //   expect(
   //       resp.body, 'this is an example response by ${msg.chatGroup.caption}');
@@ -64,4 +64,26 @@ void main() {
   //       (diff.isNegative ? diff.inDays.toString() + ' days ago' : ' '));
   //   //expect(newMsg.epochToTimeString(), '');
   // });
+
+  test('test clear messages / remove message', () async {
+    var chatFact = ChatFactory(DirectChat('admin', 'adamin dibi'));
+    final peeps = ['2pac', 'bigg', 'cube', 'ali', 'ayse'];
+    peeps.forEach((element) {
+      chatFact.addPerson(element);
+    });
+
+    final msgFact = chatFact.msgFactories.elementAt(2);
+
+    var msg = msgFact.addMessageBody('asdsadkaosd');
+
+    expect(msgFact.messages.length, 1);
+    msgFact.removeMessage(msg);
+    expect(msgFact.messages.toList().length, 0);
+
+    msgFact.addMessageBody('asdsadkaosd');
+    msgFact.addMessageBody('asdsadkaosd');
+    expect(msgFact.messages.toList().length, 2);
+    msgFact.clearMessages();
+    expect(msgFact.messages.toList().length, 0);
+  });
 }
