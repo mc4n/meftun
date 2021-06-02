@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/rendering.dart';
 import '../helpers/msghelper.dart' show MessageFactory;
-import '../models/chat.dart' show Chat;
 import 'package:me_flutting/models/directchat.dart' show DirectChat;
 import '../pages/texting.dart' show TextingPage;
 import '../main.dart' show chatFactory;
@@ -25,11 +24,7 @@ class ContactList extends StatefulWidget {
 class _ContactListState extends State<ContactList> {
   @override
   Widget build(BuildContext context) {
-    var contacts = chatFactory.msgFactories
-        .where(widget.filter)
-        .map((m) => m.chatItem)
-        .toList();
-
+    var contacts = chatFactory.msgFactories.where(widget.filter).toList();
     return Container(
         height: 80,
         color: Colors.yellow.shade200,
@@ -65,7 +60,7 @@ class _ContactListState extends State<ContactList> {
             ])));
   }
 
-  Expanded _expan(BuildContext context, List<Chat> contacts) {
+  Expanded _expan(BuildContext context, List<MessageFactory> contacts) {
     return Expanded(
       child: ListView.builder(
           scrollDirection: Axis.horizontal,
@@ -75,15 +70,16 @@ class _ContactListState extends State<ContactList> {
               onPressed: () {
                 Navigator.of(context).push(MaterialPageRoute(
                     builder: (context) => TextingPage(
-                          chatFactory.factoryByChat(contacts[index]),
+                          contacts[index],
                           widget.onMsgSent,
                         )));
               },
               child: Column(children: [
-                Text(contacts[index].caption,
+                Text(contacts[index].chatItem.caption,
                     style: TextStyle(color: Colors.grey.shade800)),
                 CircleAvatar(
-                    backgroundImage: AssetImage(contacts[index].photoURL)),
+                    backgroundImage:
+                        AssetImage(contacts[index].chatItem.photoURL)),
               ]))),
     );
   }

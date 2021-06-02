@@ -26,15 +26,14 @@ class ChatFactory extends Factory<MessageFactory> {
 
   MessageFactory get ownerFactory => _items.first;
 
-  MessageFactory factoryByChat(Chat _target) =>
+  MessageFactory _chatToFactory(Chat _target) =>
       _items.singleWhere((m) => m.chatItem == _target);
 
   Iterable<MessageFactory> get msgFactories => _items.skip(1);
 
   Iterable<Chat> get contacts => msgFactories.map((m) => m.chatItem);
 
-  Chat addContact(Chat target) =>
-      _addItem(MessageFactory(this, target)).chatItem;
+  Chat addContact(Chat item) => _addItem(MessageFactory(this, item)).chatItem;
 
   DirectChat addPerson(String userName) => addContact(DirectChat(userName));
 
@@ -63,24 +62,26 @@ class MessageFactory extends Factory<Message> {
 
   Message get lastMessage => messages.length > 0 ? messages.last : null;
 
-  Message addMessage(Message msg) => _addItem(msg);
+  Message addMessage(Message item) => _addItem(item);
 
   Message addMessageBodyFrom(DirectChat from, String body) =>
       addMessage(chatItem.createMessage(from, body));
 
   Message addMessageBody(String body) =>
-      addMessage(chatItem.createMessage(chatFactory.owner, body));
+      addMessageBodyFrom(chatFactory.owner, body);
+  //addMessage(chatItem.createMessage(chatFactory.owner, body));
 
-  Message addResponse(Message msg) {
+  Message addReplyTo(Message msg) => _addResponseFrom(msg.chatGroup);
+
+  Message _addResponseFrom(Chat newFrom) {
     final cts = chatFactory.contacts
         .where((x) => x is DirectChat)
         .map((x) => x as DirectChat);
     var newFrom = cts.elementAt(DateTime.now().millisecond % cts.length);
-    if (msg.chatGroup is GroupChat) {
-      return chatFactory.factoryByChat(msg.chatGroup).addMessageBodyFrom(
+    if (newFrom is GroupChat) {
+      return chatFactory._chatToFactory(newFrom).addMessageBodyFrom(
           newFrom, 'this is an example response by ${newFrom.caption}');
     } else {
-      var newFrom = msg.chatGroup as DirectChat;
       var ownerF = chatFactory.ownerFactory;
       return ownerF.addMessageBodyFrom(
           newFrom, 'this is an example response by ${newFrom.caption}');
@@ -88,16 +89,15 @@ class MessageFactory extends Factory<Message> {
   }
 
   // ------
-  bool get fNotContact => lastMessage?.body != null;
 
   bool fContactsFilter(bool isSearching, String ftext) =>
-      !fNotContact &&
+      lastMessage?.body == null &&
       (!isSearching ||
           ftext == '' ||
           isSearching && ftext != '' && _base.caption.contains(ftext));
 
   bool fChatsFilter(bool isSearching, String ftext) =>
-      fNotContact &&
+      lastMessage?.body != null &&
       (!isSearching ||
           ftext == '' ||
           isSearching && ftext != '' && _base.caption.contains(ftext));

@@ -39,8 +39,7 @@ class TextingPageState extends State<TextingPage> {
     var data = teC.text;
     if (data.trim() != '') {
       var msg = widget.messageFactory.addMessageBody(data);
-      if (DateTime.now().second % 3 == 0)
-        widget.messageFactory.addResponse(msg);
+      if (DateTime.now().second % 3 == 0) widget.messageFactory.addReplyTo(msg);
       if (widget.onMsgSent != null) {
         widget.onMsgSent(data);
         setState(() => null);

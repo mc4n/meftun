@@ -22,21 +22,21 @@ void _initTempObjects() {
     chatFactory.addPerson(element);
   });
 
-  var g1 = chatFactory.addGroup('THUGS');
+  chatFactory.addGroup('THUGS');
 
   final msgFact = chatFactory.msgFactories.elementAt(2);
 
   final body = 'he';
 
-  var msg = msgFact.addMessageBody(body);
+  final msg = msgFact.addMessageBody(body);
 
-  final _ = msgFact.addResponse(msg);
+  msgFact.addReplyTo(msg);
 
-  chatFactory
-      .factoryByChat(g1)
+  chatFactory.msgFactories
+      .elementAt(5)
       .addMessageBodyFrom(chatFactory.contacts.elementAt(0), 'thug life baby!');
-  chatFactory
-      .factoryByChat(g1)
+  chatFactory.msgFactories
+      .elementAt(5)
       .addMessageBodyFrom(chatFactory.contacts.elementAt(2), 'yeah bro');
 
   chatFactory.msgFactories.elementAt(0).addMessageBody('pac, are there bro?');
