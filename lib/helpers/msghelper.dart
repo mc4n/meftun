@@ -15,6 +15,8 @@ class Factory<T> {
     _items.add(_item);
     return _item;
   }
+
+  bool _removeItem(T _item) => _items.remove(_item);
 }
 
 class ChatFactory extends Factory<MessageFactory> {
@@ -43,6 +45,12 @@ class ChatFactory extends Factory<MessageFactory> {
   DirectChat addPerson(String userName) => addContact(DirectChat(userName));
 
   GroupChat addGroup(String name) => addContact(GroupChat(name));
+
+  bool removeContact(Chat item) {
+    if (!_exists((_) => item == _)) return false;
+    _removeItem(_chatToFactory(item));
+    return !_exists((_) => item == _);
+  }
 }
 
 class MessageFactory extends Factory<Message> {

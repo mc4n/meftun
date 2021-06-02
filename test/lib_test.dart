@@ -1,9 +1,6 @@
-//import 'package:flutter_test/flutter_test.dart';
-// import 'package:me_flutting/models/directchat.dart';
-// import 'package:me_flutting/models/draft.dart';
-// import 'package:me_flutting/helpers/msghelper.dart';
-// import 'package:me_flutting/models/message.dart';
-// import 'package:me_flutting/widget/msgdialogs.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:me_flutting/models/directchat.dart';
+import 'package:me_flutting/helpers/msghelper.dart';
 
 void main() {
   // test('test contacts', () async {
@@ -12,8 +9,27 @@ void main() {
   //   peeps.forEach((element) {
   //     chatFact.addPerson(element);
   //   });
+
   //   expect(chatFact.contacts.map((e) => (e as DirectChat).username), peeps);
   // });
+
+  test('test remove contact', () async {
+    var chatFact = ChatFactory(DirectChat('admin', 'adamin dibi'));
+    final peeps = ['ali', 'ayse'];
+    peeps.forEach((element) {
+      chatFact.addPerson(element);
+    });
+    expect(chatFact.contacts.map((e) => (e as DirectChat).username), peeps);
+    expect(chatFact.contacts.length, peeps.length);
+    var celal = chatFact.addPerson('celal');
+    expect(chatFact.contacts.length, peeps.length + 1);
+    expect(chatFact.existsPerson('celal'), true);
+    expect(chatFact.removeContact(celal), true);
+    expect(chatFact.existsPerson('celal'), false);
+    expect(chatFact.contacts.length, peeps.length);
+    expect(chatFact.removeContact(DirectChat('hedehede')), false);
+    expect(chatFact.contacts.length, peeps.length);
+  });
 
   // test('test messages', () async {
   //   var chatFact = ChatFactory(DirectChat('admin', 'adamin dibi'));

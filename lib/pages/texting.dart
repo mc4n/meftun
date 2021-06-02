@@ -27,7 +27,29 @@ class TextingPageState extends State<TextingPage> {
             Navigator.pop(context);
           },
         ),
-        title: Text('${widget.messageFactory.chatItem.caption}'),
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text('${widget.messageFactory.chatItem.caption}'),
+            Row(children: [
+              TextButton(
+                  onPressed: () {
+                    if (widget.messageFactory.chatFactory
+                        .removeContact(widget.messageFactory.chatItem)) {
+                      widget.onMsgSent(null);
+                      Navigator.of(context).pop();
+                    }
+                  },
+                  child: Icon(Icons.person_remove_alt_1_sharp,
+                      color: Colors.blue.shade100)),
+              TextButton(
+                  onPressed: () {
+                    // clear messages here.
+                  },
+                  child: Icon(Icons.delete, color: Colors.yellow.shade100)),
+            ])
+          ],
+        ),
       ),
       // body
       body: _body(),
