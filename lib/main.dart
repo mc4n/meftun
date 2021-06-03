@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import '/pages/main.dart' show MainPage;
 import '/helpers/msghelper.dart' show ChatFactory;
 import '/models/directchat.dart' show DirectChat;
+import 'dart:math';
 
 ChatFactory chatFactory =
     ChatFactory(DirectChat('mcan', 'Mustafa Can', 'pac.jpg'));
@@ -17,30 +18,25 @@ void main() {
 }
 
 void _initTempObjects() {
-  final peeps = ['2pac', 'bigg', 'cube', 'ali', 'ayse'];
-  peeps.forEach((element) {
-    chatFactory.addPerson(element);
-  });
-
   chatFactory.addGroup('THUGS');
+  final _ = ['2pac', 'bigg', 'cube'];
+  _.forEach((__) {
+    chatFactory.addPerson(__);
+  });
+  chatFactory.addGroup('mentals');
+  final cts =
+      chatFactory.msgFactories; //.where((_) => _.chatItem is DirectChat);
+  final rnd = Random();
+  final exampleMsgs = [
+    'Hello World!',
+    'The world is mine!',
+    'Bang bang',
+    'selamun aleyküm'
+  ];
 
-  final msgFact = chatFactory.msgFactories.elementAt(2);
-
-  final body = 'he';
-
-  final msg = msgFact.addMessageBody(body);
-
-  msgFact.addReplyTo(msg);
-
-  chatFactory.msgFactories
-      .elementAt(5)
-      .addMessageBodyFrom(chatFactory.contacts.elementAt(0), 'thug life baby!');
-  chatFactory.msgFactories
-      .elementAt(5)
-      .addMessageBodyFrom(chatFactory.contacts.elementAt(2), 'yeah bro');
-
-  chatFactory.msgFactories.elementAt(0).addMessageBody('pac, are there bro?');
-
-  chatFactory.ownerFactory.addMessageBodyFrom(
-      chatFactory.contacts.elementAt(1), 'it was all a dreeam!');
+  for (final _ in exampleMsgs) {
+    final mf = cts.elementAt(rnd.nextInt(cts.length));
+    final _msg = mf.addMessageBody(_);
+    if (rnd.nextInt(2) == 1) mf.addReplyTo(_msg);
+  }
 }

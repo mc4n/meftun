@@ -56,63 +56,45 @@ class ChatFactory extends Factory<MessageFactory> {
 class MessageFactory extends Factory<Message> {
   final ChatFactory chatFactory;
   MessageFactory(this.chatFactory, Chat target) : super(target) {
-    addMessageBody(null);
+    //addMessageBody(null);
   }
 
   Chat get chatItem => _base;
 
   Iterable<Message> get messages {
-    var list = <Message>[];
-
-    list.addAll(chatFactory.ownerFactory._items
-        .where((m) => m.body != null && m.from == chatItem));
-
-    list.addAll(_items.where((m) => m.body != null && m.chatGroup == chatItem));
-
-    list.sort(Message.compareEpoch);
-    return list;
+    _items.sort(Message.compareEpoch);
+    return _items;
   }
 
   Message get lastMessage => messages.length > 0 ? messages.last : null;
 
-  Message addMessage(Message item) => _addItem(item);
-
-  Message addMessageBodyFrom(DirectChat from, String body) =>
-      addMessage(chatItem.createMessage(from, body));
+  Message _addMessage(Message item) => _addItem(item);
 
   Message addMessageBody(String body) =>
-      addMessageBodyFrom(chatFactory.owner, body);
+      _addMessage(chatItem.createMessage(chatFactory.owner, body));
 
-  Message addReplyTo(Message msg) => _addResponseFrom(msg.chatGroup);
+  Message addReplyTo(Message msg) => _addResponse(msg.chatGroup);
 
-  Message _addResponseFrom(Chat newFrom) {
+  Message _addResponse(GroupChat chatGroup) {
     final cts = chatFactory.contacts
         .where((x) => x is DirectChat)
-        .map((x) => x as DirectChat);
-    var newFrom = cts.elementAt(DateTime.now().millisecond % cts.length);
-    if (newFrom is GroupChat) {
-      return chatFactory._chatToFactory(newFrom).addMessageBodyFrom(
-          newFrom, 'this is an example response by ${newFrom.caption}');
-    } else {
-      var ownerF = chatFactory.ownerFactory;
-      return ownerF.addMessageBodyFrom(
-          newFrom, 'this is an example response by ${newFrom.caption}');
-    }
+        .map((x) => x as DirectChat)
+        .take(chatGroup.maximumParticipants);
+    var newFrom = chatGroup.maximumParticipants == 2
+        ? chatGroup
+        : cts.elementAt(DateTime.now().millisecond % cts.length);
+    var newTo =
+        chatGroup.maximumParticipants == 2 ? chatFactory.owner : chatItem;
+    return _addMessage(
+        newTo.createMessage(newFrom, 'a response by ${newFrom.caption}'));
   }
 
   bool removeMessage(Message item) {
     if (_items.contains(item)) return _removeItem(item);
-    final cf = chatFactory._chatToFactory(item.chatGroup);
-    if (cf._items.contains(item)) return cf._removeItem(item);
     return false;
   }
 
-  void clearMessages() {
-    var f = chatFactory._chatToFactory(chatItem);
-    if (chatItem is DirectChat)
-      chatFactory.ownerFactory._items.removeWhere((_) => _.from == chatItem);
-    f._items.removeWhere((m) => m.chatGroup == chatItem);
-  }
+  void clearMessages() => _items.clear();
 
   // ------
 

@@ -1,10 +1,10 @@
-import 'chat.dart' show Chat;
+import 'groupchat.dart' show GroupChat;
 
-class DirectChat extends Chat {
+class DirectChat extends GroupChat {
   final String username;
 
-  DirectChat(this.username, [String name = '', String photoURL = 'avatar.png'])
-      : super(Chat.uuid.v4(), name, photoURL);
+  DirectChat(this.username, [String name, String photoURL = 'avatar.png'])
+      : super(name, photoURL, 2);
 
   @override
   String get caption => username;

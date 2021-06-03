@@ -21,7 +21,7 @@ class ChatItemState extends State<ChatItem> {
   Widget build(BuildContext context) {
     final lastMsg = widget.messageFactory.lastMessage;
     final meOrCaption = (Chat _) =>
-        _ == widget.messageFactory.chatFactory.owner ? 'YOU' : _.caption;
+        _ == widget.messageFactory.chatFactory.owner ? '[YOU]' : _.caption;
     final from = meOrCaption(lastMsg.from);
     final to = meOrCaption(lastMsg.chatGroup);
     final dt = lastMsg.epochToTimeString();
