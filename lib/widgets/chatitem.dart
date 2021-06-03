@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/rendering.dart';
-import 'package:me_flutting/models/chat.dart';
+import 'package:me_flutting/models/chat.dart' show Chat;
 import '../helpers/msghelper.dart' show MessageFactory;
 import '../pages/texting.dart' show TextingPage;
 
@@ -82,14 +82,8 @@ class ChatItemState extends State<ChatItem> {
   }
 
   Widget _frame(Widget _inner) => TextButton(
-      onPressed: () => {
-            Navigator.of(context).push(
-              MaterialPageRoute(
-                builder: (context) =>
-                    TextingPage(widget.messageFactory, widget.onMsgSent),
-              ),
-            )
-          },
+      onPressed: () async => TextingPage.letTheGameBegin(
+          context, widget.onMsgSent, widget.messageFactory),
       child: Card(
         key: ValueKey(widget.messageFactory.chatItem.id),
         child: Padding(

@@ -3,10 +3,7 @@ import 'package:flutter/cupertino.dart';
 import '/pages/main.dart' show MainPage;
 import '/helpers/msghelper.dart' show ChatFactory;
 import '/models/directchat.dart' show DirectChat;
-import 'dart:math';
-
-ChatFactory chatFactory =
-    ChatFactory(DirectChat('mcan', 'Mustafa Can', 'pac.jpg'));
+import 'dart:math' show Random;
 
 void main() {
   _initTempObjects();
@@ -17,6 +14,9 @@ void main() {
           )));
 }
 
+ChatFactory chatFactory =
+    ChatFactory(DirectChat('mcan', 'Mustafa Can', 'pac.jpg'));
+
 void _initTempObjects() {
   chatFactory.addGroup('THUGS');
   final _ = ['2pac', 'bigg', 'cube'];
@@ -24,8 +24,7 @@ void _initTempObjects() {
     chatFactory.addPerson(__);
   });
   chatFactory.addGroup('mentals');
-  final cts =
-      chatFactory.msgFactories; //.where((_) => _.chatItem is DirectChat);
+  final cts = chatFactory.msgFactories;
   final rnd = Random();
   final exampleMsgs = [
     'Hello World!',

@@ -67,13 +67,8 @@ class _ContactListState extends State<ContactList> {
           physics: BouncingScrollPhysics(),
           itemCount: contacts.length,
           itemBuilder: (BuildContext _, int index) => TextButton(
-              onPressed: () {
-                Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) => TextingPage(
-                          contacts[index],
-                          widget.onMsgSent,
-                        )));
-              },
+              onPressed: () async => TextingPage.letTheGameBegin(
+                  context, widget.onMsgSent, contacts[index]),
               child: Column(children: [
                 Text(contacts[index].chatItem.caption,
                     style: TextStyle(color: Colors.grey.shade800)),

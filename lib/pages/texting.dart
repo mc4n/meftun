@@ -4,6 +4,17 @@ import '../helpers/msghelper.dart' show MessageFactory;
 import '../widgets/msgdialogs.dart' show MessageDialogs;
 
 class TextingPage extends StatefulWidget {
+  static void letTheGameBegin(
+      BuildContext context,
+      final void Function(String) onMsgSent,
+      final MessageFactory messageFactory) async {
+    await Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (_) => TextingPage(messageFactory, onMsgSent),
+      ),
+    );
+  }
+
   final void Function(String) onMsgSent;
   final MessageFactory messageFactory;
 
@@ -11,10 +22,10 @@ class TextingPage extends StatefulWidget {
       : super(key: key);
 
   @override
-  State<StatefulWidget> createState() => TextingPageState();
+  State<StatefulWidget> createState() => _TextingPageState();
 }
 
-class TextingPageState extends State<TextingPage> {
+class _TextingPageState extends State<TextingPage> {
   final TextEditingController teC = TextEditingController();
 
   @override
@@ -53,9 +64,7 @@ class TextingPageState extends State<TextingPage> {
           ],
         ),
       ),
-      // body
       body: _body(),
-      //
     );
   }
 
