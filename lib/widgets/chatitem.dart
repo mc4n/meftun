@@ -32,67 +32,64 @@ class ChatItemState extends State<ChatItem> {
     final msgStatTo = (lastMsg.epoch + DateTime.now().second) % 2 == 0
         ? Colors.grey.shade700
         : Colors.blue.shade300;
-    const PAD_AV_AR = 40.0;
 
     return _frame(Padding(
         padding: EdgeInsets.symmetric(horizontal: 20),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Row(children: [
-              Column(
-                children: [
-                  CircleAvatar(backgroundImage: AssetImage(fromAv)),
-                  Text(from)
-                ],
-              ),
-              Column(children: [
-                Icon(Icons.arrow_forward, color: msgStatFrom),
-                Padding(padding: EdgeInsets.symmetric(horizontal: PAD_AV_AR)),
-                Text(dt,
-                    style:
-                        TextStyle(color: Colors.grey.shade700, fontSize: 12)),
-              ]),
-            ]),
-            Container(
-              color: Colors.grey.shade100,
-              child: Text(
-                  lastMsg.body.length > 20
-                      ? '${lastMsg.body.substring(0, 20)}...'
-                      : lastMsg.body,
-                  style: TextStyle(fontSize: 14)),
-            ),
-            Row(children: [
-              Column(children: [
-                Icon(Icons.arrow_forward, color: msgStatTo),
-                Padding(padding: EdgeInsets.symmetric(horizontal: PAD_AV_AR)),
-                Text('xx:xx',
-                    style:
-                        TextStyle(color: Colors.grey.shade700, fontSize: 12)),
-              ]),
-              Column(
-                children: [
-                  CircleAvatar(backgroundImage: AssetImage(toAv)),
-                  Text(to)
-                ],
-              )
-            ]),
+            _lrAvatar(fromAv, from, msgStatFrom, dt, true),
+            _midSect(lastMsg.body),
+            _lrAvatar(toAv, to, msgStatTo, dt, false),
           ],
         )));
   }
 
-  Widget _frame(Widget _inner) => TextButton(
-      onPressed: () async => TextingPage.letTheGameBegin(
-          context, widget.onMsgSent, widget.messageFactory),
-      child: Card(
-        key: ValueKey(widget.messageFactory.chatItem.id),
-        child: Padding(
-          child: GestureDetector(
-              child: _inner,
-              onLongPress: () {
-                print('onLongPress ');
-              }),
-          padding: EdgeInsets.symmetric(vertical: 10.0),
-        ),
-      ));
+  Container _midSect(String lastMsg) => Container(
+        color: Colors.grey.shade100,
+        child: Text(
+            lastMsg.length > 20 ? '${lastMsg.substring(0, 20)}...' : lastMsg,
+            style: TextStyle(fontSize: 14)),
+      );
+
+  static const PAD_AV_AR = 30.0;
+
+
+  Padding _lrAvatar(String avAss, String whois, Color msgStatColor, String dt, bool isleft) {
+    final _av = Column(
+      children: [
+        _wrapInGd(CircleAvatar(backgroundImage: AssetImage(avAss))),
+        Text(whois)
+      ],
+    );
+
+    final _ar = Column(
+      children: [
+        Icon(Icons.arrow_forward, color: msgStatColor),
+        Padding(padding: EdgeInsets.symmetric(horizontal: PAD_AV_AR)),
+        Text(dt, style: TextStyle(color: Colors.grey.shade700, fontSize: 12)),
+      ],
+    );
+
+    final _avarettin = isleft ? [_av, _ar] : [_ar, _av];
+
+    return Padding(
+        padding: EdgeInsets.symmetric(vertical: 10.0),
+        child: Row(children: _avarettin));
+  }
+
+  Widget _frame(Widget _inner /*, [ChatItemPositions _ = ChatItemPositions.Center]*/) => Dismissible(
+          key: Key(widget.messageFactory.chatItem.id),
+          // background: null,
+          // secondaryBackground: null,
+          child: TextButton(
+              onPressed: () async => TextingPage.letTheGameBegin(context, widget.onMsgSent, widget.messageFactory),                  
+              child: Card(key: ValueKey(widget.messageFactory.chatItem.id), child: _inner,)
+          )
+);
+
+  GestureDetector _wrapInGd(Widget item) =>
+      GestureDetector(onLongPress: () => null, child: item);
 }
+
+enum ChatItemPositions { Left, Center, Right }
