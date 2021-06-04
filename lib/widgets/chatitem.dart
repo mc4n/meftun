@@ -19,6 +19,7 @@ class ChatItem extends StatefulWidget {
 
 class ChatItemState extends State<ChatItem> {
   static const PAD_AV_AR = 30.0;
+  final SlidableController sldCont = SlidableController();
 
   @override
   Widget build(BuildContext context) {
@@ -71,9 +72,6 @@ class ChatItemState extends State<ChatItem> {
         ],
       );
 
-  Padding _lrAvatar(String avFrom, String avTo, String whoFrom, String whoTo,
-      Color msgStatColor, String dt, bool isleft) {}
-
   Widget _frame(Widget _inner) => TextButton(
       onPressed: () async => TextingPage.letTheGameBegin(
           context, widget.onMsgSent, widget.messageFactory),
@@ -85,28 +83,36 @@ class ChatItemState extends State<ChatItem> {
   GestureDetector _wrapInGd(Widget item) =>
       GestureDetector(onLongPress: () => null, child: item);
 
-// //
-
   Slidable _sl(Widget _inner) => Slidable(
+        key: Key(widget.messageFactory.chatItem.id),
         actionPane: SlidableDrawerActionPane(),
         actionExtentRatio: 0.125,
         child: _inner,
-        actions: _sl_acts,
-        secondaryActions: _sl_acts,
+        controller: sldCont,
+        actions: [
+          IconSlideAction(
+              //caption:'Profile',
+              color: Colors.grey.shade100,
+              caption: 'Remove\nContact',
+              icon: Icons.person_remove,
+              closeOnTap: false,
+              onTap: () {
+                widget.messageFactory.chatFactory
+                    .removeContact(widget.messageFactory.chatItem);
+                widget.onMsgSent(null);
+              })
+        ],
+        secondaryActions: [
+          IconSlideAction(
+              //caption: 'Delete\nChat',
+              color: Colors.red.shade500,
+              caption: 'Clear\nChat',
+              icon: Icons.delete,
+              closeOnTap: false,
+              onTap: () {
+                widget.messageFactory.clearMessages();
+                widget.onMsgSent(null);
+              }),
+        ],
       );
-
-  List<IconSlideAction> get _sl_acts => [
-        IconSlideAction(
-          //caption:'Profile',
-          color: Colors.blue.shade100,
-          icon: Icons.person_remove,
-          onTap: () => null,
-        ),
-        IconSlideAction(
-          //caption: 'Delete\nChat',
-          color: Colors.yellow.shade100,
-          icon: Icons.delete,
-          onTap: () => null,
-        ),
-      ];
 }
