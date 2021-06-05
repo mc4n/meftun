@@ -9,6 +9,7 @@ void main() {
   _initTempObjects();
   runApp(Builder(
       builder: (_) => MaterialApp(
+            theme: ThemeData(primarySwatch: Colors.indigo),
             title: 'Mefluttin',
             home: MainPage(),
           )));

@@ -86,14 +86,14 @@ class ChatItemState extends State<ChatItem> {
   Slidable _sl(Widget _inner) => Slidable(
         key: Key(widget.messageFactory.chatItem.id),
         actionPane: SlidableDrawerActionPane(),
-        actionExtentRatio: 0.125,
+        actionExtentRatio: 0.15,
         child: _inner,
         controller: sldCont,
         actions: [
           IconSlideAction(
               //caption:'Profile',
               color: Colors.grey.shade100,
-              caption: 'Remove\nContact',
+              //caption: 'Remove\nContact',
               icon: Icons.person_remove,
               closeOnTap: false,
               onTap: () {
@@ -106,7 +106,7 @@ class ChatItemState extends State<ChatItem> {
           IconSlideAction(
               //caption: 'Delete\nChat',
               color: Colors.red.shade500,
-              caption: 'Clear\nChat',
+              //caption: 'Clear\nChat',
               icon: Icons.delete,
               closeOnTap: false,
               onTap: () {

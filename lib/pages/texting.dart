@@ -32,7 +32,6 @@ class _TextingPageState extends State<TextingPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.grey.shade800,
         leading: BackButton(
           onPressed: () {
             Navigator.pop(context);
