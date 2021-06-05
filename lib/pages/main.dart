@@ -4,6 +4,7 @@ import 'package:me_flutting/main.dart';
 import 'package:me_flutting/models/directchat.dart';
 import '../widgets/chat_list.dart' show ChatList;
 import '../widgets/contact_list.dart' show ContactList;
+import '../pages/profile.dart' show ProfilePage;
 
 class MainPage extends StatefulWidget {
   MainPage({
@@ -74,17 +75,17 @@ class MainPageState extends State<MainPage> {
                   child: !isSearching
                       ? Icon(Icons.search, color: Colors.white)
                       : Icon(Icons.cancel, color: Colors.white)),
-              title: isSearching
-                  ? TextField(
-                      decoration: InputDecoration(
-                        border: OutlineInputBorder(),
-                        hintText: 'Search in chats',
-                      ),
-                      onSubmitted: onMsgSent,
-                      controller: tedit,
-                      style: TextStyle(fontSize: 17, color: Colors.white))
-                  : Text('Meflutin',
-                      style: TextStyle(fontSize: 22, color: Colors.white)),
+              title: Row(children: [
+                Expanded(child: _tit),
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).push(MaterialPageRoute(
+                        builder: (_) => ProfilePage(chatFactory.ownerFactory)));
+                  },
+                  child: CircleAvatar(
+                      backgroundImage: AssetImage(chatFactory.owner.photoURL)),
+                )
+              ]),
               bottom: TabBar(
                 labelStyle: TextStyle(fontSize: 19),
                 isScrollable: true,
@@ -95,4 +96,15 @@ class MainPageState extends State<MainPage> {
           ),
         ),
       );
+
+  Widget get _tit => isSearching
+      ? TextField(
+          decoration: InputDecoration(
+            border: OutlineInputBorder(),
+            hintText: 'Search in chats',
+          ),
+          onSubmitted: onMsgSent,
+          controller: tedit,
+          style: TextStyle(fontSize: 17, color: Colors.white))
+      : Text('Meflutin', style: TextStyle(fontSize: 22, color: Colors.white));
 }
