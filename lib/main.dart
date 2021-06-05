@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import '/pages/main.dart' show MainPage;
+//import '/pages/profile.dart' show ProfilePage;
 import '/helpers/msghelper.dart' show ChatFactory;
 import '/models/directchat.dart' show DirectChat;
 import 'dart:math' show Random;
@@ -11,7 +12,7 @@ void main() {
       builder: (_) => MaterialApp(
             theme: ThemeData(primarySwatch: Colors.indigo),
             title: 'Mefluttin',
-            home: MainPage(),
+            home: MainPage(), // ProfilePage(chatFactory.ownerFactory),
           )));
 }
 
