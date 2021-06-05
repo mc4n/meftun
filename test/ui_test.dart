@@ -1,24 +1,22 @@
-// import 'package:flutter/material.dart';
-// import 'package:flutter_test/flutter_test.dart';
-// import 'package:me_flutting/models/person.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_test/flutter_test.dart';
+
+import 'package:me_flutting/pages/profile.dart';
+import 'package:me_flutting/models/directchat.dart';
+import 'package:me_flutting/helpers/msghelper.dart';
 
 void main() {
-  // testWidgets('testTextingWidget', (WidgetTester tester) async {
-  //   await tester.pumpWidget(MaterialApp(
-  //       home: TextingScreen(
-  //     messages: myMessages,
-  //   )));
+  testWidgets('test Profile Page', (WidgetTester tester) async {
+    final cF = ChatFactory(DirectChat('mcan'));
 
-  //   for (var msg in myMessages) {
-  //     if (msg.body.contains('wrworwor')) continue;
-  //     expect(find.textContaining(msg.body), findsOneWidget);
-  //   }
-  // });
+    cF.addPerson('mahmut');
 
-  // testWidgets('testChatItemWidget', (WidgetTester tester) async {
-  //   await tester.pumpWidget(MaterialApp(home: ChatItem(chatItem: contacts[0])));
+    final mF = cF.msgFactories.last;
 
-  //   expect(
-  //       find.textContaining(contacts[0].getLastMessage().body), findsOneWidget);
-  // });
+    await tester.pumpWidget(MaterialApp(home: ProfilePage(mF)));
+
+    expect(find.textContaining(mF.chatItem.caption), findsOneWidget);
+
+    expect(find.textContaining('mahmut'), findsOneWidget);
+  });
 }
