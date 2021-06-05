@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import '../pages/profile.dart' show ProfilePage;
 import '../helpers/msghelper.dart' show MessageFactory;
 import '../widgets/msgdialogs.dart' show MessageDialogs;
 
@@ -40,7 +41,19 @@ class _TextingPageState extends State<TextingPage> {
         title: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text('${widget.messageFactory.chatItem.caption}'),
+            TextButton(
+                onPressed: () {
+                  Navigator.of(context).push(MaterialPageRoute(
+                      builder: (_) => ProfilePage(widget.messageFactory)));
+                },
+                child: Row(children: [
+                  CircleAvatar(
+                      backgroundImage:
+                          AssetImage(widget.messageFactory.chatItem.photoURL)),
+                  Padding(padding: EdgeInsets.symmetric(horizontal: 5)),
+                  Text('${widget.messageFactory.chatItem.caption}',
+                      style: TextStyle(color: Colors.white, fontSize: 23))
+                ])),
             Row(children: [
               TextButton(
                   onPressed: () {

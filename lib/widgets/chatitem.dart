@@ -4,6 +4,7 @@ import 'package:flutter/rendering.dart';
 import 'package:me_flutting/models/chat.dart' show Chat;
 import '../helpers/msghelper.dart' show MessageFactory;
 import '../pages/texting.dart' show TextingPage;
+import '../pages/profile.dart' show ProfilePage;
 import 'package:flutter_slidable/flutter_slidable.dart';
 
 class ChatItem extends StatefulWidget {
@@ -91,22 +92,17 @@ class ChatItemState extends State<ChatItem> {
         controller: sldCont,
         actions: [
           IconSlideAction(
-              //caption:'Profile',
-              color: Colors.grey.shade100,
-              //caption: 'Remove\nContact',
-              icon: Icons.person_remove,
+              color: Colors.yellow.shade300,
+              icon: Icons.preview,
               closeOnTap: false,
               onTap: () {
-                widget.messageFactory.chatFactory
-                    .removeContact(widget.messageFactory.chatItem);
-                widget.onMsgSent(null);
+                Navigator.of(context).push(MaterialPageRoute(
+                    builder: (_) => ProfilePage(widget.messageFactory)));
               })
         ],
         secondaryActions: [
           IconSlideAction(
-              //caption: 'Delete\nChat',
-              color: Colors.red.shade500,
-              //caption: 'Clear\nChat',
+              color: Colors.grey.shade700,
               icon: Icons.delete,
               closeOnTap: false,
               onTap: () {
