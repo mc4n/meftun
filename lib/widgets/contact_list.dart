@@ -22,6 +22,8 @@ class ContactList extends StatefulWidget {
 }
 
 class _ContactListState extends State<ContactList> {
+  final ScrollController sc = ScrollController();
+
   @override
   Widget build(BuildContext context) {
     var contacts = chatFactory.msgFactories.where(widget.filter).toList();
@@ -32,10 +34,14 @@ class _ContactListState extends State<ContactList> {
             padding: EdgeInsets.all(10.0),
             child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
               contacts.length > 0
-                  ? TextButton(
-                      onPressed: () => null,
-                      child: Icon(Icons.navigate_before_rounded,
-                          color: Colors.black, size: 30),
+                  ? /*TextButton(
+                      onPressed: () {
+                        if (sc.hasClients) sc.jumpTo(sc.position.extentInside);
+                      },
+                      child: */
+                  Icon(
+                      Icons.navigate_before_rounded,
+                      // color: Colors.black, size: 30),
                     )
                   : Row(),
               contacts.length > 0
@@ -52,10 +58,15 @@ class _ContactListState extends State<ContactList> {
                       ]),
                     ),
               contacts.length > 0
-                  ? TextButton(
-                      onPressed: () => null,
-                      child: Icon(Icons.navigate_next_rounded,
-                          color: Colors.black, size: 30))
+                  ? /*TextButton(
+                      onPressed: () {
+                        if (sc.hasClients) sc.jumpTo(sc.position.extentAfter);
+                      },
+                      child:*/
+                  Icon(
+                      Icons.navigate_next_rounded,
+                      // color: Colors.black, size: 30)
+                    )
                   : Row(),
             ])));
   }
@@ -63,6 +74,7 @@ class _ContactListState extends State<ContactList> {
   Expanded _expan(BuildContext context, List<MessageFactory> contacts) {
     return Expanded(
       child: ListView.builder(
+          controller: sc,
           scrollDirection: Axis.horizontal,
           physics: BouncingScrollPhysics(),
           itemCount: contacts.length,
