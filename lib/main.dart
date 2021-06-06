@@ -4,6 +4,7 @@ import '/pages/main.dart' show MainPage;
 //import '/pages/profile.dart' show ProfilePage;
 import '/helpers/msghelper.dart' show ChatFactory;
 import '/models/directchat.dart' show DirectChat;
+import '/models/mbody.dart' show RawBody;
 import 'dart:math' show Random;
 
 void main() {
@@ -37,7 +38,7 @@ void _initTempObjects() {
 
   for (final _ in exampleMsgs) {
     final mf = cts.elementAt(rnd.nextInt(cts.length));
-    final _msg = mf.addMessageBody(_);
+    final _msg = mf.addMessageBody(RawBody(_));
     if (rnd.nextInt(2) == 1) mf.addReplyTo(_msg);
   }
 }

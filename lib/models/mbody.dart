@@ -15,9 +15,7 @@ class RawBody extends MBody {
   String get bodyType => MBody.RAW_MESSAGE;
 
   @override
-  String toString() {
-    return _rawString;
-  }
+  String toString() => _rawString ?? '<NULL>';
 }
 
 class JsonBody extends RawBody {
@@ -32,6 +30,8 @@ class FileBody extends RawBody {
   String get bodyType => MBody.FILE_MESSAGE;
   String get filePath => _filePath;
   String get description => _rawString;
+  @override
+  String toString() => _filePath ?? '<NO-PATH>';
 }
 
 class ImageBody extends FileBody {

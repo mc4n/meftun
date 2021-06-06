@@ -2,7 +2,7 @@ import '../models/chat.dart' show Chat;
 import '../models/directchat.dart' show DirectChat;
 import '../models/groupchat.dart' show GroupChat;
 import '../models/message.dart' show Message;
-import '../models/mbody.dart' show RawBody;
+import '../models/mbody.dart' show MBody, RawBody;
 
 class Factory<T> {
   List<T> _items = [];
@@ -56,9 +56,7 @@ class ChatFactory extends Factory<MessageFactory> {
 
 class MessageFactory extends Factory<Message> {
   final ChatFactory chatFactory;
-  MessageFactory(this.chatFactory, Chat target) : super(target) {
-    //addMessageBody(null);
-  }
+  MessageFactory(this.chatFactory, Chat target) : super(target);
 
   Chat get chatItem => _base;
 
@@ -71,8 +69,8 @@ class MessageFactory extends Factory<Message> {
 
   Message _addMessage(Message item) => _addItem(item);
 
-  Message addMessageBody(String body) =>
-      _addMessage(chatItem.createMessage(chatFactory.owner, RawBody(body)));
+  Message addMessageBody(MBody body) =>
+      _addMessage(chatItem.createMessage(chatFactory.owner, body));
 
   Message addReplyTo(Message msg) => _addResponse(msg.chatGroup);
 

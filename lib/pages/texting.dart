@@ -3,6 +3,8 @@ import 'package:flutter/cupertino.dart';
 import '../pages/profile.dart' show ProfilePage;
 import '../helpers/msghelper.dart' show MessageFactory;
 import '../widgets/msgdialogs.dart' show MessageDialogs;
+import '../models/mbody.dart' show RawBody, ImageBody;
+import 'package:file_picker/file_picker.dart';
 
 class TextingPage extends StatefulWidget {
   static void letTheGameBegin(
@@ -83,13 +85,24 @@ class _TextingPageState extends State<TextingPage> {
   void _sendMes([String _ = '']) {
     var data = teC.text;
     if (data.trim() != '') {
-      var msg = widget.messageFactory.addMessageBody(data);
+      var msg = widget.messageFactory.addMessageBody(RawBody(data));
       if (DateTime.now().second % 3 == 0) widget.messageFactory.addReplyTo(msg);
       if (widget.onMsgSent != null) {
         widget.onMsgSent(data);
         setState(() => null);
       }
       teC.text = '';
+    }
+  }
+
+  void _sendImg([String _ = '']) {
+    if (_.trim() != '') {
+      var msg = widget.messageFactory.addMessageBody(ImageBody(_));
+      if (DateTime.now().second % 3 == 0) widget.messageFactory.addReplyTo(msg);
+      if (widget.onMsgSent != null) {
+        widget.onMsgSent(_);
+        setState(() => null);
+      }
     }
   }
 
@@ -113,12 +126,61 @@ class _TextingPageState extends State<TextingPage> {
             controller: teC,
             onSubmitted: _sendMes,
             style: TextStyle(fontSize: 16),
-            autofocus: true,
+            //autofocus: true,
           )),
+          Row(children: [
+            TextButton(
+              onPressed: _sendMes,
+              child: Icon(Icons.send, color: Colors.black),
+            )
+          ]),
           TextButton(
-            onPressed: _sendMes,
-            child: Icon(Icons.send, color: Colors.black),
-          )
+            onPressed: () async {
+              FilePickerResult result = await FilePicker.platform.pickFiles(
+                type: FileType.image,
+                //allowedExtensions: ['jpg', 'png'],
+              );
+              final pth = result.files.first.path;
+
+              await _showMyDialog(pth ?? 'pac.jpg');
+            },
+            child: Icon(Icons.image_sharp, color: Colors.black),
+          ),
         ]));
+  }
+
+  Future<void> _showMyDialog(String pth) async {
+    return showDialog<void>(
+      context: context,
+      //barrierDismissible: false,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Send Image'),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                Container(width: 180, height: 180, child: Image.asset(pth)),
+                Text('Would you like to send this image?'),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+                child: const Text('Cancel'),
+                onPressed: () => Navigator.of(context).pop()),
+            TextButton(
+              child: const Text('Send'),
+              onPressed: () {
+                Navigator.of(context).pop();
+                final snackBar =
+                    SnackBar(content: Text(pth ?? 'No file was specified.'));
+                ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                _sendImg(pth ?? '<IMAGE>');
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 }
