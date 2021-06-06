@@ -1,14 +1,15 @@
 import 'directchat.dart' show DirectChat;
 import 'chat.dart' show Chat;
 import 'draft.dart' show Draft;
+import 'mbody.dart';
 
 class Message extends Draft {
   final String id;
   final int epoch = DateTime.now().millisecondsSinceEpoch;
-  Message(String body, DirectChat from, this.id, Chat c) : super(body, from, c);
+  Message(MBody body, DirectChat from, this.id, Chat c) : super(body, from, c);
 
   @override
-  set setBody(String _) => throw Exception('message already sent :(');
+  set setBody(MBody _) => throw Exception('message already sent :(');
 
   static int compareEpoch(Message _d1, Message _d2) {
     var ep1 = _d1.epoch;

@@ -1,6 +1,7 @@
 import 'draft.dart' show Draft;
 import 'directchat.dart' show DirectChat;
 import 'message.dart' show Message;
+import 'mbody.dart';
 import 'package:uuid/uuid.dart';
 
 abstract class Chat {
@@ -15,9 +16,9 @@ abstract class Chat {
     return '[Chat]\nid : ${id ?? ""} \n name: $name??""';
   }
 
-  Draft createDraft(DirectChat from, [String body]) => Draft(body, from, this);
+  Draft createDraft(DirectChat from, [MBody body]) => Draft(body, from, this);
 
-  Message createMessage(DirectChat from, String body) =>
+  Message createMessage(DirectChat from, MBody body) =>
       createDraft(from, body).toMessage();
 
   String get caption;

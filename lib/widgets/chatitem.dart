@@ -60,7 +60,7 @@ class ChatItemState extends State<ChatItem> {
             Padding(
                 padding: EdgeInsets.symmetric(vertical: 10.0),
                 child: Row(children: _avarettin)),
-            _midSect(lastMsg.body),
+            _midSect(lastMsg.body.toString()),
           ],
         ))));
   }

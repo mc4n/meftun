@@ -2,6 +2,7 @@ import '../models/chat.dart' show Chat;
 import '../models/directchat.dart' show DirectChat;
 import '../models/groupchat.dart' show GroupChat;
 import '../models/message.dart' show Message;
+import '../models/mbody.dart' show RawBody;
 
 class Factory<T> {
   List<T> _items = [];
@@ -71,7 +72,7 @@ class MessageFactory extends Factory<Message> {
   Message _addMessage(Message item) => _addItem(item);
 
   Message addMessageBody(String body) =>
-      _addMessage(chatItem.createMessage(chatFactory.owner, body));
+      _addMessage(chatItem.createMessage(chatFactory.owner, RawBody(body)));
 
   Message addReplyTo(Message msg) => _addResponse(msg.chatGroup);
 
@@ -85,8 +86,8 @@ class MessageFactory extends Factory<Message> {
         : cts.elementAt(DateTime.now().millisecond % cts.length);
     var newTo =
         chatGroup.maximumParticipants == 2 ? chatFactory.owner : chatItem;
-    return _addMessage(
-        newTo.createMessage(newFrom, 'a response by ${newFrom.caption}'));
+    return _addMessage(newTo.createMessage(
+        newFrom, RawBody('a response by ${newFrom.caption}')));
   }
 
   bool removeMessage(Message item) {
