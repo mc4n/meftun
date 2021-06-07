@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import '../pages/profile.dart' show ProfilePage;
 import '../helpers/msghelper.dart' show MessageFactory;
 import '../widgets/msgdialogs.dart' show MessageDialogs;
+import '../models/message.dart' show Message;
 import '../models/mbody.dart' show RawBody, ImageBody;
 import 'package:file_picker/file_picker.dart';
 import '../helpers/filehelpers.dart';
@@ -26,12 +27,20 @@ class TextingPage extends StatefulWidget {
       : super(key: key);
 
   @override
-  State<StatefulWidget> createState() => _TextingPageState();
+  State<StatefulWidget> createState() => TextingPageState();
 }
 
-class _TextingPageState extends State<TextingPage> {
+class TextingPageState extends State<TextingPage> {
   final TextEditingController teC = TextEditingController();
-
+  Message quotedMessage;
+  void Function(Message msgQuoted) onMsgQuoted;
+  TextingPageState() {
+    onMsgQuoted = (_) {
+      setState(() {
+        quotedMessage = _;
+      });
+    };
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -114,7 +123,39 @@ class _TextingPageState extends State<TextingPage> {
             MessageDialogs(widget.messageFactory),
             Padding(
                 padding: EdgeInsets.symmetric(vertical: 3, horizontal: 5),
-                child: _butt()),
+                child: Column(children: [
+                  (quotedMessage == null
+                      ? Row()
+                      :
+
+                      //
+
+                      Card(
+                          color: Colors.indigo.shade100,
+                          child: Padding(
+                            padding: EdgeInsets.all(3),
+                            child: Column(children: [
+                              TextButton(
+                                  onPressed: () => onMsgQuoted(null),
+                                  child: Icon(Icons.close)),
+                              Padding(
+                                  padding: EdgeInsets.symmetric(vertical: 2)),
+                              Text('${quotedMessage.from.caption}:'),
+                              Padding(
+                                  padding: EdgeInsets.symmetric(vertical: 3)),
+                              /*quotedMessage.body is ImageBody
+                                ? Container(width: 180, height: 180,
+                                    child: Image.file(File(quotedMessage.body.toString())))
+                                : */
+                              Text('${quotedMessage.body}'),
+                            ]),
+                          ))
+
+                  //
+
+                  ),
+                  _butt()
+                ])),
           ]);
 
   Card _butt() {

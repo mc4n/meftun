@@ -2,15 +2,15 @@ import 'package:uuid/uuid.dart';
 import 'chat.dart' show Chat;
 import 'message.dart' show Message;
 import 'directchat.dart' show DirectChat;
-import 'mbody.dart';
+import 'mbody.dart' show MBody;
 
 class Draft {
   static Uuid uuid = Uuid();
   MBody body;
   final DirectChat from;
   final Chat chatGroup;
-
-  Draft(this.body, this.from, this.chatGroup);
+  final Message quoteTo;
+  Draft(this.body, this.from, this.chatGroup, [this.quoteTo]);
 
   set setBody(MBody body) => this.body = body;
 
@@ -20,7 +20,5 @@ class Draft {
   }
 
   @override
-  String toString() {
-    return '[Draft]\n body: $body \n chatgroup.id?: ${chatGroup?.id}';
-  }
+  String toString() => '[Draft]\n body: $body}';
 }

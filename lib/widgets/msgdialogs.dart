@@ -1,11 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:me_flutting/models/directchat.dart';
-import 'package:me_flutting/pages/texting.dart';
-import '../helpers/msghelper.dart';
-import '../models/message.dart';
+import '../models/directchat.dart' show DirectChat;
+import '../pages/texting.dart' show TextingPage, TextingPageState;
+import '../helpers/msghelper.dart' show MessageFactory;
+import '../models/message.dart' show Message;
 import 'dart:io' show File;
 import '../models/mbody.dart' show ImageBody;
+import 'package:flutter_slidable/flutter_slidable.dart';
 
 class MessageDialogs extends StatefulWidget {
   final MessageFactory messageFactory;
@@ -16,6 +17,7 @@ class MessageDialogs extends StatefulWidget {
 }
 
 class _MessageDialogsState extends State<MessageDialogs> {
+  final SlidableController sldCont = SlidableController();
   final ScrollController sc = ScrollController();
   @override
   Widget build(BuildContext context) {
@@ -44,7 +46,7 @@ class _MessageDialogsState extends State<MessageDialogs> {
               child: Row(
                 mainAxisAlignment:
                     isMe ? MainAxisAlignment.end : MainAxisAlignment.start,
-                children: [_dialog(msg, isMe)],
+                children: [_sl(_dialog(msg, isMe), msg)],
               )),
         );
       });
@@ -76,4 +78,25 @@ class _MessageDialogsState extends State<MessageDialogs> {
                   : Text('${msg.body}')
             ]),
           )));
+
+  Slidable _sl(Widget _inner, Message msg) => Slidable(
+        key: Key(widget.messageFactory.chatItem.id),
+        actionPane: SlidableDrawerActionPane(),
+        actionExtentRatio: 0.4,
+        child: _inner,
+        controller: sldCont,
+        secondaryActions: [
+          IconSlideAction(
+              //caption: 'Quote',
+              color: Colors.indigo.shade100,
+              icon: Icons.copy,
+              //closeOnTap: false,
+              onTap: () {
+                setState(() => context
+                    .findAncestorStateOfType<TextingPageState>()
+                    .onMsgQuoted
+                    ?.call(msg));
+              })
+        ],
+      );
 }

@@ -1,12 +1,15 @@
 import 'directchat.dart' show DirectChat;
 import 'chat.dart' show Chat;
 import 'draft.dart' show Draft;
-import 'mbody.dart';
+import 'mbody.dart' show MBody;
 
 class Message extends Draft {
   final String id;
   final int epoch = DateTime.now().millisecondsSinceEpoch;
-  Message(MBody body, DirectChat from, this.id, Chat c) : super(body, from, c);
+  final bool isArchieved;
+  Message(MBody body, DirectChat from, this.id, Chat c,
+      [this.isArchieved = false])
+      : super(body, from, c);
 
   @override
   set setBody(MBody _) => throw Exception('message already sent :(');
@@ -21,9 +24,7 @@ class Message extends Draft {
   }
 
   @override
-  String toString() {
-    return '[Message]\n id: $id \n body: $body \n';
-  }
+  String toString() => '[Message]\n id: $id \n body: $body \n';
 
   @override
   bool operator ==(Object other) => id == ((other is Message) ? other.id : '');
