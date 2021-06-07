@@ -4,6 +4,8 @@ import 'package:me_flutting/models/directchat.dart';
 import 'package:me_flutting/pages/texting.dart';
 import '../helpers/msghelper.dart';
 import '../models/message.dart';
+import 'dart:io' show File;
+import '../models/mbody.dart' show ImageBody;
 
 class MessageDialogs extends StatefulWidget {
   final MessageFactory messageFactory;
@@ -66,7 +68,12 @@ class _MessageDialogsState extends State<MessageDialogs> {
               Padding(padding: EdgeInsets.symmetric(vertical: 2)),
               !isRight ? Text('${msg.from.caption}:') : Row(),
               Padding(padding: EdgeInsets.symmetric(vertical: 3)),
-              Text('${msg.body}'),
+              msg.body is ImageBody
+                  ? Container(
+                      width: 180,
+                      height: 180,
+                      child: Image.file(File(msg.body.toString())))
+                  : Text('${msg.body}')
             ]),
           )));
 }

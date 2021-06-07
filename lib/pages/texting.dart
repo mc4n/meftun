@@ -5,6 +5,7 @@ import '../helpers/msghelper.dart' show MessageFactory;
 import '../widgets/msgdialogs.dart' show MessageDialogs;
 import '../models/mbody.dart' show RawBody, ImageBody;
 import 'package:file_picker/file_picker.dart';
+import '../helpers/filehelpers.dart';
 
 class TextingPage extends StatefulWidget {
   static void letTheGameBegin(
@@ -140,47 +141,49 @@ class _TextingPageState extends State<TextingPage> {
                 type: FileType.image,
                 //allowedExtensions: ['jpg', 'png'],
               );
-              final pth = result.files.first.path;
-
-              await _showMyDialog(pth ?? 'pac.jpg');
+              await _showMyDialog(result.files.first.path);
             },
             child: Icon(Icons.image_sharp, color: Colors.black),
           ),
         ]));
   }
 
-  Future<void> _showMyDialog(String pth) async {
-    return showDialog<void>(
-      context: context,
-      //barrierDismissible: false,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text('Send Image'),
-          content: SingleChildScrollView(
-            child: ListBody(
-              children: <Widget>[
-                Container(width: 180, height: 180, child: Image.asset(pth)),
-                Text('Would you like to send this image?'),
+  Future<void> _showMyDialog(String pth) {
+    final _ifEx = (_file) => showDialog<void>(
+          context: context,
+          //barrierDismissible: false,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: const Text('Send Image'),
+              content: SingleChildScrollView(
+                child: ListBody(
+                  children: <Widget>[
+                    Container(
+                        width: 180, height: 180, child: Image.file(_file)),
+                    Text('Would you like to send this image?'),
+                  ],
+                ),
+              ),
+              actions: <Widget>[
+                TextButton(
+                    child: const Text('Cancel'),
+                    onPressed: () => Navigator.of(context).pop()),
+                TextButton(
+                  child: const Text('Send'),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                    _sendImg(pth ?? '<IMAGE>');
+                  },
+                ),
               ],
-            ),
-          ),
-          actions: <Widget>[
-            TextButton(
-                child: const Text('Cancel'),
-                onPressed: () => Navigator.of(context).pop()),
-            TextButton(
-              child: const Text('Send'),
-              onPressed: () {
-                Navigator.of(context).pop();
-                final snackBar =
-                    SnackBar(content: Text(pth ?? 'No file was specified.'));
-                ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                _sendImg(pth ?? '<IMAGE>');
-              },
-            ),
-          ],
+            );
+          },
         );
-      },
-    );
+
+    return fileExists(pth, _ifEx, (_) {
+      final snackBar = SnackBar(
+          content: Text('ERROR: $_ is a broken or an invalid file path!'));
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+    });
   }
 }
