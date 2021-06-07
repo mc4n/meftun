@@ -163,13 +163,25 @@ class TextingPageState extends State<TextingPage> {
         color: Colors.grey.shade200,
         margin: EdgeInsets.all(4),
         child: Row(children: [
+          //
           Expanded(
-              child: TextField(
-            controller: teC,
-            onSubmitted: _sendMes,
-            style: TextStyle(fontSize: 16),
-            //autofocus: true,
-          )),
+            child: TextField(
+              minLines: 1,
+              maxLines: 5,
+              controller: teC,
+              onSubmitted: _sendMes,
+              style: TextStyle(fontSize: 16),
+              //keyboardType: TextInputType.multiline,
+              decoration: InputDecoration(
+                hintText: 'type a message.',
+                hintStyle: TextStyle(color: Colors.grey),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(15.0)),
+                ),
+              ),
+            ),
+          ),
+          //
           Row(children: [
             TextButton(
               onPressed: _sendMes,
