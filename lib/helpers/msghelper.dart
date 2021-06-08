@@ -5,28 +5,23 @@ import '../models/message.dart' show Message;
 import '../models/mbody.dart' show MBody, RawBody;
 import 'sql_helper.dart';
 
-class Factory<T> {
-  List<T> _items = [];
-  // ignore: unused_field
-  final Chat _base;
-  Factory(this._base);
-  // ignore: unused_element
-  T _lastItem() => _items.last;
-  // ignore: unused_element
-  T _addItem(T _item) {
+class ChatFactory {
+  List<MessageFactory> _items = [];
+  ChatTable table;
+  MessageFactory _addItem(MessageFactory _item) {
     _items.add(_item);
     return _item;
   }
 
-  bool _removeItem(T _item) => _items.remove(_item);
-}
-
-class ChatFactory extends Factory<MessageFactory> {
-  ChatFactory(DirectChat _owner) : super(_owner) {
-    _items.add(MessageFactory(this, _owner));
+  bool _removeItem(MessageFactory _item) => _items.remove(_item);
+  final Chat _owner;
+  final meContext = DbaseContext('demo.db', [ChatTable(), MessageTable()]);
+  ChatFactory(this._owner) {
+    addContact(_owner);
+    meContext.tableEntityOf<ChatTable>();
   }
 
-  DirectChat get owner => _base;
+  DirectChat get owner => _owner;
 
   MessageFactory get ownerFactory => _items.first;
 
@@ -55,9 +50,20 @@ class ChatFactory extends Factory<MessageFactory> {
   }
 }
 
-class MessageFactory extends Factory<Message> {
+class MessageFactory {
+  List<Message> _items = [];
+  MessageTable table;
+  Message _addItem(Message _item) {
+    _items.add(_item);
+    return _item;
+  }
+
+  bool _removeItem(Message _item) => _items.remove(_item);
+  final Chat _base;
   final ChatFactory chatFactory;
-  MessageFactory(this.chatFactory, Chat target) : super(target);
+  MessageFactory(this.chatFactory, this._base) {
+    table = chatFactory.meContext.tableEntityOf<MessageTable>();
+  }
 
   Chat get chatItem => _base;
 
