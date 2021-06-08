@@ -1,6 +1,6 @@
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
-import 'package:flutter/widgets.dart';
+//import 'package:flutter/widgets.dart';
 
 class DbaseContext {
   final String dbName;
@@ -62,52 +62,11 @@ abstract class TableEntity<T extends ModelBase> {
   }
 }
 
-class MessageTable extends TableEntity<MessageModel> {
-  MessageTable()
-      : super(
-            'tb_messages',
-            'id nvarchar(200) primary key not null,'
-                'body nvarchar(900) not null,'
-                'from_id nvarchar(200) not null,'
-                'chat_group_id nvarchar(200) not null,'
-                'epoch integer not null');
-
-  @override
-  MessageModel from(Map<String, dynamic> _map) {
-    return MessageModel(
-      _map['id'],
-      _map['body'],
-      _map['from_id'],
-      _map['chat_group_id'],
-      _map['epoch'],
-    );
-  }
-}
-
 mixin ModelBase {
   Map<String, dynamic> get map;
 }
 
-class MessageModel with ModelBase {
-  final String id;
-  final String body;
-  final String fromId;
-  final String chatGroupId;
-  final int epoch;
-  const MessageModel(
-      this.id, this.body, this.fromId, this.chatGroupId, this.epoch);
-
-  @override
-  Map<String, dynamic> get map => {
-        'id': id,
-        'body': body,
-        'from_id': fromId,
-        'chat_group_id': chatGroupId,
-        'epoch': epoch,
-      };
-}
-
-void main() async {
+/*void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   final dbP = DbaseContext('demo', [MessageTable()]);
 
@@ -119,4 +78,4 @@ void main() async {
   final ls = await messageStore.select();
 
   print(ls.join(','));
-}
+}*/

@@ -3,6 +3,7 @@ import '../models/directchat.dart' show DirectChat;
 import '../models/groupchat.dart' show GroupChat;
 import '../models/message.dart' show Message;
 import '../models/mbody.dart' show MBody, RawBody;
+import 'sql_helper.dart';
 
 class Factory<T> {
   List<T> _items = [];
@@ -108,4 +109,83 @@ class MessageFactory extends Factory<Message> {
       (!isSearching ||
           ftext == '' ||
           isSearching && ftext != '' && _base.caption.contains(ftext));
+}
+
+//
+
+class ChatTable extends TableEntity<ChatModel> {
+  ChatTable()
+      : super(
+            'tb_chats',
+            'id nvarchar(200) primary key not null,'
+                'username nvarchar(15) not null,'
+                'name nvarchar(200) not null,'
+                'type integer not null');
+
+  @override
+  ChatModel from(Map<String, dynamic> _map) {
+    return ChatModel(
+      _map['id'],
+      _map['username'],
+      _map['name'],
+      _map['type'],
+    );
+  }
+}
+
+class MessageTable extends TableEntity<MessageModel> {
+  MessageTable()
+      : super(
+            'tb_messages',
+            'id nvarchar(200) primary key not null,'
+                'body nvarchar(900) not null,'
+                'from_id nvarchar(200) not null,'
+                'chat_group_id nvarchar(200) not null,'
+                'epoch integer not null');
+
+  @override
+  MessageModel from(Map<String, dynamic> _map) {
+    return MessageModel(
+      _map['id'],
+      _map['body'],
+      _map['from_id'],
+      _map['chat_group_id'],
+      _map['epoch'],
+    );
+  }
+}
+
+class ChatModel with ModelBase {
+  final String id;
+  final String userName;
+  final String name;
+  final int type;
+  const ChatModel(this.id, this.userName, this.name, this.type);
+
+  @override
+  Map<String, dynamic> get map => {
+        'id': id,
+        'username': userName,
+        'name': name,
+        'type': type,
+      };
+}
+
+class MessageModel with ModelBase {
+  final String id;
+  final String body;
+  final String fromId;
+  final String chatGroupId;
+  final int epoch;
+  const MessageModel(
+      this.id, this.body, this.fromId, this.chatGroupId, this.epoch);
+
+  @override
+  Map<String, dynamic> get map => {
+        'id': id,
+        'body': body,
+        'from_id': fromId,
+        'chat_group_id': chatGroupId,
+        'epoch': epoch,
+      };
 }
