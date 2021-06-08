@@ -4,11 +4,11 @@ import '/pages/main.dart' show MainPage;
 //import '/pages/profile.dart' show ProfilePage;
 import '/helpers/msghelper.dart' show ChatFactory;
 import '/models/directchat.dart' show DirectChat;
-import '/models/mbody.dart' show RawBody;
-import 'dart:math' show Random;
+//import '/models/mbody.dart' show RawBody;
+//import 'dart:math' show Random;
 
 void main() {
-  _initTempObjects();
+  //_initTempObjects();
   runApp(Builder(
       builder: (_) => MaterialApp(
             theme: ThemeData(primarySwatch: Colors.indigo),
@@ -20,7 +20,7 @@ void main() {
 ChatFactory chatFactory =
     ChatFactory(DirectChat('mcan', 'Mustafa Can', 'pac.jpg'));
 
-void _initTempObjects() {
+/*void _initTempObjects() {
   chatFactory.addGroup('THUGS');
   final _ = ['2pac', 'bigg', 'cube'];
   _.forEach((__) {
@@ -41,4 +41,4 @@ void _initTempObjects() {
     final _msg = mf.addMessageBody(RawBody(_));
     if (rnd.nextInt(2) == 1) mf.addReplyTo(_msg);
   }
-}
+}*/
