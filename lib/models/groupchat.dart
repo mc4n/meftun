@@ -2,9 +2,9 @@ import 'chat.dart' show Chat, ChatTypes;
 
 class GroupChat extends Chat {
   final int maximumParticipants;
-  GroupChat(name,
+  GroupChat(String id, name,
       [String photoURL = 'group_avatar.png', this.maximumParticipants = 10])
-      : super(Chat.uuid.v4(), name, photoURL);
+      : super(id, name, photoURL);
 
   @override
   String get caption => name;

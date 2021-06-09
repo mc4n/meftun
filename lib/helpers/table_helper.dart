@@ -1,6 +1,6 @@
-import '../models/chat.dart' show Chat;
-//import '../models/directchat.dart' show DirectChat;
-//import '../models/groupchat.dart' show GroupChat;
+import '../models/chat.dart' show Chat, ChatTypes;
+import '../models/directchat.dart' show DirectChat;
+import '../models/groupchat.dart' show GroupChat;
 import '../models/message.dart' show Message;
 //import '../models/mbody.dart' show MBody, RawBody;
 import 'sql_helper.dart';
@@ -10,7 +10,8 @@ class ChatTable extends TableEntity<ChatModel> {
       : super(
             'tb_chats',
             'id nvarchar(200) primary key not null,'
-                'caption nvarchar(15) not null,'
+                'user_name nvarchar(15) not null,'
+                'name nvarchar(50) not null,'
                 'photo_url nvarchar(200) not null,'
                 'type integer not null');
 
@@ -18,32 +19,46 @@ class ChatTable extends TableEntity<ChatModel> {
   ChatModel from(Map<String, dynamic> _map) {
     return ChatModel(
       _map['id'],
-      _map['caption'],
+      _map['user_name'],
+      _map['name'],
       _map['photo_url'],
       _map['type'],
     );
   }
 
   Future<void> insertChat(Chat item) async {
-    super.insert(
-        ChatModel(item.id, item.caption, item.photoURL, item.type as int));
+    super.insert(ChatModel(
+        item.id, item.caption, item.name, item.photoURL, item.type as int));
   }
 }
 
 class ChatModel with ModelBase {
   final String id;
-  final String caption;
+  final String userName;
+  final String name;
   final String photoURL;
   final int type;
-  const ChatModel(this.id, this.caption, this.photoURL, this.type);
+  const ChatModel(this.id, this.userName, this.name, this.photoURL, this.type);
 
   @override
   Map<String, dynamic> get map => {
         'id': id,
-        'caption': caption,
+        'user_name': userName,
+        'name': name,
         'photo_url': photoURL,
         'type': type,
       };
+
+  Chat toChat() {
+    switch (type as ChatTypes) {
+      case ChatTypes.Direct:
+        return DirectChat(id, userName, photoURL);
+      case ChatTypes.Group:
+        return GroupChat(id, name, photoURL);
+      default:
+        return null;
+    }
+  }
 }
 
 // /// ////

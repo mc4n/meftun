@@ -23,7 +23,7 @@ class _MessageDialogsState extends State<MessageDialogs> {
       if (sc.hasClients) sc.jumpTo(sc.position.maxScrollExtent);
     });
     return Expanded(
-      child: _lv([], DirectChat('me')),
+      child: _lv([], DirectChat('1', 'me')),
     );
   }
 

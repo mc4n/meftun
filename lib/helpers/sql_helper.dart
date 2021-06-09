@@ -12,8 +12,11 @@ class DbaseContext {
   Future<String> get dbPath async => join(await getDatabasesPath(), dbName);
 
   Future<Database> _open() async {
-    return openDatabase(await dbPath,
-        version: 1, onCreate: (_, __) async => await _.execute(cmdsOnCreate));
+    return openDatabase(await dbPath, version: 1, onCreate: (_, __) async {
+      for (final i in tableEntities) {
+        await _.execute(i.createString);
+      }
+    });
   }
 
   T tableEntityOf<T extends TableEntity>() {
@@ -52,7 +55,7 @@ abstract class TableEntity<T extends ModelBase> {
       item.map,
       conflictAlgorithm: ConflictAlgorithm.ignore,
     );
-    await db.close();
+    return await db.close();
   }
 
   Future<void> delete(String id) async => deleteWhere("id = ?", [id]);
@@ -60,7 +63,7 @@ abstract class TableEntity<T extends ModelBase> {
   Future<void> deleteWhere(String where, List<dynamic> whereArgs) async {
     final db = await context._open();
     await db.delete(name, where: where, whereArgs: whereArgs);
-    await db.close();
+    return await db.close();
   }
 }
 

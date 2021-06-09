@@ -1,5 +1,6 @@
 import 'draft.dart' show Draft;
 import 'directchat.dart' show DirectChat;
+import 'chat.dart' show Chat;
 
 abstract class MBody {
   static const RAW_MESSAGE = 'R';
@@ -42,7 +43,7 @@ class ImageBody extends FileBody {
 
 void main() {
   final msg = Draft(ImageBody('/wwewe/rgerge.jpg', 'rgerge is a biiiatch'),
-          DirectChat('from'), DirectChat('to'))
+          DirectChat(Chat.newId(), 'from'), DirectChat(Chat.newId(), 'to'))
       .toMessage();
   print(msg);
 }

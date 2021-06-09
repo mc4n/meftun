@@ -4,11 +4,13 @@ import 'package:flutter/rendering.dart';
 import '../models/chat.dart' show Chat;
 import '../models/directchat.dart' show DirectChat;
 import '../pages/texting.dart' show TextingPage;
+import '../main.dart';
+import '../helpers/table_helper.dart';
 
 class ContactList extends StatefulWidget {
   final bool Function(Chat) filter;
   final void Function(String) onMsgSent;
-  final void Function(
+  final Future<void> Function(
           void Function(DirectChat dcAdded, [String errMsg]) callBack)
       addContactClaimed;
 
@@ -17,15 +19,30 @@ class ContactList extends StatefulWidget {
       : super(key: key);
 
   @override
-  _ContactListState createState() => _ContactListState();
+  _ContactListState createState() => _ContactListState([]);
 }
 
 class _ContactListState extends State<ContactList> {
-  final ScrollController sc = ScrollController();
+  //final ScrollController sc = ScrollController();
+
+  final List<Chat> contacts;
+  _ContactListState(this.contacts);
+
+  @override
+  void initState() {
+    lsInit();
+    super.initState();
+  }
+
+  Future<void> lsInit() async {
+    final ls = await myContext.tableEntityOf<ChatTable>().select();
+    setState(() {
+      contacts.addAll(ls.map((i) => i.toChat()).toList());
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
-    var contacts = [];
     return Container(
         height: 80,
         color: Colors.yellow.shade200,
@@ -44,12 +61,12 @@ class _ContactListState extends State<ContactList> {
                     )
                   : Row(),
               contacts.length > 0
-                  ? _expan(context, contacts)
+                  ? _expan()
                   : TextButton(
-                      onPressed: () {
-                        /*widget.addContactClaimed((_, [err]) {
+                      onPressed: () async {
+                        await widget.addContactClaimed((_, [err]) {
                           if (err != null) print(err);
-                        });*/
+                        });
                       },
                       child: Row(children: [
                         Text(' New contact '),
@@ -70,10 +87,10 @@ class _ContactListState extends State<ContactList> {
             ])));
   }
 
-  Expanded _expan(BuildContext context, List<Chat> contacts) {
+  Expanded _expan() {
     return Expanded(
       child: ListView.builder(
-          controller: sc,
+          //controller: sc,
           scrollDirection: Axis.horizontal,
           physics: BouncingScrollPhysics(),
           itemCount: contacts.length,

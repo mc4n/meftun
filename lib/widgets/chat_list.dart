@@ -3,6 +3,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/rendering.dart';
 import 'chatitem.dart' show ChatItem;
 import '../models/chat.dart' show Chat;
+//import '../main.dart';
+//import '../helpers/table_helper.dart';
 
 class ChatList extends StatefulWidget {
   final bool Function(Chat) filter;
@@ -15,12 +17,14 @@ class ChatList extends StatefulWidget {
 }
 
 class ChatListState extends State<ChatList> {
+  List<Chat> chats = [];
+
   @override
   Widget build(BuildContext context) {
-    return _expan([]);
+    return _expan();
   }
 
-  Expanded _expan(final List<Chat> chats) {
+  Expanded _expan() {
     return Expanded(
       child: Container(
           child: ListView.builder(

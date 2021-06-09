@@ -11,6 +11,8 @@ abstract class Chat {
   final String photoURL;
   Chat(this.id, this.name, this.photoURL);
 
+  static String newId() => Chat.uuid.v4();
+
   @override
   String toString() {
     return '[Chat]\nid : ${id ?? ""} \n name: $name??""';

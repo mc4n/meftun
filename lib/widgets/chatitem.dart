@@ -25,7 +25,7 @@ class ChatItemState extends State<ChatItem> {
   @override
   Widget build(BuildContext context) {
     final lastMsg = widget.chatItem
-        .createMessage(DirectChat('me'), RawBody('example message.'));
+        .createMessage(DirectChat('1', 'me'), RawBody('example message.'));
     final meOrCaption = (Chat _) => _.caption;
     final from = meOrCaption(lastMsg.from);
     final to = meOrCaption(lastMsg.chatGroup);

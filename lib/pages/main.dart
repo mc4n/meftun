@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-//import '../main.dart';
+import '../main.dart';
+import '../models/chat.dart' show Chat;
 import '../models/directchat.dart' show DirectChat;
 import '../widgets/chat_list.dart' show ChatList;
 import '../widgets/contact_list.dart' show ContactList;
 import '../pages/profile.dart' show ProfilePage;
+import '../helpers/table_helper.dart';
 
 class MainPage extends StatefulWidget {
   MainPage({
@@ -18,22 +20,21 @@ class MainPage extends StatefulWidget {
 class MainPageState extends State<MainPage> {
   bool isSearching = false;
   void Function(String) onMsgSent;
-  void Function(void Function(DirectChat dcAdded, [String errMsg]) callBack)
+  Future<void> Function(
+          void Function(DirectChat dcAdded, [String errMsg]) callBack)
       addContactClaimed;
 
   MainPageState() {
     onMsgSent = (_) {
       setState(() => null);
     };
-    addContactClaimed = (callback) {
+    addContactClaimed = (callback) async {
       final tsea = tedit.text.trim();
-      if (tsea != '')
-        setState(() async {
-          /*final cTAdd = DirectChat(tsea, '');
-          await myContext.tableEntityOf<ChatTable>().insertChat(cTAdd);
-          callback(cTAdd);*/
-        });
-      else
+      if (tsea != '') {
+        final cTAdd = DirectChat(Chat.newId(), tsea, 'A new chat item.');
+        await myContext.tableEntityOf<ChatTable>().insertChat(cTAdd);
+        setState(() => callback(cTAdd));
+      } else
         callback(null, 'username cannot be empty ');
     };
   }
@@ -82,7 +83,7 @@ class MainPageState extends State<MainPage> {
                 TextButton(
                   onPressed: () {
                     Navigator.of(context).push(MaterialPageRoute(
-                        builder: (_) => ProfilePage(DirectChat('me'))));
+                        builder: (_) => ProfilePage(DirectChat('1', 'me'))));
                   },
                   child:
                       CircleAvatar(backgroundImage: AssetImage('avatar.png')),
