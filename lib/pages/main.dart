@@ -42,7 +42,7 @@ class MainPageState extends State<MainPage> {
   final TextEditingController tedit = TextEditingController();
   @override
   Widget build(BuildContext context) {
-    //var ftext = tedit.text.trim();
+    var ftext = tedit.text.trim();
 
     return _tabCon([
       Tab(
@@ -54,10 +54,18 @@ class MainPageState extends State<MainPage> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
-            ContactList((_) => true, onMsgSent, addContactClaimed),
+            ContactList((_) {
+              return (!isSearching ||
+                  ftext == '' ||
+                  isSearching && ftext != '' && _.caption.contains(ftext));
+            }, onMsgSent, addContactClaimed),
             Padding(padding: EdgeInsets.symmetric(vertical: 4.0)),
             ChatList(
-              (_) => true,
+              (_) {
+                return (!isSearching ||
+                    ftext == '' ||
+                    isSearching && ftext != '' && _.caption.contains(ftext));
+              },
               onMsgSent,
             ),
           ],

@@ -14,35 +14,34 @@ class ContactList extends StatefulWidget {
           void Function(DirectChat dcAdded, [String errMsg]) callBack)
       addContactClaimed;
 
-  const ContactList(this.filter, this.onMsgSent, this.addContactClaimed,
-      [Key key])
+  ContactList(this.filter, this.onMsgSent, this.addContactClaimed, [Key key])
       : super(key: key);
 
   @override
-  _ContactListState createState() => _ContactListState([]);
+  _ContactListState createState() => _ContactListState();
+
+  bool isLoaded = false;
 }
 
 class _ContactListState extends State<ContactList> {
-  //final ScrollController sc = ScrollController();
-
-  final List<Chat> contacts;
-  _ContactListState(this.contacts);
-
-  @override
-  void initState() {
-    lsInit();
-    super.initState();
-  }
+  final ScrollController sc = ScrollController();
+  final List<Chat> contacts = [];
 
   Future<void> lsInit() async {
-    final ls = await myContext.tableEntityOf<ChatTable>().select();
-    setState(() {
-      contacts.addAll(ls.map((i) => i.toChat()).toList());
-    });
+    if (!widget.isLoaded) {
+      final ls = await myContext.tableEntityOf<ChatTable>().select();
+      widget.isLoaded = true;
+      setState(() {
+        contacts.clear();
+        contacts
+            .addAll(ls.map((i) => i.toChat()).where(widget.filter).toList());
+      });
+    }
   }
 
   @override
   Widget build(BuildContext context) {
+    lsInit();
     return Container(
         height: 80,
         color: Colors.yellow.shade200,
