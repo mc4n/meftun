@@ -1,5 +1,5 @@
-import 'draft.dart';
-import 'directchat.dart';
+import 'draft.dart' show Draft;
+import 'directchat.dart' show DirectChat;
 
 abstract class MBody {
   static const RAW_MESSAGE = 'R';

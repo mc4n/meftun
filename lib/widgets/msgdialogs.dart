@@ -1,16 +1,14 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import '../models/directchat.dart' show DirectChat;
-import '../pages/texting.dart' show TextingPage, TextingPageState;
-import '../helpers/msghelper.dart' show MessageFactory;
+import '../pages/texting.dart' show TextingPageState;
 import '../models/message.dart' show Message;
 import 'dart:io' show File;
 import '../models/mbody.dart' show ImageBody;
 import 'package:flutter_slidable/flutter_slidable.dart';
 
 class MessageDialogs extends StatefulWidget {
-  final MessageFactory messageFactory;
-  const MessageDialogs(this.messageFactory, [Key key]) : super(key: key);
+  const MessageDialogs(String x, [Key key]) : super(key: key);
 
   @override
   _MessageDialogsState createState() => _MessageDialogsState();
@@ -25,8 +23,7 @@ class _MessageDialogsState extends State<MessageDialogs> {
       if (sc.hasClients) sc.jumpTo(sc.position.maxScrollExtent);
     });
     return Expanded(
-      child: _lv(widget.messageFactory.messages,
-          widget.messageFactory.chatFactory.owner),
+      child: _lv([], DirectChat('me')),
     );
   }
 
@@ -53,12 +50,12 @@ class _MessageDialogsState extends State<MessageDialogs> {
 
   Widget _dialog(Message msg, bool isRight) => GestureDetector(
       onDoubleTap: () {
-        if (widget.messageFactory.removeMessage(msg)) {
+        /*if (widget.messageFactory.removeMessage(msg)) {
           setState(() => context
               .findAncestorWidgetOfExactType<TextingPage>()
               .onMsgSent
               ?.call(null));
-        }
+        }*/
       },
       child: Card(
           color: !isRight ? Colors.grey.shade200 : Colors.lightGreen.shade300,
@@ -82,7 +79,7 @@ class _MessageDialogsState extends State<MessageDialogs> {
           )));
 
   Slidable _sl(Widget _inner, Message msg) => Slidable(
-        key: Key(widget.messageFactory.chatItem.id),
+        //key: Key(widget.chatItem.id),
         actionPane: SlidableDrawerActionPane(),
         actionExtentRatio: 0.4,
         child: _inner,

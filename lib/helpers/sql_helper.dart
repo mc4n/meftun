@@ -19,7 +19,7 @@ class DbaseContext {
   T tableEntityOf<T extends TableEntity>() {
     for (final _ in tableEntities) {
       if (_ is T) {
-        _.context = this;
+        if (_.context == null) _.context = this;
         return _;
       }
     }
@@ -55,9 +55,11 @@ abstract class TableEntity<T extends ModelBase> {
     await db.close();
   }
 
-  Future<void> delete(String id) async {
+  Future<void> delete(String id) async => deleteWhere("id = ?", [id]);
+
+  Future<void> deleteWhere(String where, List<dynamic> whereArgs) async {
     final db = await context._open();
-    await db.delete(name, where: "id = ?", whereArgs: [id]);
+    await db.delete(name, where: where, whereArgs: whereArgs);
     await db.close();
   }
 }
@@ -65,17 +67,3 @@ abstract class TableEntity<T extends ModelBase> {
 mixin ModelBase {
   Map<String, dynamic> get map;
 }
-
-/*void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  final dbP = DbaseContext('demo', [MessageTable()]);
-
-  final messageStore = dbP.tableEntityOf<MessageTable>();
-
-  await messageStore.insert(MessageModel('1', 'hello, world!', '_', '_', -1));
-  await messageStore.insert(MessageModel('2', 'selamun alekum!', '_', '_', -1));
-
-  final ls = await messageStore.select();
-
-  print(ls.join(','));
-}*/

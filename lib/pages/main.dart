@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:me_flutting/main.dart';
-import 'package:me_flutting/models/directchat.dart';
+//import '../main.dart';
+import '../models/directchat.dart' show DirectChat;
 import '../widgets/chat_list.dart' show ChatList;
 import '../widgets/contact_list.dart' show ContactList;
 import '../pages/profile.dart' show ProfilePage;
@@ -27,18 +27,21 @@ class MainPageState extends State<MainPage> {
     };
     addContactClaimed = (callback) {
       final tsea = tedit.text.trim();
-      if (tsea != '' && !chatFactory.existsPerson(tsea))
-        setState(() => callback(chatFactory.addPerson(tsea)));
+      if (tsea != '')
+        setState(() async {
+          /*final cTAdd = DirectChat(tsea, '');
+          await myContext.tableEntityOf<ChatTable>().insertChat(cTAdd);
+          callback(cTAdd);*/
+        });
       else
-        callback(null,
-            'person $tsea already exists or an invalid username supplied.');
+        callback(null, 'username cannot be empty ');
     };
   }
 
   final TextEditingController tedit = TextEditingController();
   @override
   Widget build(BuildContext context) {
-    var ftext = tedit.text.trim();
+    //var ftext = tedit.text.trim();
 
     return _tabCon([
       Tab(
@@ -50,11 +53,10 @@ class MainPageState extends State<MainPage> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
-            ContactList((_) => _.fContactsFilter(isSearching, ftext), onMsgSent,
-                addContactClaimed),
+            ContactList((_) => true, onMsgSent, addContactClaimed),
             Padding(padding: EdgeInsets.symmetric(vertical: 4.0)),
             ChatList(
-              (_) => _.fChatsFilter(isSearching, ftext),
+              (_) => true,
               onMsgSent,
             ),
           ],
@@ -80,10 +82,10 @@ class MainPageState extends State<MainPage> {
                 TextButton(
                   onPressed: () {
                     Navigator.of(context).push(MaterialPageRoute(
-                        builder: (_) => ProfilePage(chatFactory.ownerFactory)));
+                        builder: (_) => ProfilePage(DirectChat('me'))));
                   },
-                  child: CircleAvatar(
-                      backgroundImage: AssetImage(chatFactory.owner.photoURL)),
+                  child:
+                      CircleAvatar(backgroundImage: AssetImage('avatar.png')),
                 )
               ]),
               bottom: TabBar(

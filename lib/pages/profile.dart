@@ -1,19 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-import '../helpers/msghelper.dart' show MessageFactory;
+import '../models/chat.dart' show Chat;
 import '../models/directchat.dart' show DirectChat;
 
 class ProfilePage extends StatelessWidget {
-  final MessageFactory messageFactory;
+  final Chat chatItem;
 
-  const ProfilePage(this.messageFactory, {Key key}) : super(key: key);
+  const ProfilePage(this.chatItem, {Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
           leading: BackButton(),
-          title: Text('Profile/${messageFactory.chatItem.caption}'),
+          title: Text('Profile/${chatItem.caption}'),
         ),
         body: Padding(
             padding: EdgeInsets.symmetric(vertical: 40),
@@ -23,15 +23,13 @@ class ProfilePage extends StatelessWidget {
                 Container(
                     width: 180,
                     height: 290,
-                    child: Image.asset(messageFactory.chatItem.photoURL)),
+                    child: Image.asset(chatItem.photoURL)),
                 Padding(padding: EdgeInsets.symmetric(vertical: 5)),
                 Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-                  Text(
-                      messageFactory.chatItem.name ??
-                          messageFactory.chatItem.caption,
+                  Text(chatItem.name ?? chatItem.caption,
                       style: TextStyle(fontSize: 25)),
                   Padding(padding: EdgeInsets.symmetric(horizontal: 5)),
-                  Text(messageFactory.chatItem is DirectChat ? '' : '(Group)',
+                  Text(chatItem is DirectChat ? '' : '(Group)',
                       style: TextStyle(fontSize: 15)),
                 ])
               ],

@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/rendering.dart';
-import '../helpers/msghelper.dart' show MessageFactory;
 import 'chatitem.dart' show ChatItem;
-import '../main.dart' show chatFactory;
+import '../models/chat.dart' show Chat;
 
 class ChatList extends StatefulWidget {
-  final bool Function(MessageFactory) filter;
+  final bool Function(Chat) filter;
   final void Function(String) onMsgSent;
 
   const ChatList(this.filter, this.onMsgSent, [Key key]);
@@ -18,10 +17,10 @@ class ChatList extends StatefulWidget {
 class ChatListState extends State<ChatList> {
   @override
   Widget build(BuildContext context) {
-    return _expan(chatFactory.msgFactories.where(widget.filter).toList());
+    return _expan([]);
   }
 
-  Expanded _expan(final List<MessageFactory> chats) {
+  Expanded _expan(final List<Chat> chats) {
     return Expanded(
       child: Container(
           child: ListView.builder(

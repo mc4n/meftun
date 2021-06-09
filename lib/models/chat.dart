@@ -1,7 +1,7 @@
 import 'draft.dart' show Draft;
 import 'directchat.dart' show DirectChat;
 import 'message.dart' show Message;
-import 'mbody.dart';
+import 'mbody.dart' show MBody;
 import 'package:uuid/uuid.dart';
 
 abstract class Chat {
@@ -28,4 +28,12 @@ abstract class Chat {
 
   @override
   int get hashCode => id.hashCode;
+
+  ChatTypes get type;
+}
+
+enum ChatTypes {
+  Direct,
+  Group,
+  Bot,
 }

@@ -1,4 +1,4 @@
-import 'chat.dart' show Chat;
+import 'chat.dart' show Chat, ChatTypes;
 
 class GroupChat extends Chat {
   final int maximumParticipants;
@@ -8,4 +8,7 @@ class GroupChat extends Chat {
 
   @override
   String get caption => name;
+
+  @override
+  ChatTypes get type => ChatTypes.Group;
 }

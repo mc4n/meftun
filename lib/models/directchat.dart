@@ -1,4 +1,5 @@
 import 'groupchat.dart' show GroupChat;
+import 'chat.dart' show ChatTypes;
 
 class DirectChat extends GroupChat {
   final String username;
@@ -8,4 +9,7 @@ class DirectChat extends GroupChat {
 
   @override
   String get caption => username;
+
+  @override
+  ChatTypes get type => ChatTypes.Direct;
 }

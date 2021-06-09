@@ -2,17 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/rendering.dart';
 import 'package:me_flutting/models/chat.dart' show Chat;
-import '../helpers/msghelper.dart' show MessageFactory;
 import '../pages/texting.dart' show TextingPage;
 import '../pages/profile.dart' show ProfilePage;
 import 'package:flutter_slidable/flutter_slidable.dart';
+import '../models/directchat.dart' show DirectChat;
+import '../models/mbody.dart' show RawBody;
 
 class ChatItem extends StatefulWidget {
-  final MessageFactory messageFactory;
+  final Chat chatItem;
   final void Function(String) onMsgSent;
 
-  const ChatItem(this.messageFactory, this.onMsgSent, [Key key])
-      : super(key: key);
+  const ChatItem(this.chatItem, this.onMsgSent, [Key key]) : super(key: key);
 
   @override
   State<StatefulWidget> createState() => ChatItemState();
@@ -24,9 +24,9 @@ class ChatItemState extends State<ChatItem> {
 
   @override
   Widget build(BuildContext context) {
-    final lastMsg = widget.messageFactory.lastMessage;
-    final meOrCaption = (Chat _) =>
-        _ == widget.messageFactory.chatFactory.owner ? '[YOU]' : _.caption;
+    final lastMsg = widget.chatItem
+        .createMessage(DirectChat('me'), RawBody('example message.'));
+    final meOrCaption = (Chat _) => _.caption;
     final from = meOrCaption(lastMsg.from);
     final to = meOrCaption(lastMsg.chatGroup);
     final dt = lastMsg.epochToTimeString();
@@ -75,9 +75,9 @@ class ChatItemState extends State<ChatItem> {
 
   Widget _frame(Widget _inner) => TextButton(
       onPressed: () async => TextingPage.letTheGameBegin(
-          context, widget.onMsgSent, widget.messageFactory),
+          context, widget.chatItem, widget.onMsgSent),
       child: Card(
-        key: ValueKey(widget.messageFactory.chatItem.id),
+        key: ValueKey(widget.chatItem.id),
         child: _inner,
       ));
 
@@ -85,7 +85,7 @@ class ChatItemState extends State<ChatItem> {
       GestureDetector(onLongPress: () => null, child: item);
 
   Slidable _sl(Widget _inner) => Slidable(
-        key: Key(widget.messageFactory.chatItem.id),
+        key: Key(widget.chatItem.id),
         actionPane: SlidableDrawerActionPane(),
         actionExtentRatio: 0.15,
         child: _inner,
@@ -97,7 +97,7 @@ class ChatItemState extends State<ChatItem> {
               closeOnTap: false,
               onTap: () {
                 Navigator.of(context).push(MaterialPageRoute(
-                    builder: (_) => ProfilePage(widget.messageFactory)));
+                    builder: (_) => ProfilePage(widget.chatItem)));
               })
         ],
         secondaryActions: [
@@ -106,8 +106,8 @@ class ChatItemState extends State<ChatItem> {
               icon: Icons.delete,
               closeOnTap: false,
               onTap: () {
-                widget.messageFactory.clearMessages();
-                widget.onMsgSent(null);
+                /*widget.messageFactory.clearMessages();
+                widget.onMsgSent(null);*/
               }),
         ],
       );

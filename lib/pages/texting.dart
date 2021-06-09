@@ -1,30 +1,27 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import '../pages/profile.dart' show ProfilePage;
-import '../helpers/msghelper.dart' show MessageFactory;
 import '../widgets/msgdialogs.dart' show MessageDialogs;
+import '../models/chat.dart' show Chat;
 import '../models/message.dart' show Message;
-import '../models/mbody.dart' show RawBody, ImageBody;
+//import '../models/mbody.dart' show RawBody, ImageBody;
 import 'package:file_picker/file_picker.dart';
 import '../helpers/filehelpers.dart';
 
 class TextingPage extends StatefulWidget {
-  static void letTheGameBegin(
-      BuildContext context,
-      final void Function(String) onMsgSent,
-      final MessageFactory messageFactory) async {
+  static void letTheGameBegin(BuildContext context, final Chat chatItem,
+      final void Function(String) onMsgSent) async {
     await Navigator.of(context).push(
       MaterialPageRoute(
-        builder: (_) => TextingPage(messageFactory, onMsgSent),
+        builder: (_) => TextingPage(chatItem, onMsgSent),
       ),
     );
   }
 
+  final Chat chatItem;
   final void Function(String) onMsgSent;
-  final MessageFactory messageFactory;
 
-  const TextingPage(this.messageFactory, this.onMsgSent, {Key key})
-      : super(key: key);
+  const TextingPage(this.chatItem, this.onMsgSent, {Key key}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() => TextingPageState();
@@ -56,32 +53,29 @@ class TextingPageState extends State<TextingPage> {
             TextButton(
                 onPressed: () {
                   Navigator.of(context).push(MaterialPageRoute(
-                      builder: (_) => ProfilePage(widget.messageFactory)));
+                      builder: (_) => ProfilePage(widget.chatItem)));
                 },
                 child: Row(children: [
                   CircleAvatar(
-                      backgroundImage:
-                          AssetImage(widget.messageFactory.chatItem.photoURL)),
+                      backgroundImage: AssetImage(widget.chatItem.photoURL)),
                   Padding(padding: EdgeInsets.symmetric(horizontal: 5)),
-                  Text('${widget.messageFactory.chatItem.caption}',
+                  Text('${widget.chatItem.caption}',
                       style: TextStyle(color: Colors.white, fontSize: 23))
                 ])),
             Row(children: [
               TextButton(
                   onPressed: () {
-                    if (widget.messageFactory.chatFactory
-                        .removeContact(widget.messageFactory.chatItem)) {
+                    /*.removeContact(widget.chatItem);
                       widget.onMsgSent(null);
-                      Navigator.of(context).pop();
-                    }
+                      Navigator.of(context).pop();*/
                   },
                   child: Icon(Icons.person_remove_alt_1_sharp,
                       color: Colors.blue.shade100)),
               TextButton(
                   onPressed: () {
-                    widget.messageFactory.clearMessages();
+                    /*.clearMessages();
                     setState(() => null);
-                    widget.onMsgSent(null);
+                    widget.onMsgSent(null);*/
                   },
                   child: Icon(Icons.delete, color: Colors.yellow.shade100)),
             ])
@@ -93,7 +87,7 @@ class TextingPageState extends State<TextingPage> {
   }
 
   void _sendMes([String _ = '']) {
-    var data = teC.text;
+    /*var data = teC.text;
     if (data.trim() != '') {
       var msg = widget.messageFactory.addMessageBody(RawBody(data));
       if (DateTime.now().second % 3 == 0) widget.messageFactory.addReplyTo(msg);
@@ -102,25 +96,25 @@ class TextingPageState extends State<TextingPage> {
         setState(() => null);
       }
       teC.text = '';
-    }
+    }*/
   }
 
   void _sendImg([String _ = '']) {
-    if (_.trim() != '') {
+    /*if (_.trim() != '') {
       var msg = widget.messageFactory.addMessageBody(ImageBody(_));
       if (DateTime.now().second % 3 == 0) widget.messageFactory.addReplyTo(msg);
       if (widget.onMsgSent != null) {
         widget.onMsgSent(_);
         setState(() => null);
       }
-    }
+    }*/
   }
 
   Column _body() => Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            MessageDialogs(widget.messageFactory),
+            MessageDialogs(null),
             Padding(
                 padding: EdgeInsets.symmetric(vertical: 3, horizontal: 5),
                 child: Column(children: [

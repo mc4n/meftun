@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/rendering.dart';
-import '../helpers/msghelper.dart' show MessageFactory;
-import 'package:me_flutting/models/directchat.dart' show DirectChat;
+import '../models/chat.dart' show Chat;
+import '../models/directchat.dart' show DirectChat;
 import '../pages/texting.dart' show TextingPage;
-import '../main.dart' show chatFactory;
 
 class ContactList extends StatefulWidget {
-  final bool Function(MessageFactory) filter;
+  final bool Function(Chat) filter;
   final void Function(String) onMsgSent;
   final void Function(
           void Function(DirectChat dcAdded, [String errMsg]) callBack)
@@ -26,7 +25,7 @@ class _ContactListState extends State<ContactList> {
 
   @override
   Widget build(BuildContext context) {
-    var contacts = chatFactory.msgFactories.where(widget.filter).toList();
+    var contacts = [];
     return Container(
         height: 80,
         color: Colors.yellow.shade200,
@@ -48,9 +47,9 @@ class _ContactListState extends State<ContactList> {
                   ? _expan(context, contacts)
                   : TextButton(
                       onPressed: () {
-                        widget.addContactClaimed((_, [err]) {
+                        /*widget.addContactClaimed((_, [err]) {
                           if (err != null) print(err);
-                        });
+                        });*/
                       },
                       child: Row(children: [
                         Text(' New contact '),
@@ -71,7 +70,7 @@ class _ContactListState extends State<ContactList> {
             ])));
   }
 
-  Expanded _expan(BuildContext context, List<MessageFactory> contacts) {
+  Expanded _expan(BuildContext context, List<Chat> contacts) {
     return Expanded(
       child: ListView.builder(
           controller: sc,
@@ -80,13 +79,12 @@ class _ContactListState extends State<ContactList> {
           itemCount: contacts.length,
           itemBuilder: (BuildContext _, int index) => TextButton(
               onPressed: () async => TextingPage.letTheGameBegin(
-                  context, widget.onMsgSent, contacts[index]),
+                  context, contacts[index], widget.onMsgSent),
               child: Column(children: [
-                Text(contacts[index].chatItem.caption,
+                Text(contacts[index].caption,
                     style: TextStyle(color: Colors.grey.shade800)),
                 CircleAvatar(
-                    backgroundImage:
-                        AssetImage(contacts[index].chatItem.photoURL)),
+                    backgroundImage: AssetImage(contacts[index].photoURL)),
               ]))),
     );
   }
