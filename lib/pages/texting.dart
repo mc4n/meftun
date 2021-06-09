@@ -7,6 +7,8 @@ import '../models/message.dart' show Message;
 //import '../models/mbody.dart' show RawBody, ImageBody;
 import 'package:file_picker/file_picker.dart';
 import '../helpers/filehelpers.dart';
+import '../main.dart';
+import '../helpers/table_helper.dart';
 
 class TextingPage extends StatefulWidget {
   static void letTheGameBegin(BuildContext context, final Chat chatItem,
@@ -64,10 +66,12 @@ class TextingPageState extends State<TextingPage> {
                 ])),
             Row(children: [
               TextButton(
-                  onPressed: () {
-                    /*.removeContact(widget.chatItem);
-                      widget.onMsgSent(null);
-                      Navigator.of(context).pop();*/
+                  onPressed: () async {
+                    await myContext
+                        .tableEntityOf<ChatTable>()
+                        .delete(widget.chatItem.id);
+                    widget.onMsgSent(null);
+                    Navigator.of(context).pop();
                   },
                   child: Icon(Icons.person_remove_alt_1_sharp,
                       color: Colors.blue.shade100)),

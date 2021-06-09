@@ -1,4 +1,4 @@
-import '../models/chat.dart' show Chat, ChatTypes;
+import '../models/chat.dart' show Chat;
 import '../models/directchat.dart' show DirectChat;
 import '../models/groupchat.dart' show GroupChat;
 import '../models/message.dart' show Message;
@@ -27,7 +27,8 @@ class ChatTable extends TableEntity<ChatModel> {
   }
 
   Future<void> insertChat(Chat item) async {
-    super.insert(ChatModel(item.id, item.caption, item.name, item.photoURL, 0));
+    super.insert(ChatModel(item.id, item.caption, item.name, item.photoURL,
+        item is DirectChat ? 0 : 1));
   }
 }
 
@@ -52,14 +53,10 @@ class ChatModel with ModelBase {
       };
 
   Chat toChat() {
-    switch (ChatTypes.Direct) {
-      case ChatTypes.Direct:
-        return DirectChat(id, userName, name, photoURL);
-      case ChatTypes.Group:
-        return GroupChat(id, name, photoURL);
-      default:
-        return null;
-    }
+    if (type == 0)
+      return DirectChat(id, userName, name, photoURL);
+    else
+      return GroupChat(id, name, photoURL);
   }
 }
 

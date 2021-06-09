@@ -30,12 +30,4 @@ abstract class Chat {
 
   @override
   int get hashCode => id.hashCode;
-
-  ChatTypes get type;
-}
-
-enum ChatTypes {
-  Direct,
-  Group,
-  Bot,
 }
