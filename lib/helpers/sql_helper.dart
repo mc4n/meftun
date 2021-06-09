@@ -34,6 +34,7 @@ abstract class TableEntity<T extends ModelBase> {
   final String scheme;
   final String name;
   DbaseContext context;
+  final List<T> _itemList = [];
 
   TableEntity(this.scheme, this.name);
 
@@ -42,31 +43,37 @@ abstract class TableEntity<T extends ModelBase> {
   T from(Map<String, dynamic> _map);
 
   Future<List<T>> select() async {
-    final db = await context._open();
+    return _itemList;
+    /*final db = await context._open();
     final maps = await db.query(name);
     await db.close();
-    return List.generate(maps.length, (i) => from(maps[i]));
+    return List.generate(maps.length, (i) => from(maps[i]));*/
   }
 
   Future<void> insert(T item) async {
-    final db = await context._open();
+    _itemList.add(item);
+    /*final db = await context._open();
     await db.insert(
       name,
       item.map,
       conflictAlgorithm: ConflictAlgorithm.ignore,
     );
-    return await db.close();
+    return await db.close();*/
   }
 
-  Future<void> delete(String id) async => deleteWhere("id = ?", [id]);
+  Future<void> delete(String id) async {
+    int i = _itemList.indexWhere((_) => _.getId == id);
+    _itemList.removeAt(i); //deleteWhere("id = ?", [id]);
+  }
 
-  Future<void> deleteWhere(String where, List<dynamic> whereArgs) async {
+  /*Future<void> deleteWhere(String where, List<dynamic> whereArgs) async {
     final db = await context._open();
     await db.delete(name, where: where, whereArgs: whereArgs);
     return await db.close();
-  }
+  }*/
 }
 
 mixin ModelBase {
+  String get getId;
   Map<String, dynamic> get map;
 }

@@ -27,8 +27,7 @@ class ChatTable extends TableEntity<ChatModel> {
   }
 
   Future<void> insertChat(Chat item) async {
-    super.insert(ChatModel(
-        item.id, item.caption, item.name, item.photoURL, item.type as int));
+    super.insert(ChatModel(item.id, item.caption, item.name, item.photoURL, 0));
   }
 }
 
@@ -41,6 +40,9 @@ class ChatModel with ModelBase {
   const ChatModel(this.id, this.userName, this.name, this.photoURL, this.type);
 
   @override
+  String get getId => id;
+
+  @override
   Map<String, dynamic> get map => {
         'id': id,
         'user_name': userName,
@@ -50,9 +52,9 @@ class ChatModel with ModelBase {
       };
 
   Chat toChat() {
-    switch (type as ChatTypes) {
+    switch (ChatTypes.Direct) {
       case ChatTypes.Direct:
-        return DirectChat(id, userName, photoURL);
+        return DirectChat(id, userName, name, photoURL);
       case ChatTypes.Group:
         return GroupChat(id, name, photoURL);
       default:
@@ -98,6 +100,9 @@ class MessageModel with ModelBase {
   final int epoch;
   const MessageModel(
       this.id, this.body, this.fromId, this.chatGroupId, this.epoch);
+
+  @override
+  String get getId => id;
 
   @override
   Map<String, dynamic> get map => {
