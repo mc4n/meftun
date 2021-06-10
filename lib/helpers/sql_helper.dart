@@ -11,13 +11,13 @@ class DbaseContext {
 
   Future<String> get dbPath async => join(await getDatabasesPath(), dbName);
 
-  Future<Database> _open() async {
+  /*Future<Database> _open() async {
     return openDatabase(await dbPath, version: 1, onCreate: (_, __) async {
       for (final i in tableEntities) {
         await _.execute(i.createString);
       }
     });
-  }
+  }*/
 
   T tableEntityOf<T extends TableEntity>() {
     for (final _ in tableEntities) {
@@ -50,6 +50,18 @@ abstract class TableEntity<T extends ModelBase> {
     return List.generate(maps.length, (i) => from(maps[i]));*/
   }
 
+  Future<T> single(bool Function(T) predicate) async {
+    return _itemList.lastWhere(predicate);
+  }
+
+  Future<List<T>> selectWhere(bool Function(T) predicate) async {
+    return _itemList.where(predicate).toList();
+    /*final db = await context._open();
+    final maps = await db.query(name, where: 'id = ?', whereArgs: [id]);
+    await db.close();
+    return List.generate(maps.length, (i) => from(maps[i]));*/
+  }
+
   Future<void> insert(T item) async {
     _itemList.add(item);
     /*final db = await context._open();
@@ -62,15 +74,20 @@ abstract class TableEntity<T extends ModelBase> {
   }
 
   Future<void> delete(String id) async {
-    int i = _itemList.indexWhere((_) => _.getId == id);
-    _itemList.removeAt(i); //deleteWhere("id = ?", [id]);
+    return deleteWhere((_) => _.getId == id);
+    //deleteWhere("id = ?", [id]);
   }
 
-  /*Future<void> deleteWhere(String where, List<dynamic> whereArgs) async {
-    final db = await context._open();
+  Future<void> deleteWhere(bool Function(T) predicate) async {
+    while (true) {
+      int i = _itemList.lastIndexWhere(predicate);
+      if (i == -1) break;
+      _itemList.removeAt(i);
+    }
+    /*final db = await context._open();
     await db.delete(name, where: where, whereArgs: whereArgs);
-    return await db.close();
-  }*/
+    return await db.close();*/
+  }
 }
 
 mixin ModelBase {

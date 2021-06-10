@@ -3,7 +3,6 @@ import 'package:flutter/cupertino.dart';
 import '../pages/profile.dart' show ProfilePage;
 import '../widgets/msgdialogs.dart' show MessageDialogs;
 import '../models/chat.dart' show Chat;
-import '../models/directchat.dart' show DirectChat;
 import '../models/message.dart' show Message;
 import '../models/mbody.dart' show RawBody, ImageBody;
 import 'package:file_picker/file_picker.dart';
@@ -77,10 +76,11 @@ class TextingPageState extends State<TextingPage> {
                   child: Icon(Icons.person_remove_alt_1_sharp,
                       color: Colors.blue.shade100)),
               TextButton(
-                  onPressed: () {
-                    /*.clearMessages();
+                  onPressed: () async {
+                    await myContext.tableEntityOf<MessageTable>().deleteWhere(
+                        (msg) => msg.chatGroupId == widget.chatItem.id);
                     setState(() => null);
-                    widget.onMsgSent(null);*/
+                    widget.onMsgSent(null);
                   },
                   child: Icon(Icons.delete, color: Colors.yellow.shade100)),
             ])
@@ -98,7 +98,7 @@ class TextingPageState extends State<TextingPage> {
   Future<bool> _msgPush(RawBody mb) async {
     final _ = mb.toString();
     if (_.trim() != '') {
-      final msg = widget.chatItem.createMessage(DirectChat('1', 'me'), mb);
+      final msg = widget.chatItem.createMessage(meSession, mb);
       await myContext.tableEntityOf<MessageTable>().insertMessage(msg);
       // if (DateTime.now().second % 3 == 0) .addReplyTo(msg);
       if (widget.onMsgSent != null) {

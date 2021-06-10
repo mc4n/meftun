@@ -91,10 +91,10 @@ class MainPageState extends State<MainPage> {
                 TextButton(
                   onPressed: () {
                     Navigator.of(context).push(MaterialPageRoute(
-                        builder: (_) => ProfilePage(DirectChat('1', 'me'))));
+                        builder: (_) => ProfilePage(meSession)));
                   },
-                  child:
-                      CircleAvatar(backgroundImage: AssetImage('avatar.png')),
+                  child: CircleAvatar(
+                      backgroundImage: AssetImage(meSession.photoURL)),
                 )
               ]),
               bottom: TabBar(

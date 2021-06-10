@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/rendering.dart';
-import 'package:me_flutting/models/chat.dart' show Chat;
+import '../models/chat.dart' show Chat;
+import '../models/message.dart' show Message;
 import '../pages/texting.dart' show TextingPage;
 import '../pages/profile.dart' show ProfilePage;
 import 'package:flutter_slidable/flutter_slidable.dart';
-import '../models/directchat.dart' show DirectChat;
-import '../models/mbody.dart' show RawBody;
+import '../main.dart';
+import '../helpers/table_helper.dart';
 
 class ChatItem extends StatefulWidget {
   final Chat chatItem;
@@ -24,8 +25,20 @@ class ChatItemState extends State<ChatItem> {
 
   @override
   Widget build(BuildContext context) {
-    final lastMsg = widget.chatItem
-        .createMessage(DirectChat('1', 'me'), RawBody('example message.'));
+    return FutureBuilder<Message>(
+      future: myContext.tableEntityOf<MessageTable>().getMessageDetails(
+          myContext.tableEntityOf<ChatTable>(),
+          (m) => m.chatGroupId == widget.chatItem.id),
+      builder: (BuildContext bc, AsyncSnapshot<Message> snap) {
+        if (snap.hasData)
+          return _lastMsgDetailsFrame(snap.data.toMessage());
+        else
+          return Row();
+      },
+    );
+  }
+
+  Widget _lastMsgDetailsFrame(Message lastMsg) {
     final meOrCaption = (Chat _) => _.caption;
     final from = meOrCaption(lastMsg.from);
     final to = meOrCaption(lastMsg.chatGroup);
@@ -105,9 +118,10 @@ class ChatItemState extends State<ChatItem> {
               color: Colors.grey.shade700,
               icon: Icons.delete,
               closeOnTap: false,
-              onTap: () {
-                /*widget.messageFactory.clearMessages();
-                widget.onMsgSent(null);*/
+              onTap: () async {
+                await myContext.tableEntityOf<MessageTable>().deleteWhere(
+                    (msg) => msg.chatGroupId == widget.chatItem.id);
+                widget.onMsgSent(null);
               }),
         ],
       );

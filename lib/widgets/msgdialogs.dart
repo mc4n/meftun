@@ -25,12 +25,19 @@ class _MessageDialogsState extends State<MessageDialogs> {
 
   Future<void> lsInit() async {
     if (!widget.isLoaded) {
-      final ls = await myContext.tableEntityOf<MessageTable>().select();
+      final ment = myContext.tableEntityOf<MessageTable>();
+      final cent = myContext.tableEntityOf<ChatTable>();
+      final chatItem =
+          context.findAncestorWidgetOfExactType<TextingPage>()?.chatItem;
+      final lsGroupMessageModels = await ment
+          .selectWhere((mtbItem) => mtbItem.chatGroupId == chatItem.id);
+
+      messages.clear();
+      lsGroupMessageModels.forEach((msgModel) async => messages.add(await ment
+          .getMessageDetails(cent, (pred) => pred.id == msgModel.id)));
+
       widget.isLoaded = true;
-      setState(() {
-        messages.clear();
-        messages.addAll(ls.map((i) => i.toMessage()).toList());
-      });
+      setState(() {});
     }
   }
 
@@ -41,7 +48,7 @@ class _MessageDialogsState extends State<MessageDialogs> {
     });
     lsInit();
     return Expanded(
-      child: _lv(DirectChat('1', 'me')),
+      child: _lv(meSession),
     );
   }
 

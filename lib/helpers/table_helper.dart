@@ -87,6 +87,15 @@ class MessageTable extends TableEntity<MessageModel> {
     super.insert(MessageModel(item.id, item.body.toString(), item.from.id,
         item.chatGroup.id, item.epoch));
   }
+
+  Future<Message> getMessageDetails(
+      final ChatTable chatSource, bool Function(MessageModel) predicate) async {
+    final msgModel = await super.single(predicate);
+    final from = await chatSource.single((m) => m.id == msgModel.fromId);
+    final to = await chatSource.single((m) => m.id == msgModel.chatGroupId);
+    return Message(
+        RawBody(msgModel.body), from.toChat(), msgModel.id, to.toChat());
+  }
 }
 
 class MessageModel with ModelBase {
@@ -109,11 +118,4 @@ class MessageModel with ModelBase {
         'chat_group_id': chatGroupId,
         'epoch': epoch,
       };
-
-  Message toMessage() {
-    final isAr = false; //epoch > DateTime(year: 2000);
-    final MBody mbod = RawBody(body);
-    return Message(mbod, DirectChat(fromId, 'p-from'), id,
-        DirectChat(chatGroupId, 'p-group'), isAr);
-  }
 }
