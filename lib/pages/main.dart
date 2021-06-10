@@ -55,16 +55,20 @@ class MainPageState extends State<MainPage> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
             ContactList((_) {
-              return (!isSearching ||
-                  ftext == '' ||
-                  isSearching && ftext != '' && _.caption.contains(ftext));
+              return _ != meSession &&
+                  (!isSearching ||
+                      ftext == '' ||
+                      isSearching && ftext != '' && _.caption.contains(ftext));
             }, onMsgSent, addContactClaimed),
             Padding(padding: EdgeInsets.symmetric(vertical: 4.0)),
             ChatList(
               (_) {
-                return (!isSearching ||
-                    ftext == '' ||
-                    isSearching && ftext != '' && _.caption.contains(ftext));
+                return _ != meSession &&
+                    (!isSearching ||
+                        ftext == '' ||
+                        isSearching &&
+                            ftext != '' &&
+                            _.caption.contains(ftext));
               },
               onMsgSent,
             ),

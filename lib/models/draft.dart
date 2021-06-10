@@ -15,7 +15,8 @@ class Draft {
   set setBody(MBody body) => this.body = body;
 
   Message toMessage() {
-    var _msg = Message(body, from, uuid.v4(), chatGroup);
+    var _msg = Message(uuid.v4(), body, from, chatGroup,
+        DateTime.now().millisecondsSinceEpoch);
     return _msg;
   }
 

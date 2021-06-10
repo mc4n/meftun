@@ -26,15 +26,14 @@ class _MessageDialogsState extends State<MessageDialogs> {
   Future<void> lsInit() async {
     if (!widget.isLoaded) {
       final ment = myContext.tableEntityOf<MessageTable>();
-      final cent = myContext.tableEntityOf<ChatTable>();
       final chatItem =
           context.findAncestorWidgetOfExactType<TextingPage>()?.chatItem;
       final lsGroupMessageModels = await ment
           .selectWhere((mtbItem) => mtbItem.chatGroupId == chatItem.id);
 
       messages.clear();
-      lsGroupMessageModels.forEach((msgModel) async => messages.add(await ment
-          .getMessageDetails(cent, (pred) => pred.id == msgModel.id)));
+      lsGroupMessageModels.forEach((msgModel) async => messages
+          .add(await ment.getMessageDetails((pred) => pred.id == msgModel.id)));
 
       widget.isLoaded = true;
       setState(() {});

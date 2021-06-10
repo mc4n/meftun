@@ -26,12 +26,12 @@ class ChatItemState extends State<ChatItem> {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<Message>(
-      future: myContext.tableEntityOf<MessageTable>().getMessageDetails(
-          myContext.tableEntityOf<ChatTable>(),
-          (m) => m.chatGroupId == widget.chatItem.id),
+      future: myContext
+          .tableEntityOf<MessageTable>()
+          .getMessageDetails((m) => m.chatGroupId == widget.chatItem.id),
       builder: (BuildContext bc, AsyncSnapshot<Message> snap) {
         if (snap.hasData)
-          return _lastMsgDetailsFrame(snap.data.toMessage());
+          return _lastMsgDetailsFrame(snap.data);
         else
           return Row();
       },

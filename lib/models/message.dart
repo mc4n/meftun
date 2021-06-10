@@ -5,11 +5,9 @@ import 'mbody.dart' show MBody;
 
 class Message extends Draft {
   final String id;
-  final int epoch = DateTime.now().millisecondsSinceEpoch;
-  final bool isArchieved;
-  Message(MBody body, DirectChat from, this.id, Chat c,
-      [this.isArchieved = false])
-      : super(body, from, c);
+  final int epoch;
+  Message(this.id, MBody body, DirectChat from, Chat group, this.epoch)
+      : super(body, from, group);
 
   @override
   set setBody(MBody _) => throw Exception('message already sent :(');
@@ -37,3 +35,4 @@ class Message extends Draft {
     return '${dt.hour}:${dt.minute}';
   }
 }
+//  epoch = DateTime.now().millisecondsSinceEpoch;
