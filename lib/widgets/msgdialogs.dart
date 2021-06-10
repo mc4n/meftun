@@ -1,33 +1,51 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import '../models/directchat.dart' show DirectChat;
-import '../pages/texting.dart' show TextingPageState;
+import '../pages/texting.dart' show TextingPage, TextingPageState;
 import '../models/message.dart' show Message;
 import 'dart:io' show File;
 import '../models/mbody.dart' show ImageBody;
 import 'package:flutter_slidable/flutter_slidable.dart';
+import '../main.dart';
+import '../helpers/table_helper.dart';
 
 class MessageDialogs extends StatefulWidget {
-  const MessageDialogs(String x, [Key key]) : super(key: key);
+  MessageDialogs([Key key]) : super(key: key);
 
   @override
   _MessageDialogsState createState() => _MessageDialogsState();
+
+  bool isLoaded = false;
 }
 
 class _MessageDialogsState extends State<MessageDialogs> {
+  final List<Message> messages = [];
   final SlidableController sldCont = SlidableController();
   final ScrollController sc = ScrollController();
+
+  Future<void> lsInit() async {
+    if (!widget.isLoaded) {
+      final ls = await myContext.tableEntityOf<MessageTable>().select();
+      widget.isLoaded = true;
+      setState(() {
+        messages.clear();
+        messages.addAll(ls.map((i) => i.toMessage()).toList());
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     WidgetsBinding.instance.addPostFrameCallback((i) {
       if (sc.hasClients) sc.jumpTo(sc.position.maxScrollExtent);
     });
+    lsInit();
     return Expanded(
-      child: _lv([], DirectChat('1', 'me')),
+      child: _lv(DirectChat('1', 'me')),
     );
   }
 
-  Widget _lv(List<Message> messages, DirectChat owner) => ListView.builder(
+  Widget _lv(DirectChat owner) => ListView.builder(
       //reverse: true,
       physics: BouncingScrollPhysics(),
       controller: sc,
@@ -49,13 +67,13 @@ class _MessageDialogsState extends State<MessageDialogs> {
       });
 
   Widget _dialog(Message msg, bool isRight) => GestureDetector(
-      onDoubleTap: () {
-        /*if (widget.messageFactory.removeMessage(msg)) {
-          setState(() => context
-              .findAncestorWidgetOfExactType<TextingPage>()
-              .onMsgSent
-              ?.call(null));
-        }*/
+      onDoubleTap: () async {
+        await myContext.tableEntityOf<MessageTable>().delete(msg.id);
+        widget.isLoaded = false;
+        setState(() => context
+            .findAncestorWidgetOfExactType<TextingPage>()
+            .onMsgSent
+            ?.call(null));
       },
       child: Card(
           color: !isRight ? Colors.grey.shade200 : Colors.lightGreen.shade300,

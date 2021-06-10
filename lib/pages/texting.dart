@@ -3,8 +3,9 @@ import 'package:flutter/cupertino.dart';
 import '../pages/profile.dart' show ProfilePage;
 import '../widgets/msgdialogs.dart' show MessageDialogs;
 import '../models/chat.dart' show Chat;
+import '../models/directchat.dart' show DirectChat;
 import '../models/message.dart' show Message;
-//import '../models/mbody.dart' show RawBody, ImageBody;
+import '../models/mbody.dart' show RawBody, ImageBody;
 import 'package:file_picker/file_picker.dart';
 import '../helpers/filehelpers.dart';
 import '../main.dart';
@@ -90,29 +91,26 @@ class TextingPageState extends State<TextingPage> {
     );
   }
 
-  void _sendMes([String _ = '']) {
-    /*var data = teC.text;
-    if (data.trim() != '') {
-      var msg = widget.messageFactory.addMessageBody(RawBody(data));
-      if (DateTime.now().second % 3 == 0) widget.messageFactory.addReplyTo(msg);
-      if (widget.onMsgSent != null) {
-        widget.onMsgSent(data);
-        setState(() => null);
-      }
-      teC.text = '';
-    }*/
+  Future<void> _sendMes([String _ = '']) async {
+    if (await _msgPush(RawBody(teC.text))) teC.text = '';
   }
 
-  void _sendImg([String _ = '']) {
-    /*if (_.trim() != '') {
-      var msg = widget.messageFactory.addMessageBody(ImageBody(_));
-      if (DateTime.now().second % 3 == 0) widget.messageFactory.addReplyTo(msg);
+  Future<bool> _msgPush(RawBody mb) async {
+    final _ = mb.toString();
+    if (_.trim() != '') {
+      final msg = widget.chatItem.createMessage(DirectChat('1', 'me'), mb);
+      await myContext.tableEntityOf<MessageTable>().insertMessage(msg);
+      // if (DateTime.now().second % 3 == 0) .addReplyTo(msg);
       if (widget.onMsgSent != null) {
         widget.onMsgSent(_);
         setState(() => null);
+        return true;
       }
-    }*/
+    }
+    return false;
   }
+
+  Future<void> _sendImg([String _ = '']) async => await _msgPush(ImageBody(_));
 
   Column _body() => Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -124,11 +122,7 @@ class TextingPageState extends State<TextingPage> {
                 child: Column(children: [
                   (quotedMessage == null
                       ? Row()
-                      :
-
-                      //
-
-                      Card(
+                      : Card(
                           color: Colors.indigo.shade100,
                           child: Padding(
                             padding: EdgeInsets.all(3),

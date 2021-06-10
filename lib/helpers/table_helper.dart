@@ -2,7 +2,7 @@ import '../models/chat.dart' show Chat;
 import '../models/directchat.dart' show DirectChat;
 import '../models/groupchat.dart' show GroupChat;
 import '../models/message.dart' show Message;
-//import '../models/mbody.dart' show MBody, RawBody;
+import '../models/mbody.dart' show MBody, RawBody;
 import 'sql_helper.dart';
 
 class ChatTable extends TableEntity<ChatModel> {
@@ -109,4 +109,11 @@ class MessageModel with ModelBase {
         'chat_group_id': chatGroupId,
         'epoch': epoch,
       };
+
+  Message toMessage() {
+    final isAr = false; //epoch > DateTime(year: 2000);
+    final MBody mbod = RawBody(body);
+    return Message(mbod, DirectChat(fromId, 'p-from'), id,
+        DirectChat(chatGroupId, 'p-group'), isAr);
+  }
 }
