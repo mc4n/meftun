@@ -1,6 +1,6 @@
-import 'package:sqflite/sqflite.dart';
+//import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
-//import 'package:flutter/widgets.dart';
+import 'package:path_provider/path_provider.dart';
 
 class DbaseContext {
   final String dbName;
@@ -9,13 +9,12 @@ class DbaseContext {
 
   String get cmdsOnCreate => tableEntities.map((m) => m.createString).join(';');
 
-  Future<String> get dbPath async => join(await getDatabasesPath(), dbName);
+  Future<String> get dbPath async =>
+      join((await getApplicationDocumentsDirectory()).path, dbName);
 
   /*Future<Database> _open() async {
     return openDatabase(await dbPath, version: 1, onCreate: (_, __) async {
-      for (final i in tableEntities) {
-        await _.execute(i.createString);
-      }
+        await _.execute(cmdsOnCreate);
     });
   }*/
 
@@ -68,14 +67,13 @@ abstract class TableEntity<T extends ModelBase> {
     await db.insert(
       name,
       item.map,
-      conflictAlgorithm: ConflictAlgorithm.ignore,
+      conflictAlgorithm: ConflictAlgorithm.replace,
     );
     return await db.close();*/
   }
 
   Future<void> delete(String id) async {
     return deleteWhere((_) => _.getId == id);
-    //deleteWhere("id = ?", [id]);
   }
 
   Future<void> deleteWhere(bool Function(T) predicate) async {

@@ -4,8 +4,10 @@ import '/pages/main.dart' show MainPage;
 import '/models/directchat.dart' show DirectChat;
 import '/helpers/sql_helper.dart';
 import '/helpers/table_helper.dart';
+//import 'package:flutter/widgets.dart';
 
 void main() {
+  //WidgetsFlutterBinding.ensureInitialized();
   myContext.tableEntityOf<ChatTable>().insertChat(meSession);
   runApp(Builder(
       builder: (_) => MaterialApp(
