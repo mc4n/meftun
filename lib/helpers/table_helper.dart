@@ -71,7 +71,7 @@ class MessageTable extends TableEntity<MessageModel> {
                 'from_id nvarchar(200) not null,'
                 'chat_group_id nvarchar(200) not null,'
                 'epoch integer not null,'
-                'mbody_type nvarchar(5) not null,');
+                'mbody_type nvarchar(5) not null');
 
   @override
   MessageModel from(Map<String, dynamic> _map) {

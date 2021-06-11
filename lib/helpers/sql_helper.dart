@@ -1,20 +1,19 @@
-//import 'package:sqflite/sqflite.dart';
+import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
-import 'package:path_provider/path_provider.dart';
 
 class DbaseContext {
   final String dbName;
   final List<TableEntity> tableEntities;
   DbaseContext(this.dbName, this.tableEntities);
 
-  String get cmdsOnCreate => tableEntities.map((m) => m.createString).join(';');
-
-  Future<String> get dbPath async =>
-      join((await getApplicationDocumentsDirectory()).path, dbName);
+  Future<String> get dbPath async => join(await getDatabasesPath(), dbName);
 
   /*Future<Database> _open() async {
     return openDatabase(await dbPath, version: 1, onCreate: (_, __) async {
-        await _.execute(cmdsOnCreate);
+        final tb1 = tableEntities[0];
+        final tb2 = tableEntities[1];
+       await _.execute(tb2.createString);
+       await _.execute(tb1.createString);
     });
   }*/
 
@@ -35,7 +34,7 @@ abstract class TableEntity<T extends ModelBase> {
   DbaseContext context;
   final List<T> _itemList = [];
 
-  TableEntity(this.scheme, this.name);
+  TableEntity(this.name, this.scheme);
 
   String get createString => 'create table $name ($scheme)';
 

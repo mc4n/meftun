@@ -33,7 +33,7 @@ class ChatItemState extends State<ChatItem> {
         if (snap.hasData)
           return _lastMsgDetailsFrame(snap.data);
         else
-          return Row();
+          return Text('no item');
       },
     );
   }
