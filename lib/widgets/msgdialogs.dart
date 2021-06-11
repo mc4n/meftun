@@ -10,72 +10,71 @@ import '../main.dart';
 import '../helpers/table_helper.dart';
 
 class MessageDialogs extends StatefulWidget {
-  MessageDialogs([Key key]) : super(key: key);
-
+  const MessageDialogs([Key key]) : super(key: key);
   @override
   _MessageDialogsState createState() => _MessageDialogsState();
-
-  bool isLoaded = false;
 }
 
 class _MessageDialogsState extends State<MessageDialogs> {
-  final List<Message> messages = [];
   final SlidableController sldCont = SlidableController();
   final ScrollController sc = ScrollController();
-
-  Future<void> lsInit() async {
-    if (!widget.isLoaded) {
-      final ment = myContext.tableEntityOf<MessageTable>();
-      final chatItem =
-          context.findAncestorWidgetOfExactType<TextingPage>()?.chatItem;
-      final lsGroupMessageModels = await ment
-          .selectWhere((mtbItem) => mtbItem.chatGroupId == chatItem.id);
-
-      messages.clear();
-      lsGroupMessageModels.forEach((msgModel) async => messages
-          .add(await ment.getMessageDetails((pred) => pred.id == msgModel.id)));
-
-      widget.isLoaded = true;
-      setState(() {});
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
     WidgetsBinding.instance.addPostFrameCallback((i) {
       if (sc.hasClients) sc.jumpTo(sc.position.maxScrollExtent);
     });
-    lsInit();
-    return Expanded(
-      child: _lv(meSession),
+    final chatItem =
+        context.findAncestorWidgetOfExactType<TextingPage>()?.chatItem;
+    return FutureBuilder<List<MessageModel>>(
+      future: myContext
+          .tableEntityOf<MessageTable>()
+          .selectWhere((mtbItem) => mtbItem.chatGroupId == chatItem.id),
+      builder: (BuildContext bc, AsyncSnapshot<List<MessageModel>> snap) {
+        if (snap.hasData)
+          return Expanded(child: _lv(snap.data, meSession));
+        else
+          return Text('no item');
+      },
     );
   }
 
-  Widget _lv(DirectChat owner) => ListView.builder(
-      //reverse: true,
-      physics: BouncingScrollPhysics(),
-      controller: sc,
-      itemCount: messages.length,
-      shrinkWrap: false,
-      itemBuilder: (_, __) {
-        var msg = messages[__];
-        var isMe = msg.from == owner;
-        return Container(
-          //color: Colors.yellow.shade100,
-          child: Padding(
+  Widget _lv(final List<MessageModel> messages, DirectChat owner) =>
+      ListView.builder(
+          //reverse: true,
+          physics: BouncingScrollPhysics(),
+          controller: sc,
+          itemCount: messages.length,
+          shrinkWrap: false,
+          itemBuilder: (_, __) {
+            var msg = messages[__];
+            var isMe = msg.fromId == owner.id;
+            return Container(
+                //color: Colors.yellow.shade100,
+                child: Padding(
               padding: EdgeInsets.symmetric(horizontal: 15),
               child: Row(
-                mainAxisAlignment:
-                    isMe ? MainAxisAlignment.end : MainAxisAlignment.start,
-                children: [_sl(_dialog(msg, isMe), msg)],
-              )),
-        );
-      });
+                  mainAxisAlignment:
+                      isMe ? MainAxisAlignment.end : MainAxisAlignment.start,
+                  children: [
+                    FutureBuilder<Message>(
+                      future: myContext
+                          .tableEntityOf<MessageTable>()
+                          .getMessageDetails((pred) => pred.id == msg.id),
+                      builder: (BuildContext bc, AsyncSnapshot<Message> snap) {
+                        if (snap.hasData)
+                          return _sl(_dialog(snap.data, isMe), snap.data);
+                        else
+                          return Text('no item');
+                      },
+                    )
+                  ]),
+            ));
+          });
 
   Widget _dialog(Message msg, bool isRight) => GestureDetector(
       onDoubleTap: () async {
         await myContext.tableEntityOf<MessageTable>().delete(msg.id);
-        widget.isLoaded = false;
         setState(() => context
             .findAncestorWidgetOfExactType<TextingPage>()
             .onMsgSent

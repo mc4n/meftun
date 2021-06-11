@@ -1,12 +1,13 @@
-import 'package:sqflite/sqflite.dart';
-import 'package:path/path.dart';
+//import 'package:sqflite/sqflite.dart';
+//import 'package:path/path.dart';
 
 class DbaseContext {
   final String dbName;
   final List<TableEntity> tableEntities;
-  DbaseContext(this.dbName, this.tableEntities);
+  final List<PersistentTableEntity> persistentTableEntities;
+  DbaseContext(this.dbName, this.tableEntities, [this.persistentTableEntities]);
 
-  Future<Database> _open() async {
+  /*Future<Database> _open() async {
     return openDatabase(join(await getDatabasesPath(), dbName),
         version: 1, singleInstance: false, onCreate: (_, __) async {
       await _.execute(''' 
@@ -28,7 +29,7 @@ class DbaseContext {
     					_type integer not null)
  			''');
     });
-  }
+  }*/
 
   T tableEntityOf<T extends TableEntity>() {
     for (final _ in tableEntities) {
@@ -39,6 +40,22 @@ class DbaseContext {
     }
     return null;
   }
+
+  /*T persistentTableEntityOf<T extends PersistentTableEntity>() {
+    for (final _ in persistentTableEntities) {
+      if (_ is T) {
+        if (_.dbase == null) _.dbase = ;
+        return _;
+      }
+    }
+    return null;
+  }*/
+}
+
+abstract class PersistentTableEntity<T extends ModelBase> {
+  /*final String name;
+  Database dbase;
+  PersistentTableEntity(this.name);*/
 }
 
 abstract class TableEntity<T extends ModelBase> {
@@ -52,33 +69,18 @@ abstract class TableEntity<T extends ModelBase> {
 
   Future<List<T>> select() async {
     return _itemList;
-    /*final db = await context._open();
-    final maps = await db.query(name);
-    await db.close();
-    return List.generate(maps.length, (i) => from(maps[i]));*/
   }
 
   Future<T> single(bool Function(T) predicate) async {
-    return _itemList.lastWhere(predicate);
+    return (await select()).lastWhere(predicate);
   }
 
   Future<List<T>> selectWhere(bool Function(T) predicate) async {
-    return _itemList.where(predicate).toList();
-    /*final db = await context._open();
-    final maps = await db.query(name, where: 'id = ?', whereArgs: [id]);
-    await db.close();
-    return List.generate(maps.length, (i) => from(maps[i]));*/
+    return (await select()).where(predicate).toList();
   }
 
   Future<void> insert(T item) async {
     _itemList.add(item);
-    /*final db = await context._open();
-    await db.insert(
-      name,
-      item.map,
-      conflictAlgorithm: ConflictAlgorithm.replace,
-    );
-    return await db.close();*/
   }
 
   Future<void> delete(String id) async {
@@ -91,9 +93,6 @@ abstract class TableEntity<T extends ModelBase> {
       if (i == -1) break;
       _itemList.removeAt(i);
     }
-    /*final db = await context._open();
-    await db.delete(name, where: where, whereArgs: whereArgs);
-    return await db.close();*/
   }
 }
 

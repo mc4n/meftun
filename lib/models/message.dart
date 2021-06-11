@@ -31,8 +31,13 @@ class Message extends Draft {
   int get hashCode => id.hashCode;
 
   String epochToTimeString() {
-    var dt = DateTime.fromMillisecondsSinceEpoch(this.epoch);
-    return '${dt.hour}:${dt.minute}';
+    final dt = DateTime.fromMillisecondsSinceEpoch(this.epoch);
+
+    final ts = DateTime.now().difference(dt);
+
+    return ts.inDays > 1 || ts.inDays < -1
+        ? '${dt.day}/${dt.month}/${dt.year}'
+        : '${dt.hour}:${dt.minute}';
   }
 }
 //  epoch = DateTime.now().millisecondsSinceEpoch;

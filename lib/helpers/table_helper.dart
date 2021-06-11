@@ -95,6 +95,13 @@ class MessageTable extends TableEntity<MessageModel> {
     return Message(msgModel.id, bodyObj(msgModel.mbodyType, msgModel.body),
         from.toChat(), to.toChat(), msgModel.epoch);
   }
+
+  @override
+  Future<List<MessageModel>> select() async {
+    final ls = await super.select();
+    ls.sort(MessageModel.compareEpoch);
+    return ls;
+  }
 }
 
 class MessageModel with ModelBase {
@@ -119,4 +126,13 @@ class MessageModel with ModelBase {
         'epoch': epoch,
         'mbody_type': mbodyType,
       };
+
+  static int compareEpoch(MessageModel _d1, MessageModel _d2) {
+    var ep1 = _d1.epoch;
+    var ep2 = _d2.epoch;
+    if (ep1 > ep2)
+      return 1;
+    else if (ep2 > ep1) return -1;
+    return 0;
+  }
 }

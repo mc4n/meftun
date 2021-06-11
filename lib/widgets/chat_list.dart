@@ -7,38 +7,28 @@ import '../main.dart';
 import '../helpers/table_helper.dart';
 
 class ChatList extends StatefulWidget {
-  final bool Function(Chat) filter;
+  final bool Function(ChatModel) filter;
   final void Function(String) onMsgSent;
-
-  ChatList(this.filter, this.onMsgSent, [Key key]);
-
+  const ChatList(this.filter, this.onMsgSent, [Key key]);
   @override
   State<StatefulWidget> createState() => ChatListState();
-
-  bool isLoaded = false;
 }
 
 class ChatListState extends State<ChatList> {
-  final List<Chat> chats = [];
-
-  Future<void> lsInit() async {
-    if (!widget.isLoaded) {
-      final ls = await myContext.tableEntityOf<ChatTable>().select();
-      widget.isLoaded = true;
-      setState(() {
-        chats.clear();
-        chats.addAll(ls.map((i) => i.toChat()).where(widget.filter).toList());
-      });
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
-    lsInit();
-    return _expan();
+    return FutureBuilder<List<ChatModel>>(
+      future: myContext.tableEntityOf<ChatTable>().selectWhere(widget.filter),
+      builder: (BuildContext bc, AsyncSnapshot<List<ChatModel>> snap) {
+        if (snap.hasData)
+          return _expan(snap.data.map((m) => m.toChat()).toList());
+        else
+          return Text('no item');
+      },
+    );
   }
 
-  Expanded _expan() {
+  Expanded _expan(final List<Chat> chats) {
     return Expanded(
       child: Container(
           child: ListView.builder(

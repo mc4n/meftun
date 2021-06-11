@@ -33,18 +33,18 @@ class ChatItemState extends State<ChatItem> {
         if (snap.hasData)
           return _lastMsgDetailsFrame(snap.data);
         else
-          return Text('no item');
+          return Row();
       },
     );
   }
 
   Widget _lastMsgDetailsFrame(Message lastMsg) {
-    final meOrCaption = (Chat _) => _.caption;
-    final from = meOrCaption(lastMsg.from);
-    final to = meOrCaption(lastMsg.chatGroup);
+    final isToMe = lastMsg.from == lastMsg.chatGroup;
+    final from = lastMsg.from.caption;
+    final to = isToMe ? '' : lastMsg.chatGroup.caption;
     final dt = lastMsg.epochToTimeString();
     final fromAv = lastMsg.from.photoURL;
-    final toAv = lastMsg.chatGroup.photoURL;
+    final toAv = isToMe ? meSession.photoURL : lastMsg.chatGroup.photoURL;
     final msgStat =
         lastMsg.epoch % 2 == 0 ? Colors.grey.shade700 : Colors.blue.shade300;
 

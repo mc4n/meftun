@@ -8,88 +8,62 @@ import '../main.dart';
 import '../helpers/table_helper.dart';
 
 class ContactList extends StatefulWidget {
-  final bool Function(Chat) filter;
+  final bool Function(ChatModel) filter;
   final void Function(String) onMsgSent;
   final Future<void> Function(
           void Function(DirectChat dcAdded, [String errMsg]) callBack)
       addContactClaimed;
-
-  ContactList(this.filter, this.onMsgSent, this.addContactClaimed, [Key key])
+  const ContactList(this.filter, this.onMsgSent, this.addContactClaimed,
+      [Key key])
       : super(key: key);
 
   @override
   _ContactListState createState() => _ContactListState();
-
-  bool isLoaded = false;
 }
 
 class _ContactListState extends State<ContactList> {
-  final ScrollController sc = ScrollController();
-  final List<Chat> contacts = [];
-
-  Future<void> lsInit() async {
-    if (!widget.isLoaded) {
-      final ls = await myContext.tableEntityOf<ChatTable>().select();
-      widget.isLoaded = true;
-      setState(() {
-        contacts.clear();
-        contacts
-            .addAll(ls.map((i) => i.toChat()).where(widget.filter).toList());
-      });
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
-    lsInit();
     return Container(
         height: 80,
         color: Colors.yellow.shade200,
         child: Padding(
-            padding: EdgeInsets.all(10.0),
-            child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-              contacts.length > 0
-                  ? /*TextButton(
-                      onPressed: () {
-                        if (sc.hasClients) sc.jumpTo(sc.position.extentInside);
-                      },
-                      child: */
-                  Icon(
-                      Icons.navigate_before_rounded,
-                      // color: Colors.black, size: 30),
-                    )
-                  : Row(),
-              contacts.length > 0
-                  ? _expan()
-                  : TextButton(
+          padding: EdgeInsets.all(10.0),
+          child: FutureBuilder<List<ChatModel>>(
+              future: myContext
+                  .tableEntityOf<ChatTable>()
+                  .selectWhere(widget.filter),
+              builder: (BuildContext bc, AsyncSnapshot<List<ChatModel>> snap) {
+                if (snap.hasData && snap.data.length > 0)
+                  return Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(Icons.navigate_before_rounded),
+                        _expan(snap.data.map((m) => m.toChat()).toList()),
+                        Icon(
+                          Icons.navigate_next_rounded,
+                        )
+                      ]);
+                else
+                  return TextButton(
                       onPressed: () async {
                         await widget.addContactClaimed((_, [err]) {
                           if (err != null) print(err);
                         });
                       },
-                      child: Row(children: [
-                        Text(' New contact '),
-                        Icon(Icons.person_add_alt, size: 26),
-                      ]),
-                    ),
-              contacts.length > 0
-                  ? /*TextButton(
-                      onPressed: () {
-                        if (sc.hasClients) sc.jumpTo(sc.position.extentAfter);
-                      },
-                      child:*/
-                  Icon(
-                      Icons.navigate_next_rounded,
-                      // color: Colors.black, size: 30)
-                    )
-                  : Row(),
-            ])));
+                      child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(' New contact '),
+                            Icon(Icons.person_add_alt, size: 26),
+                          ]));
+              }),
+        ));
   }
 
-  Expanded _expan() {
+  Expanded _expan(List<Chat> contacts) {
     return Expanded(
       child: ListView.builder(
-          //controller: sc,
           scrollDirection: Axis.horizontal,
           physics: BouncingScrollPhysics(),
           itemCount: contacts.length,
