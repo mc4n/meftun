@@ -28,4 +28,6 @@ flutter:
   assets:
     - avatar.png
     - group_avatar.png
+    - can.jpg
     - pac.jpg
+    - big.jpg
