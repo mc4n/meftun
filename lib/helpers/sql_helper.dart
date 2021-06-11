@@ -6,16 +6,29 @@ class DbaseContext {
   final List<TableEntity> tableEntities;
   DbaseContext(this.dbName, this.tableEntities);
 
-  Future<String> get dbPath async => join(await getDatabasesPath(), dbName);
+  Future<Database> _open() async {
+    return openDatabase(join(await getDatabasesPath(), dbName),
+        version: 1, singleInstance: false, onCreate: (_, __) async {
+      await _.execute(''' 
+    		create table tb_messages (
+						id text primary key not null,
+		                body text not null,
+		                from_id text not null,
+		                chat_group_id text not null,
+		                epoch integer not null,
+		                mbody_type text not null)
+    		''');
 
-  /*Future<Database> _open() async {
-    return openDatabase(await dbPath, version: 1, onCreate: (_, __) async {
-        final tb1 = tableEntities[0];
-        final tb2 = tableEntities[1];
-       await _.execute(tb2.createString);
-       await _.execute(tb1.createString);
+      await _.execute(''' 
+       			create table tb_chats (
+		       	        id text primary key not null,
+		                user_name text not null,
+		                name text not null,
+		                photo_url text not null,
+    					_type integer not null)
+ 			''');
     });
-  }*/
+  }
 
   T tableEntityOf<T extends TableEntity>() {
     for (final _ in tableEntities) {
@@ -29,14 +42,11 @@ class DbaseContext {
 }
 
 abstract class TableEntity<T extends ModelBase> {
-  final String scheme;
   final String name;
   DbaseContext context;
   final List<T> _itemList = [];
 
-  TableEntity(this.name, this.scheme);
-
-  String get createString => 'create table $name ($scheme)';
+  TableEntity(this.name);
 
   T from(Map<String, dynamic> _map);
 

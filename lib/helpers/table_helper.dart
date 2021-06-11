@@ -6,14 +6,7 @@ import '../models/mbody.dart' show MBody, RawBody, ImageBody;
 import 'sql_helper.dart';
 
 class ChatTable extends TableEntity<ChatModel> {
-  ChatTable()
-      : super(
-            'tb_chats',
-            'id nvarchar(200) primary key not null,'
-                'user_name nvarchar(15) not null,'
-                'name nvarchar(50) not null,'
-                'photo_url nvarchar(200) not null,'
-                '_type integer not null');
+  ChatTable() : super('tb_chats');
 
   @override
   ChatModel from(Map<String, dynamic> _map) {
@@ -63,15 +56,7 @@ class ChatModel with ModelBase {
 // /// ////
 
 class MessageTable extends TableEntity<MessageModel> {
-  MessageTable()
-      : super(
-            'tb_messages',
-            'id nvarchar(200) primary key not null,'
-                'body nvarchar(900) not null,'
-                'from_id nvarchar(200) not null,'
-                'chat_group_id nvarchar(200) not null,'
-                'epoch integer not null,'
-                'mbody_type nvarchar(5) not null');
+  MessageTable() : super('tb_messages');
 
   @override
   MessageModel from(Map<String, dynamic> _map) {
