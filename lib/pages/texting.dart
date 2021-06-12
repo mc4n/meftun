@@ -9,6 +9,9 @@ import 'package:file_picker/file_picker.dart';
 import '../helpers/filehelpers.dart';
 import '../main.dart';
 import '../helpers/table_helper.dart';
+import '../helpers/bot_helper.dart';
+
+final fnInsert = myContext.tableEntityOf<MessageTable>().insertMessage;
 
 class TextingPage extends StatefulWidget {
   static void letTheGameBegin(BuildContext context, final Chat chatItem,
@@ -26,14 +29,17 @@ class TextingPage extends StatefulWidget {
   const TextingPage(this.chatItem, this.onMsgSent, {Key key}) : super(key: key);
 
   @override
-  State<StatefulWidget> createState() => TextingPageState();
+  State<StatefulWidget> createState() => TextingPageState(chatItem.type == 'B'
+      ? BotManager.findManagerByBot(chatItem).msgMiddleMan
+      : fnInsert);
 }
 
 class TextingPageState extends State<TextingPage> {
   final TextEditingController teC = TextEditingController();
-  Message quotedMessage;
+  final Future<void> Function(Message msg) messagingMiddleware;
+  Message quotedMessage; // this better be MBody rather than ..
   void Function(Message msgQuoted) onMsgQuoted;
-  TextingPageState() {
+  TextingPageState(this.messagingMiddleware) {
     onMsgQuoted = (_) {
       setState(() {
         quotedMessage = _;
@@ -99,8 +105,7 @@ class TextingPageState extends State<TextingPage> {
     final _ = mb.toString();
     if (_.trim() != '') {
       final msg = widget.chatItem.createMessage(meSession, mb);
-      await myContext.tableEntityOf<MessageTable>().insertMessage(msg);
-      // if (DateTime.now().second % 3 == 0) .addReplyTo(msg);
+      await messagingMiddleware(msg);
       if (widget.onMsgSent != null) {
         widget.onMsgSent(_);
         setState(() => null);
