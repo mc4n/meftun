@@ -5,11 +5,16 @@ import 'mbody.dart' show MBody;
 import 'package:uuid/uuid.dart';
 
 abstract class Chat {
+  static const GROUP = 'G';
+  static const DIRECT = 'D';
+  static const BOT = 'B';
+
   static Uuid uuid = Uuid();
   final String id;
+  final String username;
   final String name;
   final String photoURL;
-  Chat(this.id, this.name, this.photoURL);
+  Chat(this.id, this.username, this.name, this.photoURL);
 
   static String newId() => Chat.uuid.v4();
 
@@ -30,4 +35,6 @@ abstract class Chat {
 
   @override
   int get hashCode => id.hashCode;
+
+  String get type;
 }

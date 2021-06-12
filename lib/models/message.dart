@@ -7,7 +7,14 @@ class Message extends Draft {
   final String id;
   final int epoch;
   Message(this.id, MBody body, DirectChat from, Chat group, this.epoch)
-      : super(body, from, group);
+      : super(body, from, group) {
+    if (DateTime.now()
+            .difference(DateTime.fromMillisecondsSinceEpoch(epoch))
+            .inDays <
+        -1) {
+      throw new Exception('ERROR: A future date is invalid for a message!');
+    }
+  }
 
   @override
   set setBody(MBody _) => throw Exception('message already sent :(');
@@ -31,13 +38,17 @@ class Message extends Draft {
   int get hashCode => id.hashCode;
 
   String epochToTimeString() {
-    final dt = DateTime.fromMillisecondsSinceEpoch(this.epoch);
-
+    final dt = DateTime.fromMillisecondsSinceEpoch(epoch);
     final ts = DateTime.now().difference(dt);
-
-    return ts.inDays > 1 || ts.inDays < -1
-        ? '${dt.day}/${dt.month}/${dt.year}'
-        : '${dt.hour}:${dt.minute}';
+    final _fmtt = (int _) {
+      var _str = _.toString();
+      if (_str.length == 1) return _str = '0$_str';
+      return _str;
+    };
+    final fmtFullDate = (DateTime _dt) => '${_dt.day}/${_dt.month}/${_dt.year}';
+    final dayDiff = ts.inDays;
+    return dayDiff > 1
+        ? fmtFullDate(dt)
+        : '${_fmtt(dt.hour)}:${_fmtt(dt.minute)}';
   }
 }
-//  epoch = DateTime.now().millisecondsSinceEpoch;

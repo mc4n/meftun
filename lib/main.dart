@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import '/pages/main.dart' show MainPage;
 import '/models/directchat.dart' show DirectChat;
 import '/models/groupchat.dart' show GroupChat;
+import '/models/botchat.dart' show BotChat;
 import '/helpers/sql_helper.dart';
 import '/helpers/table_helper.dart';
 import '/models/mbody.dart' show RawBody;
@@ -10,24 +11,36 @@ import '/models/message.dart' show Message;
 
 void main() {
   // temp chats
-  final pac = DirectChat('2', 'pac', 'Tupac Shakur', 'pac.jpg');
+  final pac = DirectChat('2', 'pac', name: 'Tupac Shakur', photoURL: 'pac.jpg');
   final thugs = GroupChat('3', 'THUGS');
-  final big = DirectChat('4', 'big', 'Notorious BIG', 'big.jpg');
+  final big =
+      DirectChat('4', 'big', name: 'Notorious BIG', photoURL: 'big.jpg');
+  final botEfendi = BotChat('5', meSession, 'efendi', name: 'Bot Efendi');
+  final apiBot = BotChat('6', botEfendi, 'api', name: 'API helper bot');
+  final sqlBot = BotChat('7', botEfendi, 'sql', name: 'SQLite helper bot');
+  final ali = DirectChat('8', 'ali');
+
   myContext.tableEntityOf<ChatTable>().insertChat(meSession);
+  myContext.tableEntityOf<ChatTable>().insertChat(botEfendi);
   myContext.tableEntityOf<ChatTable>().insertChat(pac);
   myContext.tableEntityOf<ChatTable>().insertChat(thugs);
+  myContext.tableEntityOf<ChatTable>().insertChat(apiBot);
   myContext.tableEntityOf<ChatTable>().insertChat(big);
+  myContext.tableEntityOf<ChatTable>().insertChat(sqlBot);
+  myContext.tableEntityOf<ChatTable>().insertChat(ali);
   //
 
   // temp messages
   myContext.tableEntityOf<MessageTable>().insertMessage(
-      Message('4', RawBody('I warned u.'), big, big, 1542450000000));
+      Message('4', RawBody('maan, f this sh.'), meSession, big, 1542450000000));
   myContext.tableEntityOf<MessageTable>().insertMessage(
       Message('1', RawBody('whutsup bro?'), pac, pac, 1042342000000));
   myContext.tableEntityOf<MessageTable>().insertMessage(
       Message('3', RawBody('yeah, indeed.'), big, thugs, 1622450000000));
   myContext.tableEntityOf<MessageTable>().insertMessage(
       Message('2', RawBody('thug 4 life!'), pac, thugs, 1027675000000));
+  myContext.tableEntityOf<MessageTable>().insertMessage(Message('5',
+      RawBody('heyoooo'), ali, ali, DateTime.now().millisecondsSinceEpoch));
   //
 
   runApp(Builder(
@@ -38,7 +51,8 @@ void main() {
           )));
 }
 
-final meSession = DirectChat('1', 'mcan', 'Mustafa Can', 'can.jpg');
+final meSession =
+    DirectChat('1', 'mcan', name: 'Mustafa Can', photoURL: 'can.jpg');
 
 final DbaseContext myContext =
     DbaseContext('myfl.db', [ChatTable(), MessageTable()]);

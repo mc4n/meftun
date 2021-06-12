@@ -1,12 +1,11 @@
 import 'groupchat.dart' show GroupChat;
 
 class DirectChat extends GroupChat {
-  final String username;
-
-  DirectChat(String id, this.username,
-      [String name, String photoURL = 'avatar.png'])
-      : super(id, name, photoURL, 2);
+  DirectChat(String id, String username,
+      {String name, String photoURL = 'avatar.png'})
+      : super(id, username,
+            name: name, photoURL: photoURL, maximumParticipants: 2);
 
   @override
-  String get caption => username;
+  String get type => 'D';
 }

@@ -1,6 +1,7 @@
 import '../models/chat.dart' show Chat;
 import '../models/directchat.dart' show DirectChat;
 import '../models/groupchat.dart' show GroupChat;
+import '../models/botchat.dart' show BotChat;
 import '../models/message.dart' show Message;
 import '../models/mbody.dart' show MBody, RawBody, ImageBody;
 import 'sql_helper.dart';
@@ -20,8 +21,8 @@ class ChatTable extends TableEntity<ChatModel> {
   }
 
   Future<void> insertChat(Chat item) async {
-    super.insert(ChatModel(item.id, item.caption, item.name, item.photoURL,
-        item is DirectChat ? 0 : 1));
+    super.insert(
+        ChatModel(item.id, item.username, item.name, item.photoURL, item.type));
   }
 }
 
@@ -30,7 +31,7 @@ class ChatModel with ModelBase {
   final String userName;
   final String name;
   final String photoURL;
-  final int type;
+  final String type;
   const ChatModel(this.id, this.userName, this.name, this.photoURL, this.type);
 
   @override
@@ -46,10 +47,15 @@ class ChatModel with ModelBase {
       };
 
   Chat toChat() {
-    if (type == 0)
-      return DirectChat(id, userName, name, photoURL);
-    else
-      return GroupChat(id, name, photoURL);
+    switch (type) {
+      case Chat.BOT:
+        return BotChat(id, null, userName, name: name, photoURL: photoURL);
+      case Chat.DIRECT:
+        return DirectChat(id, userName, name: name, photoURL: photoURL);
+      case Chat.GROUP:
+      default:
+        return GroupChat(id, userName, name: name, photoURL: photoURL);
+    }
   }
 }
 

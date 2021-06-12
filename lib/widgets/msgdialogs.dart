@@ -112,7 +112,7 @@ class _MessageDialogsState extends State<MessageDialogs> {
               //caption: 'Quote',
               color: Colors.indigo.shade100,
               icon: Icons.copy,
-              //closeOnTap: false,
+              closeOnTap: true,
               onTap: () {
                 setState(() => context
                     .findAncestorStateOfType<TextingPageState>()

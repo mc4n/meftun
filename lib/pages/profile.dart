@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import '../models/chat.dart' show Chat;
-import '../models/directchat.dart' show DirectChat;
 
 class ProfilePage extends StatelessWidget {
   final Chat chatItem;
@@ -29,7 +28,7 @@ class ProfilePage extends StatelessWidget {
                   Text(chatItem.name ?? chatItem.caption,
                       style: TextStyle(fontSize: 25)),
                   Padding(padding: EdgeInsets.symmetric(horizontal: 5)),
-                  Text(chatItem is DirectChat ? '' : '(Group)',
+                  Text(' ${chatItem.type == 'G' ? '(Group)' : ''} ',
                       style: TextStyle(fontSize: 15)),
                 ])
               ],

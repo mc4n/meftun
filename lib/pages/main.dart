@@ -31,7 +31,7 @@ class MainPageState extends State<MainPage> {
     addContactClaimed = (callback) async {
       final tsea = tedit.text.trim();
       if (tsea != '') {
-        final cTAdd = DirectChat(Chat.newId(), tsea, 'A new chat item.');
+        final cTAdd = DirectChat(Chat.newId(), tsea, name: 'A new chat item.');
         await myContext.tableEntityOf<ChatTable>().insertChat(cTAdd);
         setState(() => callback(cTAdd));
       } else

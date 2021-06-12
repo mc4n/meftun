@@ -39,8 +39,9 @@ class ChatItemState extends State<ChatItem> {
   }
 
   Widget _lastMsgDetailsFrame(Message lastMsg) {
+    final isFromMe = lastMsg.from == meSession;
     final isToMe = lastMsg.from == lastMsg.chatGroup;
-    final from = lastMsg.from.caption;
+    final from = isFromMe ? '' : lastMsg.from.caption;
     final to = isToMe ? '' : lastMsg.chatGroup.caption;
     final dt = lastMsg.epochToTimeString();
     final fromAv = lastMsg.from.photoURL;
