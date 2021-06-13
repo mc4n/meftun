@@ -17,6 +17,7 @@ dependencies:
   #path: ^1.8.0
   flutter_slidable:
   file_picker: ^3.0.2+2
+  http: ^0.13.3
   #sqflite:
 
 dev_dependencies:

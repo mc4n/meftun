@@ -5,12 +5,13 @@ import 'package:me_flutting/models/message.dart';
 import '../models/draft.dart' show Draft;
 import 'package:me_flutting/models/mbody.dart';
 import 'table_helper.dart';
+import 'package:http/http.dart' as http;
 
 class BotCommand {
   final String cmd;
   final String description;
   final int argNum;
-  final Future<MBody> Function([List<MBody> args]) func;
+  final Future<MBody> Function([List<RawBody> args]) func;
 
   const BotCommand(
       {this.cmd = 'help', this.description, this.argNum, this.func});
@@ -30,19 +31,9 @@ class BotCommand {
 }
 
 class BotManager extends BotChat {
-  List<BotCommand> _builtInCommands;
   final List<BotCommand> commands;
   BotManager(this.commands, BotChat botObj)
-      : super(botObj.id, botObj.owner, botObj.username) {
-    _builtInCommands = [
-      BotCommand(
-          cmd: 'help',
-          argNum: 0,
-          description: 'lists all the available commands.',
-          func: ([_]) async =>
-              RawBody('available commands:\n ${commands.join('\n')}')),
-    ];
-  }
+      : super(botObj.id, botObj.owner, botObj.username);
 
   Future<Message> msgMiddleMan(Draft draft) async {
     final msg =
@@ -53,12 +44,19 @@ class BotManager extends BotChat {
     return msg;
   }
 
-  Future<MBody> executeCmd(MBody cmdText, [List<MBody> args]) async {
-    for (final _ in _builtInCommands)
-      if (_.cmd == cmdText.toString()) return _.func(args);
-    for (final c in commands)
-      if (c.cmd == cmdText.toString()) return c.func(args);
-    return RawBody('invalid command!');
+  Future<MBody> executeCmd(RawBody cmdText) async {
+    final cmdStr = cmdText.toString();
+    for (final _ in commands) {
+      if (cmdStr.startsWith(_.cmd)) {
+        final start = _.cmd.length + 1;
+        if (cmdStr.length <= start) return RawBody('request not long enough.');
+        final _args = cmdStr.substring(start).split(' ');
+        if (_args.length != _.argNum)
+          return RawBody('wrong number of arguments supplied!');
+        return _.func(_args.map((s) => RawBody(s)).toList());
+      }
+    }
+    return RawBody('available commands:\n ${commands.join('\n')}');
   }
 
   static Map<String, BotManager> memoizer = Map();
@@ -78,11 +76,23 @@ class BotManager extends BotChat {
     ],
     'api': [
       BotCommand(
-        cmd: 'get',
-        description: 'get request for an URL.',
-        argNum: 1,
-        func: ([args]) async => RawBody('requesting...'),
-      ),
+          cmd: 'get',
+          description: 'get request for an URL.',
+          argNum: 1,
+          func: ([args]) async {
+            try {
+              // https://jsonplaceholder.typicode.com/albums/1
+              final uri = Uri.parse(args[0].toString());
+              final response = await http.get(uri);
+              if (response.statusCode == 200)
+                return RawBody(
+                    'uri:$uri \n\n\n\nResponse header:\n${response.headers}\n\n\nResponse body:\n${response.body}');
+              else
+                return RawBody('invalid url');
+            } catch (_) {
+              return RawBody(_.message);
+            }
+          }),
     ],
     'efendi': []
   };
