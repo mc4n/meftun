@@ -78,7 +78,7 @@ class MessageTable extends TableEntity<MessageModel> {
   }
 
   Future<Message> insertMessage(Draft dr) async {
-    final item = dr.toMessage();
+    final item = dr is Message ? dr : dr.toMessage();
     insert(MessageModel(item.id, item.body.toString(), item.from.id,
         item.chatGroup.id, item.epoch, item.body.bodyType));
     return item;

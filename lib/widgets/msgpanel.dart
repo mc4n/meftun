@@ -24,12 +24,19 @@ class MessagingPanel extends StatefulWidget {
 class MessagingPanelState extends State<MessagingPanel> {
   final TextEditingController teC = TextEditingController();
   final Future<Message> Function(Draft) messagingMiddleware;
+  Draft currentDraft;
   MessagingPanelState(this.messagingMiddleware);
 
   TextingPage get parentWidget =>
       context.findAncestorWidgetOfExactType<TextingPage>();
   TextingPageState get parentState =>
       context.findAncestorStateOfType<TextingPageState>();
+
+  @override
+  void initState() {
+    super.initState();
+    currentDraft = parentWidget.chatItem.createDraft(meSession, null);
+  }
 
   @override
   Widget build(BuildContext context) => _subPanel;
@@ -41,8 +48,8 @@ class MessagingPanelState extends State<MessagingPanel> {
   Future<bool> _msgPush(RawBody mb) async {
     final _ = mb.toString();
     if (_.trim() != '') {
-      final msg = parentWidget.chatItem.createMessage(meSession, mb);
-      await messagingMiddleware(msg);
+      currentDraft.setBody = mb;
+      await messagingMiddleware(currentDraft);
       if (parentWidget.onMsgSent != null) {
         parentWidget.onMsgSent(_);
         parentState.setState(() => null);
@@ -59,31 +66,30 @@ class MessagingPanelState extends State<MessagingPanel> {
       child: Column(children: [
         (parentState.quotedMessage == null
             ? Row()
-            : Card(
-                color: Colors.indigo.shade100,
-                child: Padding(
-                  padding: EdgeInsets.all(3),
-                  child: Column(children: [
-                    TextButton(
-                        onPressed: () => context
-                            .findAncestorStateOfType<TextingPageState>()
-                            .onMsgQuoted
-                            ?.call(null),
-                        child: Icon(Icons.close)),
-                    Padding(padding: EdgeInsets.symmetric(vertical: 2)),
-                    Text('${parentState.quotedMessage.from.caption}:'),
-                    Padding(padding: EdgeInsets.symmetric(vertical: 3)),
-                    /*quotedMessage.body is ImageBody
-                                ? Container(width: 180, height: 180,
-                                    child: Image.file(File(quotedMessage.body.toString())))
-                                : */
-                    Text('${parentState.quotedMessage.body}'),
-                  ]),
-                ))
-
-        //
-
-        ),
+            : Dismissible(
+                key: Key(widget.chatItem.id),
+                child: Card(
+                  color: Colors.indigo.shade100,
+                  child: Padding(
+                      padding: EdgeInsets.all(3),
+                      child: Column(children: [
+                        TextButton(
+                            onPressed: () =>
+                                parentState.onMsgQuoted?.call(null),
+                            child: Icon(Icons.close)),
+                        Padding(padding: EdgeInsets.symmetric(vertical: 2)),
+                        Text('${parentState.quotedMessage.from.caption}:'),
+                        Padding(padding: EdgeInsets.symmetric(vertical: 3)),
+                        /*quotedMessage.body is ImageBody
+                                                        ? Container(width: 180, height: 180,
+                                                            child: Image.file(File(quotedMessage.body.toString())))
+                                                        : */
+                        Text('${parentState.quotedMessage.body}'),
+                      ])),
+                ),
+                onDismissed: (_) => parentState.onMsgQuoted?.call(null),
+                direction: DismissDirection.vertical,
+              )),
         _butt()
       ]));
 

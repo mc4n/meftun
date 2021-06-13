@@ -44,13 +44,13 @@ class BotManager extends BotChat {
     ];
   }
 
-  Future<Message> msgMiddleMan(Draft msg) async {
-    final item =
-        await myContext.tableEntityOf<MessageTable>().insertMessage(msg);
+  Future<Message> msgMiddleMan(Draft draft) async {
+    final msg =
+        await myContext.tableEntityOf<MessageTable>().insertMessage(draft);
     final botResponse = await executeCmd(msg.body);
     final newBotMsg = msg.chatGroup.createMessage(msg.chatGroup, botResponse);
     await myContext.tableEntityOf<MessageTable>().insertMessage(newBotMsg);
-    return item;
+    return msg;
   }
 
   Future<MBody> executeCmd(MBody cmdText, [List<MBody> args]) async {

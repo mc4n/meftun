@@ -106,8 +106,8 @@ class ChatItemState extends State<ChatItem> {
         controller: sldCont,
         actions: [
           IconSlideAction(
-              color: Colors.yellow.shade300,
-              icon: Icons.preview,
+              color: Colors.grey.shade100,
+              icon: Icons.perm_identity,
               closeOnTap: false,
               onTap: () {
                 Navigator.of(context).push(MaterialPageRoute(

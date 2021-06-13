@@ -109,9 +109,8 @@ class _MessageDialogsState extends State<MessageDialogs> {
         controller: sldCont,
         secondaryActions: [
           IconSlideAction(
-              //caption: 'Quote',
               color: Colors.indigo.shade100,
-              icon: Icons.copy,
+              icon: Icons.insert_comment,
               closeOnTap: true,
               onTap: () {
                 setState(() => context
