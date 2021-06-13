@@ -4,6 +4,7 @@ import '../pages/profile.dart' show ProfilePage;
 import '../widgets/msgdialogs.dart' show MessageDialogs;
 import '../models/chat.dart' show Chat;
 import '../models/message.dart' show Message;
+import '../models/draft.dart' show Draft;
 import '../models/mbody.dart' show RawBody, ImageBody;
 import 'package:file_picker/file_picker.dart';
 import '../helpers/filehelpers.dart';
@@ -36,7 +37,7 @@ class TextingPage extends StatefulWidget {
 
 class TextingPageState extends State<TextingPage> {
   final TextEditingController teC = TextEditingController();
-  final Future<void> Function(Message msg) messagingMiddleware;
+  final Future<Message> Function(Draft) messagingMiddleware;
   Message quotedMessage; // this better be MBody rather than ..
   void Function(Message msgQuoted) onMsgQuoted;
   TextingPageState(this.messagingMiddleware) {

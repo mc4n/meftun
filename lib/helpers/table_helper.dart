@@ -3,6 +3,7 @@ import '../models/directchat.dart' show DirectChat;
 import '../models/groupchat.dart' show GroupChat;
 import '../models/botchat.dart' show BotChat;
 import '../models/message.dart' show Message;
+import '../models/draft.dart' show Draft;
 import '../models/mbody.dart' show MBody, RawBody, ImageBody;
 import 'sql_helper.dart';
 
@@ -76,9 +77,11 @@ class MessageTable extends TableEntity<MessageModel> {
     );
   }
 
-  Future<void> insertMessage(Message item) async {
-    super.insert(MessageModel(item.id, item.body.toString(), item.from.id,
+  Future<Message> insertMessage(Draft dr) async {
+    final item = dr.toMessage();
+    insert(MessageModel(item.id, item.body.toString(), item.from.id,
         item.chatGroup.id, item.epoch, item.body.bodyType));
+    return item;
   }
 
   Future<Message> getMessageDetails(

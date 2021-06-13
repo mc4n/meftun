@@ -2,6 +2,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:me_flutting/models/botchat.dart';
 import 'package:me_flutting/main.dart';
 import 'package:me_flutting/models/message.dart';
+import '../models/draft.dart' show Draft;
 import 'package:me_flutting/models/mbody.dart';
 import 'table_helper.dart';
 
@@ -9,7 +10,7 @@ class BotCommand {
   final String cmd;
   final String description;
   final int argNum;
-  final Future<String> Function([List<String> args]) func;
+  final Future<MBody> Function([List<MBody> args]) func;
 
   const BotCommand(
       {this.cmd = 'help', this.description, this.argNum, this.func});
@@ -38,22 +39,26 @@ class BotManager extends BotChat {
           cmd: 'help',
           argNum: 0,
           description: 'lists all the available commands.',
-          func: ([_]) async => 'available commands:\n ${commands.join('\n')}'),
+          func: ([_]) async =>
+              RawBody('available commands:\n ${commands.join('\n')}')),
     ];
   }
 
-  Future<void> msgMiddleMan(Message msg) async {
-    await myContext.tableEntityOf<MessageTable>().insertMessage(msg);
-    final response = await executeCmd(msg.body.toString());
-    final newMsg =
-        msg.chatGroup.createMessage(msg.chatGroup, RawBody(response));
-    await myContext.tableEntityOf<MessageTable>().insertMessage(newMsg);
+  Future<Message> msgMiddleMan(Draft msg) async {
+    final item =
+        await myContext.tableEntityOf<MessageTable>().insertMessage(msg);
+    final botResponse = await executeCmd(msg.body);
+    final newBotMsg = msg.chatGroup.createMessage(msg.chatGroup, botResponse);
+    await myContext.tableEntityOf<MessageTable>().insertMessage(newBotMsg);
+    return item;
   }
 
-  Future<String> executeCmd(String cmdText, [List<String> args]) async {
-    for (final _ in _builtInCommands) if (_.cmd == cmdText) return _.func(args);
-    for (final c in commands) if (c.cmd == cmdText) return c.func(args);
-    return "invalid command!";
+  Future<MBody> executeCmd(MBody cmdText, [List<MBody> args]) async {
+    for (final _ in _builtInCommands)
+      if (_.cmd == cmdText.toString()) return _.func(args);
+    for (final c in commands)
+      if (c.cmd == cmdText.toString()) return c.func(args);
+    return RawBody('invalid command!');
   }
 
   static Map<String, BotManager> memoizer = Map();
@@ -68,7 +73,7 @@ class BotManager extends BotChat {
         cmd: 'select',
         description: 'selects rows from the table specified.',
         argNum: 1,
-        func: ([args]) async => 'selecting...',
+        func: ([args]) async => RawBody('selecting...'),
       ),
     ],
     'api': [
@@ -76,7 +81,7 @@ class BotManager extends BotChat {
         cmd: 'get',
         description: 'get request for an URL.',
         argNum: 1,
-        func: ([args]) async => 'requesting...',
+        func: ([args]) async => RawBody('requesting...'),
       ),
     ],
     'efendi': []
