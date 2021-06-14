@@ -1,11 +1,11 @@
 {
-    "name": "me_flutting",
-    "short_name": "me_flutting",
+    "name": "meftune",
+    "short_name": "meftune",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",
     "theme_color": "#0175C2",
-    "description": "A new Flutter project.",
+    "description": "A featherweight messaging platform.",
     "orientation": "portrait-primary",
     "prefer_related_applications": false,
     "icons": [

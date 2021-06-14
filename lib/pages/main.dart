@@ -95,5 +95,5 @@ class MainPageState extends State<MainPage> {
           onSubmitted: (_) => setState(() => null),
           controller: tedit,
           style: TextStyle(fontSize: 17, color: Colors.white))
-      : Text('Meflutin', style: TextStyle(fontSize: 22, color: Colors.white));
+      : Text(APP_TITLE, style: TextStyle(fontSize: 22, color: Colors.white));
 }

@@ -4,6 +4,7 @@ import 'draft.dart' show Draft;
 import 'mbody.dart' show MBody;
 
 class Message extends Draft {
+  static const CHARACTER_LIMIT = 50000;
   final String id;
   final int epoch;
   Message(this.id, MBody body, DirectChat from, Chat group, this.epoch)

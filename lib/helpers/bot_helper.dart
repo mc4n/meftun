@@ -37,8 +37,14 @@ class BotManager extends BotChat {
   Future<Message> msgMiddleMan(Draft draft) async {
     final msg = await messageTable.insertMessage(draft);
     final botResponse = await executeCmd(msg.body);
-    final newBotMsg = msg.chatGroup.createMessage(msg.chatGroup, botResponse);
-    await messageTable.insertMessage(newBotMsg);
+    if (botResponse.toString().length <= Message.CHARACTER_LIMIT) {
+      final newBotMsg = msg.chatGroup.createMessage(msg.chatGroup, botResponse);
+      await messageTable.insertMessage(newBotMsg);
+    } else {
+      await messageTable.insertMessage(msg.chatGroup.createMessage(
+          msg.chatGroup, RawBody('''message was too large to show!
+          (character limit: ${Message.CHARACTER_LIMIT}) ''')));
+    }
     return msg;
   }
 
@@ -84,8 +90,7 @@ class BotManager extends BotChat {
               final uri = Uri.parse(args[0].toString());
               final response = await http.get(uri);
               if (response.statusCode == 200)
-                return RawBody(
-                    'uri:$uri \n\n\n\nResponse header:\n${response.headers}\n\n\nResponse body:\n${response.body}');
+                return RawBody('${response.body}');
               else
                 return RawBody('invalid url');
             } catch (_) {

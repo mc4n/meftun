@@ -92,7 +92,9 @@ class _MessageDialogsState extends State<MessageDialogs> {
                       height: 180,
                       child: Image.file(File(msg.body.toString())))
                   : Container(
-                      constraints: BoxConstraints(minWidth: 100, maxWidth: 200),
+                      constraints: BoxConstraints(
+                          minWidth: 100,
+                          maxWidth: MediaQuery.of(context).size.width * 9 / 10),
                       child: Text('${msg.body}'))
             ]),
           )));

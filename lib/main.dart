@@ -45,11 +45,12 @@ void main() {
   runApp(Builder(
       builder: (_) => MaterialApp(
             theme: ThemeData(primarySwatch: Colors.indigo),
-            title: 'Mefluttin',
+            title: APP_TITLE,
             home: MainPage(),
           )));
 }
 
+const APP_TITLE = 'Meftune';
 final meSession =
     DirectChat('1', 'mcan', name: 'Mustafa Can', photoURL: 'can.jpg');
 final ChatTable chatTable = ChatTable();
