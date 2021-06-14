@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import '../main.dart';
-import '../models/chat.dart' show Chat;
-import '../models/directchat.dart' show DirectChat;
 import '../widgets/chat_list.dart' show ChatList;
 import '../widgets/contact_list.dart' show ContactList;
 import '../pages/profile.dart' show ProfilePage;
@@ -17,32 +15,14 @@ class MainPage extends StatefulWidget {
 }
 
 class MainPageState extends State<MainPage> {
+  static Future<void> setMainPageState(BuildContext con) async =>
+      con.findAncestorStateOfType<MainPageState>().setState(() => null);
+
   bool isSearching = false;
-  void Function(String) onMsgSent;
-  Future<void> Function(
-          void Function(DirectChat dcAdded, [String errMsg]) callBack)
-      addContactClaimed;
-
-  MainPageState() {
-    onMsgSent = (_) {
-      setState(() => null);
-    };
-    addContactClaimed = (callback) async {
-      final tsea = tedit.text.trim();
-      if (tsea != '') {
-        final cTAdd = DirectChat(Chat.newId(), tsea, name: 'A new chat item.');
-        await chatTable.insertChat(cTAdd);
-        setState(() => callback(cTAdd));
-      } else
-        callback(null, 'username cannot be empty ');
-    };
-  }
-
   final TextEditingController tedit = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
-    var ftext = tedit.text.trim();
-
     return _tabCon([
       Tab(
         child: Text('Chats'),
@@ -53,24 +33,19 @@ class MainPageState extends State<MainPage> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
-            ContactList((_) {
+            ContactList(tedit.text.trim(), (ftext, _) {
               return _.id != meSession.id &&
                   (!isSearching ||
                       ftext == '' ||
                       isSearching && ftext != '' && _.userName.contains(ftext));
-            }, onMsgSent, addContactClaimed),
+            }),
             Padding(padding: EdgeInsets.symmetric(vertical: 4.0)),
-            ChatList(
-              (_) {
-                return _.id != meSession.id &&
-                    (!isSearching ||
-                        ftext == '' ||
-                        isSearching &&
-                            ftext != '' &&
-                            _.userName.contains(ftext));
-              },
-              onMsgSent,
-            ),
+            ChatList(tedit.text.trim(), (ftext, _) {
+              return _.id != meSession.id &&
+                  (!isSearching ||
+                      ftext == '' ||
+                      isSearching && ftext != '' && _.userName.contains(ftext));
+            }),
           ],
         ),
       ),
@@ -84,7 +59,7 @@ class MainPageState extends State<MainPage> {
               leading: TextButton(
                   onPressed: () {
                     isSearching = !isSearching;
-                    onMsgSent(tedit.text = '');
+                    setState(() => null);
                   },
                   child: !isSearching
                       ? Icon(Icons.search, color: Colors.white)
@@ -117,7 +92,7 @@ class MainPageState extends State<MainPage> {
             border: OutlineInputBorder(),
             hintText: 'Search in chats',
           ),
-          onSubmitted: onMsgSent,
+          onSubmitted: (_) => setState(() => null),
           controller: tedit,
           style: TextStyle(fontSize: 17, color: Colors.white))
       : Text('Meflutin', style: TextStyle(fontSize: 22, color: Colors.white));

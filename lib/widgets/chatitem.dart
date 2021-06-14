@@ -7,12 +7,11 @@ import '../pages/texting.dart' show TextingPage;
 import '../pages/profile.dart' show ProfilePage;
 import 'package:flutter_slidable/flutter_slidable.dart';
 import '../main.dart';
+import '../pages/main.dart';
 
 class ChatItem extends StatefulWidget {
   final Chat chatItem;
-  final void Function(String) onMsgSent;
-
-  const ChatItem(this.chatItem, this.onMsgSent, [Key key]) : super(key: key);
+  const ChatItem(this.chatItem, [Key key]) : super(key: key);
 
   @override
   State<StatefulWidget> createState() => ChatItemState();
@@ -86,8 +85,8 @@ class ChatItemState extends State<ChatItem> {
       );
 
   Widget _frame(Widget _inner) => TextButton(
-      onPressed: () async => TextingPage.letTheGameBegin(
-          context, widget.chatItem, widget.onMsgSent),
+      onPressed: () async => TextingPage.letTheGameBegin(context,
+          widget.chatItem, () => MainPageState.setMainPageState(context)),
       child: Card(
         key: ValueKey(widget.chatItem.id),
         child: _inner,
@@ -120,7 +119,7 @@ class ChatItemState extends State<ChatItem> {
               onTap: () async {
                 await messageTable.deleteWhere(
                     (msg) => msg.chatGroupId == widget.chatItem.id);
-                widget.onMsgSent(null);
+                MainPageState.setMainPageState(context);
               }),
         ],
       );

@@ -4,38 +4,67 @@ import '../pages/profile.dart' show ProfilePage;
 import '../widgets/msgdialogs.dart' show MessageDialogs;
 import '../models/chat.dart' show Chat;
 import '../models/message.dart' show Message;
+import '../models/draft.dart' show Draft;
 import '../main.dart';
 import '../widgets/msgpanel.dart';
+import '../helpers/bot_helper.dart';
 
 class TextingPage extends StatefulWidget {
-  static void letTheGameBegin(BuildContext context, final Chat chatItem,
-      final void Function(String) onMsgSent) async {
+  static void letTheGameBegin(BuildContext context, Chat chatItem,
+      Future<void> Function() setMainState) async {
     await Navigator.of(context).push(
       MaterialPageRoute(
-        builder: (_) => TextingPage(chatItem, onMsgSent),
+        builder: (_) => TextingPage(chatItem, setMainState),
       ),
     );
   }
 
   @override
-  State<StatefulWidget> createState() => TextingPageState();
+  State<StatefulWidget> createState() => TextingPageState(chatItem.type == 'B'
+      ? BotManager.findManagerByBot(chatItem).msgMiddleMan
+      : messageTable.insertMessage);
+
+  final Future<void> Function() setMainState;
 
   final Chat chatItem;
-  final void Function(String) onMsgSent;
-
-  const TextingPage(this.chatItem, this.onMsgSent, {Key key}) : super(key: key);
+  const TextingPage(this.chatItem, this.setMainState, {Key key})
+      : super(key: key);
 }
 
 class TextingPageState extends State<TextingPage> {
-  Message quotedMessage; // this better be MBody rather than ..
-  void Function(Message msgQuoted) onMsgQuoted;
-  TextingPageState() {
-    onMsgQuoted = (_) {
+  final Future<Message> Function(Draft) messagingMiddleware;
+
+  Future<void> onMsgSendClaimed(Draft draft,
+      Function({Message itemAdded, String errorMsg}) callback) async {
+    final msgResult = await messagingMiddleware(draft);
+    if (msgResult != null) {
+      widget.setMainState();
       setState(() {
-        quotedMessage = _;
+        callback(itemAdded: msgResult);
       });
-    };
+    } else {
+      callback(errorMsg: 'msg not sent!');
+    }
   }
+
+  Future<void> onMsgRemoveClaimed(
+      Message msg, Function(bool isSucceed, {String errorMsg}) callback) async {
+    await messageTable.delete(msg.id);
+    setState(() {
+      callback(true);
+    });
+    await widget.setMainState();
+  }
+
+  Future<void> onMsgQuoted(Message _) async {
+    setState(() {
+      quotedMessage = _;
+    });
+  }
+
+  Message quotedMessage; // this better be MBody rather than ..
+
+  TextingPageState(this.messagingMiddleware);
 
   Widget get _title => Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -56,7 +85,7 @@ class TextingPageState extends State<TextingPage> {
             TextButton(
                 onPressed: () async {
                   await chatTable.delete(widget.chatItem.id);
-                  widget.onMsgSent(null);
+                  await widget.setMainState();
                   Navigator.of(context).pop();
                 },
                 child: Icon(Icons.person_remove_alt_1_sharp,
@@ -66,7 +95,7 @@ class TextingPageState extends State<TextingPage> {
                   await messageTable.deleteWhere(
                       (msg) => msg.chatGroupId == widget.chatItem.id);
                   setState(() => null);
-                  widget.onMsgSent(null);
+                  await widget.setMainState();
                 },
                 child: Icon(Icons.delete, color: Colors.yellow.shade100)),
           ])
@@ -86,7 +115,10 @@ class TextingPageState extends State<TextingPage> {
       body: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [MessageDialogs(), MessagingPanel(widget.chatItem)]),
+          children: [
+            MessageDialogs(widget.chatItem),
+            MessagingPanel(widget.chatItem)
+          ]),
     );
   }
 }

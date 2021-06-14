@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import '../models/chat.dart' show Chat;
-import '../models/message.dart' show Message;
 import '../models/draft.dart' show Draft;
 import '../models/mbody.dart' show RawBody, ImageBody;
 import 'package:file_picker/file_picker.dart';
 import '../helpers/filehelpers.dart';
 import '../main.dart';
-import '../helpers/bot_helper.dart';
 import '../pages/texting.dart';
 
 class MessagingPanel extends StatefulWidget {
@@ -15,17 +13,13 @@ class MessagingPanel extends StatefulWidget {
   const MessagingPanel(this.chatItem, {Key key}) : super(key: key);
 
   @override
-  State<StatefulWidget> createState() =>
-      MessagingPanelState(chatItem.type == 'B'
-          ? BotManager.findManagerByBot(chatItem).msgMiddleMan
-          : messageTable.insertMessage);
+  State<StatefulWidget> createState() => MessagingPanelState();
 }
 
 class MessagingPanelState extends State<MessagingPanel> {
   final TextEditingController teC = TextEditingController();
-  final Future<Message> Function(Draft) messagingMiddleware;
   Draft currentDraft;
-  MessagingPanelState(this.messagingMiddleware);
+  MessagingPanelState();
 
   TextingPage get parentWidget =>
       context.findAncestorWidgetOfExactType<TextingPage>();
@@ -49,12 +43,17 @@ class MessagingPanelState extends State<MessagingPanel> {
     final _ = mb.toString();
     if (_.trim() != '') {
       currentDraft.setBody = mb;
-      await messagingMiddleware(currentDraft);
-      if (parentWidget.onMsgSent != null) {
-        parentWidget.onMsgSent(_);
-        parentState.setState(() => null);
-        return true;
-      }
+      /*await messagingMiddleware(currentDraft);
+      MainPageState.mainPageState(context).onMsgSent(_);*/
+      parentState.onMsgSendClaimed(currentDraft, ({itemAdded, errorMsg}) {
+        // fired back here...
+        if (itemAdded != null)
+          setState(() => null);
+        else
+          print(errorMsg);
+      });
+
+      return true;
     }
     return false;
   }

@@ -2,26 +2,39 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/rendering.dart';
 import '../models/chat.dart' show Chat;
-import '../models/directchat.dart' show DirectChat;
 import '../pages/texting.dart' show TextingPage;
+import '../models/directchat.dart' show DirectChat;
 import '../main.dart';
 import '../helpers/table_helper.dart';
+import '../pages/main.dart';
 
 class ContactList extends StatefulWidget {
-  final bool Function(ChatModel) filter;
-  final void Function(String) onMsgSent;
-  final Future<void> Function(
-          void Function(DirectChat dcAdded, [String errMsg]) callBack)
-      addContactClaimed;
-  const ContactList(this.filter, this.onMsgSent, this.addContactClaimed,
-      [Key key])
-      : super(key: key);
+  final bool Function(String, ChatModel) filter;
+  final String tsea;
+  const ContactList(this.tsea, this.filter, [Key key]) : super(key: key);
 
   @override
   _ContactListState createState() => _ContactListState();
 }
 
 class _ContactListState extends State<ContactList> {
+  Future<void> Function(
+          void Function(DirectChat dcAdded, [String errMsg]) callBack)
+      addContactClaimed;
+
+  _ContactListState() {
+    addContactClaimed = (callback) async {
+      //final tsea = tedit.text.trim();
+      final tsea = widget.tsea;
+      if (tsea != '') {
+        final cTAdd = DirectChat(Chat.newId(), tsea, name: 'A new chat item.');
+        await chatTable.insertChat(cTAdd);
+        callback(cTAdd);
+      } else
+        callback(null, 'username cannot be empty ');
+    };
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -30,7 +43,8 @@ class _ContactListState extends State<ContactList> {
         child: Padding(
           padding: EdgeInsets.all(10.0),
           child: FutureBuilder<List<ChatModel>>(
-              future: chatTable.selectWhere(widget.filter),
+              future:
+                  chatTable.selectWhere((_) => widget.filter(widget.tsea, _)),
               builder: (BuildContext bc, AsyncSnapshot<List<ChatModel>> snap) {
                 if (snap.hasData && snap.data.length > 0)
                   return Row(
@@ -45,8 +59,11 @@ class _ContactListState extends State<ContactList> {
                 else
                   return TextButton(
                       onPressed: () async {
-                        await widget.addContactClaimed((_, [err]) {
-                          if (err != null) print(err);
+                        await addContactClaimed((_, [err]) {
+                          if (err != null)
+                            print(err);
+                          else
+                            MainPageState.setMainPageState(context);
                         });
                       },
                       child: Row(
@@ -67,7 +84,9 @@ class _ContactListState extends State<ContactList> {
           itemCount: contacts.length,
           itemBuilder: (BuildContext _, int index) => TextButton(
               onPressed: () async => TextingPage.letTheGameBegin(
-                  context, contacts[index], widget.onMsgSent),
+                  context,
+                  contacts[index],
+                  () => MainPageState.setMainPageState(context)),
               child: Column(children: [
                 Text(contacts[index].caption,
                     style: TextStyle(color: Colors.grey.shade800)),

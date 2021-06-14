@@ -1,7 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import '../models/chat.dart' show Chat;
 import '../models/directchat.dart' show DirectChat;
-import '../pages/texting.dart' show TextingPage, TextingPageState;
+import '../pages/texting.dart' show TextingPageState;
 import '../models/message.dart' show Message;
 import 'dart:io' show File;
 import '../models/mbody.dart' show ImageBody;
@@ -10,7 +11,8 @@ import '../main.dart';
 import '../helpers/table_helper.dart';
 
 class MessageDialogs extends StatefulWidget {
-  const MessageDialogs([Key key]) : super(key: key);
+  final Chat chatItem;
+  const MessageDialogs(this.chatItem, [Key key]) : super(key: key);
   @override
   _MessageDialogsState createState() => _MessageDialogsState();
 }
@@ -24,11 +26,10 @@ class _MessageDialogsState extends State<MessageDialogs> {
     WidgetsBinding.instance.addPostFrameCallback((i) {
       if (sc.hasClients) sc.jumpTo(sc.position.maxScrollExtent);
     });
-    final chatItem =
-        context.findAncestorWidgetOfExactType<TextingPage>()?.chatItem;
+
     return FutureBuilder<List<MessageModel>>(
       future: messageTable
-          .selectWhere((mtbItem) => mtbItem.chatGroupId == chatItem.id),
+          .selectWhere((mtbItem) => mtbItem.chatGroupId == widget.chatItem.id),
       builder: (BuildContext bc, AsyncSnapshot<List<MessageModel>> snap) {
         if (snap.hasData)
           return Expanded(child: _lv(snap.data, meSession));
@@ -49,7 +50,6 @@ class _MessageDialogsState extends State<MessageDialogs> {
             var msg = messages[__];
             var isMe = msg.fromId == owner.id;
             return Container(
-                //color: Colors.yellow.shade100,
                 child: Padding(
               padding: EdgeInsets.symmetric(horizontal: 15),
               child: Row(
@@ -72,11 +72,9 @@ class _MessageDialogsState extends State<MessageDialogs> {
 
   Widget _dialog(Message msg, bool isRight) => GestureDetector(
       onDoubleTap: () async {
-        await messageTable.delete(msg.id);
-        setState(() => context
-            .findAncestorWidgetOfExactType<TextingPage>()
-            .onMsgSent
-            ?.call(null));
+        context
+            .findAncestorStateOfType<TextingPageState>()
+            .onMsgRemoveClaimed(msg, (isSucceed, {errorMsg}) => null);
       },
       child: Card(
           color: !isRight ? Colors.grey.shade200 : Colors.lightGreen.shade300,
@@ -100,7 +98,7 @@ class _MessageDialogsState extends State<MessageDialogs> {
           )));
 
   Slidable _sl(Widget _inner, Message msg) => Slidable(
-        //key: Key(widget.chatItem.id),
+        key: Key(widget.chatItem.id),
         actionPane: SlidableDrawerActionPane(),
         actionExtentRatio: 0.4,
         child: _inner,
@@ -113,8 +111,7 @@ class _MessageDialogsState extends State<MessageDialogs> {
               onTap: () {
                 setState(() => context
                     .findAncestorStateOfType<TextingPageState>()
-                    .onMsgQuoted
-                    ?.call(msg));
+                    .onMsgQuoted(msg));
               })
         ],
       );
