@@ -6,7 +6,6 @@ import '../pages/texting.dart' show TextingPageState;
 import '../models/message.dart' show Message;
 import 'dart:io' show File;
 import '../models/mbody.dart' show ImageBody;
-import 'package:flutter_slidable/flutter_slidable.dart';
 import '../main.dart';
 import '../helpers/table_helper.dart';
 
@@ -18,7 +17,6 @@ class MessageDialogs extends StatefulWidget {
 }
 
 class _MessageDialogsState extends State<MessageDialogs> {
-  final SlidableController sldCont = SlidableController();
   final ScrollController sc = ScrollController();
 
   @override
@@ -61,7 +59,7 @@ class _MessageDialogsState extends State<MessageDialogs> {
                           chatTable, (pred) => pred.id == msg.id),
                       builder: (BuildContext bc, AsyncSnapshot<Message> snap) {
                         if (snap.hasData)
-                          return _sl(_dialog(snap.data, isMe), snap.data);
+                          return _dsmb(_dialog(snap.data, isMe), snap.data);
                         else
                           return Text('no item');
                       },
@@ -99,22 +97,14 @@ class _MessageDialogsState extends State<MessageDialogs> {
             ]),
           )));
 
-  Slidable _sl(Widget _inner, Message msg) => Slidable(
+  Dismissible _dsmb(Widget _inner, Message msg) => Dismissible(
         key: Key(widget.chatItem.id),
-        actionPane: SlidableDrawerActionPane(),
-        actionExtentRatio: 0.4,
         child: _inner,
-        controller: sldCont,
-        secondaryActions: [
-          IconSlideAction(
-              color: Colors.indigo.shade100,
-              icon: Icons.insert_comment,
-              closeOnTap: true,
-              onTap: () {
-                setState(() => context
-                    .findAncestorStateOfType<TextingPageState>()
-                    .onMsgQuoted(msg));
-              })
-        ],
+        background: Container(child: Icon(Icons.insert_comment)),
+        confirmDismiss: (_) async {
+          context.findAncestorStateOfType<TextingPageState>().onMsgQuoted(msg);
+          setState(() => null);
+          return false;
+        },
       );
 }
