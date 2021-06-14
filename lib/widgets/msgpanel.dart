@@ -18,7 +18,7 @@ class MessagingPanel extends StatefulWidget {
   State<StatefulWidget> createState() =>
       MessagingPanelState(chatItem.type == 'B'
           ? BotManager.findManagerByBot(chatItem).msgMiddleMan
-          : fnInsert);
+          : messageTable.insertMessage);
 }
 
 class MessagingPanelState extends State<MessagingPanel> {

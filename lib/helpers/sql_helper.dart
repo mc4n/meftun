@@ -1,56 +1,29 @@
-//import 'package:sqflite/sqflite.dart';
-//import 'package:path/path.dart';
+/*import 'package:sqflite/sqflite.dart';
+import 'package:path/path.dart';
 
-class DbaseContext {
-  final String dbName;
-  final List<TableEntity> tableEntities;
-  final List<PersistentTableEntity> persistentTableEntities;
-  DbaseContext(this.dbName, this.tableEntities, [this.persistentTableEntities]);
+Future<Database> _open() async {
+  return openDatabase(join(await getDatabasesPath(), dbName),
+      version: 1, singleInstance: false, onCreate: (_, __) async {
+    await _.execute(''' 
+  		create table tb_messages (
+					id text primary key not null,
+	                body text not null,
+	                from_id text not null,
+	                chat_group_id text not null,
+	                epoch integer not null,
+	                mbody_type text not null)
+  		''');
 
-  /*Future<Database> _open() async {
-    return openDatabase(join(await getDatabasesPath(), dbName),
-        version: 1, singleInstance: false, onCreate: (_, __) async {
-      await _.execute(''' 
-    		create table tb_messages (
-						id text primary key not null,
-		                body text not null,
-		                from_id text not null,
-		                chat_group_id text not null,
-		                epoch integer not null,
-		                mbody_type text not null)
-    		''');
-
-      await _.execute(''' 
-       			create table tb_chats (
-		       	        id text primary key not null,
-		                user_name text not null,
-		                name text not null,
-		                photo_url text not null,
-    					_type integer not null)
- 			''');
-    });
-  }*/
-
-  T tableEntityOf<T extends TableEntity>() {
-    for (final _ in tableEntities) {
-      if (_ is T) {
-        if (_.context == null) _.context = this;
-        return _;
-      }
-    }
-    return null;
-  }
-
-  /*T persistentTableEntityOf<T extends PersistentTableEntity>() {
-    for (final _ in persistentTableEntities) {
-      if (_ is T) {
-        if (_.dbase == null) _.dbase = ;
-        return _;
-      }
-    }
-    return null;
-  }*/
-}
+    await _.execute(''' 
+     			create table tb_chats (
+	       	        id text primary key not null,
+	                user_name text not null,
+	                name text not null,
+	                photo_url text not null,
+  					_type integer not null)
+			''');
+  });
+}*/
 
 abstract class PersistentTableEntity<T extends ModelBase> {
   /*final String name;
@@ -59,11 +32,9 @@ abstract class PersistentTableEntity<T extends ModelBase> {
 }
 
 abstract class TableEntity<T extends ModelBase> {
-  final String name;
-  DbaseContext context;
   final List<T> _itemList = [];
-
-  TableEntity(this.name);
+  final String tableName;
+  TableEntity(this.tableName);
 
   T from(Map<String, dynamic> _map);
 

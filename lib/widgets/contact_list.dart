@@ -30,9 +30,7 @@ class _ContactListState extends State<ContactList> {
         child: Padding(
           padding: EdgeInsets.all(10.0),
           child: FutureBuilder<List<ChatModel>>(
-              future: myContext
-                  .tableEntityOf<ChatTable>()
-                  .selectWhere(widget.filter),
+              future: chatTable.selectWhere(widget.filter),
               builder: (BuildContext bc, AsyncSnapshot<List<ChatModel>> snap) {
                 if (snap.hasData && snap.data.length > 0)
                   return Row(

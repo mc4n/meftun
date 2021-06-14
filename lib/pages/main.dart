@@ -6,7 +6,6 @@ import '../models/directchat.dart' show DirectChat;
 import '../widgets/chat_list.dart' show ChatList;
 import '../widgets/contact_list.dart' show ContactList;
 import '../pages/profile.dart' show ProfilePage;
-import '../helpers/table_helper.dart';
 
 class MainPage extends StatefulWidget {
   MainPage({
@@ -32,7 +31,7 @@ class MainPageState extends State<MainPage> {
       final tsea = tedit.text.trim();
       if (tsea != '') {
         final cTAdd = DirectChat(Chat.newId(), tsea, name: 'A new chat item.');
-        await myContext.tableEntityOf<ChatTable>().insertChat(cTAdd);
+        await chatTable.insertChat(cTAdd);
         setState(() => callback(cTAdd));
       } else
         callback(null, 'username cannot be empty ');

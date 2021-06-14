@@ -5,10 +5,7 @@ import '../widgets/msgdialogs.dart' show MessageDialogs;
 import '../models/chat.dart' show Chat;
 import '../models/message.dart' show Message;
 import '../main.dart';
-import '../helpers/table_helper.dart';
 import '../widgets/msgpanel.dart';
-
-final fnInsert = myContext.tableEntityOf<MessageTable>().insertMessage;
 
 class TextingPage extends StatefulWidget {
   static void letTheGameBegin(BuildContext context, final Chat chatItem,
@@ -58,9 +55,7 @@ class TextingPageState extends State<TextingPage> {
           Row(children: [
             TextButton(
                 onPressed: () async {
-                  await myContext
-                      .tableEntityOf<ChatTable>()
-                      .delete(widget.chatItem.id);
+                  await chatTable.delete(widget.chatItem.id);
                   widget.onMsgSent(null);
                   Navigator.of(context).pop();
                 },
@@ -68,7 +63,7 @@ class TextingPageState extends State<TextingPage> {
                     color: Colors.blue.shade100)),
             TextButton(
                 onPressed: () async {
-                  await myContext.tableEntityOf<MessageTable>().deleteWhere(
+                  await messageTable.deleteWhere(
                       (msg) => msg.chatGroupId == widget.chatItem.id);
                   setState(() => null);
                   widget.onMsgSent(null);

@@ -4,7 +4,6 @@ import 'package:me_flutting/main.dart';
 import 'package:me_flutting/models/message.dart';
 import '../models/draft.dart' show Draft;
 import 'package:me_flutting/models/mbody.dart';
-import 'table_helper.dart';
 import 'package:http/http.dart' as http;
 
 class BotCommand {
@@ -36,11 +35,10 @@ class BotManager extends BotChat {
       : super(botObj.id, botObj.owner, botObj.username);
 
   Future<Message> msgMiddleMan(Draft draft) async {
-    final msg =
-        await myContext.tableEntityOf<MessageTable>().insertMessage(draft);
+    final msg = await messageTable.insertMessage(draft);
     final botResponse = await executeCmd(msg.body);
     final newBotMsg = msg.chatGroup.createMessage(msg.chatGroup, botResponse);
-    await myContext.tableEntityOf<MessageTable>().insertMessage(newBotMsg);
+    await messageTable.insertMessage(newBotMsg);
     return msg;
   }
 
@@ -49,10 +47,11 @@ class BotManager extends BotChat {
     for (final _ in commands) {
       if (cmdStr.startsWith(_.cmd)) {
         final start = _.cmd.length + 1;
-        if (cmdStr.length <= start) return RawBody('request not long enough.');
+        if (cmdStr.length <= start)
+          return RawBody('ERROR: no arguments supplied!');
         final _args = cmdStr.substring(start).split(' ');
         if (_args.length != _.argNum)
-          return RawBody('wrong number of arguments supplied!');
+          return RawBody('ERROR: number of arguments doesn\'t match!');
         return _.func(_args.map((s) => RawBody(s)).toList());
       }
     }

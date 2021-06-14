@@ -4,8 +4,7 @@ import '/pages/main.dart' show MainPage;
 import '/models/directchat.dart' show DirectChat;
 import '/models/groupchat.dart' show GroupChat;
 import '/models/botchat.dart' show BotChat;
-import '/helpers/sql_helper.dart';
-import '/helpers/table_helper.dart';
+import '/helpers/table_helper.dart' show ChatTable, MessageTable;
 import '/models/mbody.dart' show RawBody;
 import '/models/message.dart' show Message;
 
@@ -20,27 +19,27 @@ void main() {
   final sqlBot = BotChat('7', botEfendi, 'sql', name: 'SQLite helper bot');
   final ali = DirectChat('8', 'ali');
 
-  myContext.tableEntityOf<ChatTable>().insertChat(meSession);
-  myContext.tableEntityOf<ChatTable>().insertChat(botEfendi);
-  myContext.tableEntityOf<ChatTable>().insertChat(pac);
-  myContext.tableEntityOf<ChatTable>().insertChat(thugs);
-  myContext.tableEntityOf<ChatTable>().insertChat(apiBot);
-  myContext.tableEntityOf<ChatTable>().insertChat(big);
-  myContext.tableEntityOf<ChatTable>().insertChat(sqlBot);
-  myContext.tableEntityOf<ChatTable>().insertChat(ali);
+  chatTable.insertChat(meSession);
+  chatTable.insertChat(botEfendi);
+  chatTable.insertChat(pac);
+  chatTable.insertChat(thugs);
+  chatTable.insertChat(apiBot);
+  chatTable.insertChat(big);
+  chatTable.insertChat(sqlBot);
+  chatTable.insertChat(ali);
   //
 
   // temp messages
-  myContext.tableEntityOf<MessageTable>().insertMessage(
+  messageTable.insertMessage(
       Message('4', RawBody('maan, f this sh.'), meSession, big, 1542450000000));
-  myContext.tableEntityOf<MessageTable>().insertMessage(
+  messageTable.insertMessage(
       Message('1', RawBody('whutsup bro?'), pac, pac, 1042342000000));
-  myContext.tableEntityOf<MessageTable>().insertMessage(
+  messageTable.insertMessage(
       Message('3', RawBody('yeah, indeed.'), big, thugs, 1622450000000));
-  myContext.tableEntityOf<MessageTable>().insertMessage(
+  messageTable.insertMessage(
       Message('2', RawBody('thug 4 life!'), pac, thugs, 1027675000000));
-  myContext.tableEntityOf<MessageTable>().insertMessage(Message('5',
-      RawBody('heyoooo'), ali, ali, DateTime.now().millisecondsSinceEpoch));
+  messageTable.insertMessage(Message('5', RawBody('heyoooo'), ali, ali,
+      DateTime.now().millisecondsSinceEpoch));
   //
 
   runApp(Builder(
@@ -53,6 +52,5 @@ void main() {
 
 final meSession =
     DirectChat('1', 'mcan', name: 'Mustafa Can', photoURL: 'can.jpg');
-
-final DbaseContext myContext =
-    DbaseContext('myfl.db', [ChatTable(), MessageTable()]);
+final ChatTable chatTable = ChatTable();
+final MessageTable messageTable = MessageTable();

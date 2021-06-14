@@ -27,8 +27,7 @@ class _MessageDialogsState extends State<MessageDialogs> {
     final chatItem =
         context.findAncestorWidgetOfExactType<TextingPage>()?.chatItem;
     return FutureBuilder<List<MessageModel>>(
-      future: myContext
-          .tableEntityOf<MessageTable>()
+      future: messageTable
           .selectWhere((mtbItem) => mtbItem.chatGroupId == chatItem.id),
       builder: (BuildContext bc, AsyncSnapshot<List<MessageModel>> snap) {
         if (snap.hasData)
@@ -58,9 +57,8 @@ class _MessageDialogsState extends State<MessageDialogs> {
                       isMe ? MainAxisAlignment.end : MainAxisAlignment.start,
                   children: [
                     FutureBuilder<Message>(
-                      future: myContext
-                          .tableEntityOf<MessageTable>()
-                          .getMessageDetails((pred) => pred.id == msg.id),
+                      future: messageTable.getMessageDetails(
+                          chatTable, (pred) => pred.id == msg.id),
                       builder: (BuildContext bc, AsyncSnapshot<Message> snap) {
                         if (snap.hasData)
                           return _sl(_dialog(snap.data, isMe), snap.data);
@@ -74,7 +72,7 @@ class _MessageDialogsState extends State<MessageDialogs> {
 
   Widget _dialog(Message msg, bool isRight) => GestureDetector(
       onDoubleTap: () async {
-        await myContext.tableEntityOf<MessageTable>().delete(msg.id);
+        await messageTable.delete(msg.id);
         setState(() => context
             .findAncestorWidgetOfExactType<TextingPage>()
             .onMsgSent

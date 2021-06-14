@@ -7,7 +7,6 @@ import '../pages/texting.dart' show TextingPage;
 import '../pages/profile.dart' show ProfilePage;
 import 'package:flutter_slidable/flutter_slidable.dart';
 import '../main.dart';
-import '../helpers/table_helper.dart';
 
 class ChatItem extends StatefulWidget {
   final Chat chatItem;
@@ -26,9 +25,8 @@ class ChatItemState extends State<ChatItem> {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<Message>(
-      future: myContext
-          .tableEntityOf<MessageTable>()
-          .getMessageDetails((m) => m.chatGroupId == widget.chatItem.id),
+      future: messageTable.getMessageDetails(
+          chatTable, (m) => m.chatGroupId == widget.chatItem.id),
       builder: (BuildContext bc, AsyncSnapshot<Message> snap) {
         if (snap.hasData)
           return _lastMsgDetailsFrame(snap.data);
@@ -120,7 +118,7 @@ class ChatItemState extends State<ChatItem> {
               icon: Icons.delete,
               closeOnTap: false,
               onTap: () async {
-                await myContext.tableEntityOf<MessageTable>().deleteWhere(
+                await messageTable.deleteWhere(
                     (msg) => msg.chatGroupId == widget.chatItem.id);
                 widget.onMsgSent(null);
               }),

@@ -18,7 +18,7 @@ class ChatListState extends State<ChatList> {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<List<ChatModel>>(
-      future: myContext.tableEntityOf<ChatTable>().selectWhere(widget.filter),
+      future: chatTable.selectWhere(widget.filter),
       builder: (BuildContext bc, AsyncSnapshot<List<ChatModel>> snap) {
         if (snap.hasData)
           return _expan(snap.data.map((m) => m.toChat()).toList());

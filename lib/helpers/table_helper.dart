@@ -85,9 +85,8 @@ class MessageTable extends TableEntity<MessageModel> {
   }
 
   Future<Message> getMessageDetails(
-      bool Function(MessageModel) predicate) async {
-    final chatSource = context.tableEntityOf<ChatTable>();
-    final msgModel = await super.single(predicate);
+      ChatTable chatSource, bool Function(MessageModel) predicate) async {
+    final msgModel = await single(predicate);
     final from = await chatSource.single((m) => m.id == msgModel.fromId);
     final to = await chatSource.single((m) => m.id == msgModel.chatGroupId);
     final bodyObj = (String bt, String mb) {
