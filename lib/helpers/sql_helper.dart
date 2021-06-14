@@ -1,10 +1,12 @@
-/*import 'package:sqflite/sqflite.dart';
+import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 
-Future<Database> _open() async {
-  return openDatabase(join(await getDatabasesPath(), dbName),
-      version: 1, singleInstance: false, onCreate: (_, __) async {
-    await _.execute(''' 
+Database db;
+Future<Database> open(String dbName) async {
+  db = db ??
+      await openDatabase(join(await getDatabasesPath(), dbName), version: 1,
+          onCreate: (_, __) async {
+        await _.execute(''' 
   		create table tb_messages (
 					id text primary key not null,
 	                body text not null,
@@ -14,7 +16,7 @@ Future<Database> _open() async {
 	                mbody_type text not null)
   		''');
 
-    await _.execute(''' 
+        await _.execute(''' 
      			create table tb_chats (
 	       	        id text primary key not null,
 	                user_name text not null,
@@ -22,14 +24,32 @@ Future<Database> _open() async {
 	                photo_url text not null,
   					_type integer not null)
 			''');
-  });
-}*/
-
-abstract class PersistentTableEntity<T extends ModelBase> {
-  /*final String name;
-  Database dbase;
-  PersistentTableEntity(this.name);*/
+      });
+  return db;
 }
+
+Future<String> queryRaw(String queryText) async {
+  final q = await db.rawQuery(queryText);
+  return q.join(',');
+}
+
+Future<void> insertRaw(String cmdText) async {
+  await db.rawInsert(cmdText);
+}
+
+Future<void> updateRaw(String cmdText) async {
+  await db.rawUpdate(cmdText);
+}
+
+Future<void> deleteRaw(String cmdText) async {
+  await db.rawDelete(cmdText);
+}
+
+/*abstract class PersistentTableEntity<T extends ModelBase> {
+  final String name;
+  Database dbase;
+  PersistentTableEntity(this.name);
+}*/
 
 abstract class TableEntity<T extends ModelBase> {
   final List<T> _itemList = [];

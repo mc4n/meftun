@@ -5,6 +5,7 @@ import 'package:me_flutting/models/message.dart';
 import '../models/draft.dart' show Draft;
 import 'package:me_flutting/models/mbody.dart';
 import 'package:http/http.dart' as http;
+import 'sql_helper.dart' as sql;
 
 class BotCommand {
   final String cmd;
@@ -55,7 +56,7 @@ class BotManager extends BotChat {
         final start = _.cmd.length + 1;
         if (cmdStr.length <= start)
           return RawBody('ERROR: no arguments supplied!');
-        final _args = cmdStr.substring(start).split(' ');
+        final _args = cmdStr.substring(start).split(';');
         if (_args.length != _.argNum)
           return RawBody('ERROR: number of arguments doesn\'t match!');
         return _.func(_args.map((s) => RawBody(s)).toList());
@@ -73,12 +74,76 @@ class BotManager extends BotChat {
   static Map<String, List<BotCommand>> cmdList = {
     'sql': [
       BotCommand(
-        cmd: 'select',
-        description: 'selects rows from the table specified.',
-        argNum: 1,
-        func: ([args]) async => RawBody('selecting...'),
-      ),
+          cmd: 'open',
+          description: 'opens the database specified. \n arg[0]: database name',
+          argNum: 1,
+          func: ([args]) async {
+            try {
+              final na = args[0].toString();
+              final db = await sql.open(na);
+              return RawBody('database $na status : ${db.isOpen}');
+            } catch (_) {
+              return RawBody(_.message);
+            }
+          }),
+      BotCommand(
+          cmd: 'select',
+          description: 'lets you run raw queries. \n arg[0]: query text',
+          argNum: 1,
+          func: ([args]) async {
+            try {
+              final na = args[0].toString();
+              final result = await sql.queryRaw(na);
+              return RawBody(result);
+            } catch (_) {
+              return RawBody(_.message);
+            }
+          }),
+      BotCommand(
+          cmd: 'insert',
+          description:
+              'lets you execute raw insert commands. \n arg[0]: command text',
+          argNum: 1,
+          func: ([args]) async {
+            try {
+              final na = args[0].toString();
+              await sql.insertRaw(na);
+              return RawBody('OK!');
+            } catch (_) {
+              return RawBody(_.message);
+            }
+          }),
+      BotCommand(
+          cmd: 'update',
+          description:
+              'lets you execute raw update commands. \n arg[0]: command text',
+          argNum: 1,
+          func: ([args]) async {
+            try {
+              final na = args[0].toString();
+              await sql.updateRaw(na);
+              return RawBody('OK!');
+            } catch (_) {
+              return RawBody(_.message);
+            }
+          }),
+      BotCommand(
+          cmd: 'delete',
+          description:
+              'lets you execute raw delete commands. \n arg[0]: command text',
+          argNum: 1,
+          func: ([args]) async {
+            try {
+              final na = args[0].toString();
+              await sql.deleteRaw(na);
+              return RawBody('OK!');
+            } catch (_) {
+              return RawBody(_.message);
+            }
+          }),
     ],
+
+// --------------------
     'api': [
       BotCommand(
           cmd: 'get',
