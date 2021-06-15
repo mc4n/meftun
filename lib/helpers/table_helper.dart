@@ -5,7 +5,48 @@ import '../models/botchat.dart' show BotChat;
 import '../models/message.dart' show Message;
 import '../models/draft.dart' show Draft;
 import '../models/mbody.dart' show MBody, RawBody, ImageBody;
-import 'sql_helper.dart';
+import 'sql_helper.dart' as sql;
+
+abstract class TableEntity<T extends sql.ModelBase> {
+  static const PAGE_LEN = 25;
+  final String tableName;
+  TableEntity(this.tableName);
+
+  T from(Map<String, dynamic> _map);
+
+  Future<List<T>> select([int pageNum = 0]) async =>
+      (await sql.query(tableName, PAGE_LEN, pageNum * PAGE_LEN, from)).toList();
+
+  Future<List<T>> selectWhere(String _where, List<dynamic> whereArgs,
+          [int pageNum = 0]) async =>
+      (await sql.queryWhere(
+              tableName, _where, whereArgs, PAGE_LEN, pageNum * PAGE_LEN, from))
+          .toList();
+
+  Future<List<T>> selectByOne(String field, dynamic value,
+          [int pageNum = 0]) async =>
+      (await sql.queryWhere(tableName, '$field = ?', [value], PAGE_LEN,
+              pageNum * PAGE_LEN, from))
+          .toList();
+
+  Future<T> single(String _where, List<dynamic> whereArgs) async {
+    final res =
+        (await sql.queryWhere(tableName, _where, whereArgs, 1, 0, from));
+    return res != null && res.length == 1 ? res.first : null;
+  }
+
+  Future<bool> insert(T item) async => (await sql.insert(tableName, item)) > 0;
+
+  Future<bool> deleteWhere(String _where, List<dynamic> whereArgs) async =>
+      (await sql.delete(tableName, _where, whereArgs)) > 0;
+
+  Future<bool> deleteByOne(String field, dynamic value) async =>
+      deleteWhere('$field = ?', value);
+
+  Future<bool> delete(String id) async => deleteByOne('id', id);
+}
+
+//-------
 
 class ChatTable extends TableEntity<ChatModel> {
   ChatTable() : super('tb_chats');
@@ -21,13 +62,17 @@ class ChatTable extends TableEntity<ChatModel> {
     );
   }
 
-  Future<void> insertChat(Chat item) async {
-    super.insert(
-        ChatModel(item.id, item.username, item.name, item.photoURL, item.type));
-  }
+  Future<bool> insertChat(Chat item) async => super.insert(
+      ChatModel(item.id, item.username, item.name, item.photoURL, item.type));
+
+  Future<Chat> getChat(String id) async =>
+      (await super.single('id = ?', [id])).asChat;
+
+  Future<List<Chat>> chats() async =>
+      (await super.select()).map((cm) => cm.asChat).toList();
 }
 
-class ChatModel with ModelBase {
+class ChatModel with sql.ModelBase {
   final String id;
   final String userName;
   final String name;
@@ -47,7 +92,7 @@ class ChatModel with ModelBase {
         '_type': type,
       };
 
-  Chat toChat() {
+  Chat get asChat {
     switch (type) {
       case Chat.BOT:
         return BotChat(id, null, userName, name: name, photoURL: photoURL);
@@ -84,35 +129,32 @@ class MessageTable extends TableEntity<MessageModel> {
     return item;
   }
 
-  Future<Message> getMessageDetails(
-      ChatTable chatSource, bool Function(MessageModel) predicate) async {
-    final msgModel = await single(predicate);
-    final from = await chatSource.single((m) => m.id == msgModel.fromId);
-    final to = await chatSource.single((m) => m.id == msgModel.chatGroupId);
-    final bodyObj = (String bt, String mb) {
-      switch (bt) {
-        case MBody.IMAGE_MESSAGE:
-          return ImageBody(mb);
-        case MBody.FILE_MESSAGE:
-        case MBody.JSON_MESSAGE:
-        case MBody.RAW_MESSAGE:
-        default:
-          return RawBody(mb);
-      }
-    };
-    return Message(msgModel.id, bodyObj(msgModel.mbodyType, msgModel.body),
-        from.toChat(), to.toChat(), msgModel.epoch);
+  Future<bool> clearMessages(String chatGroupId) async =>
+      super.deleteWhere('chat_group_id = ?', [chatGroupId]);
+
+  Future<List<MessageModel>> chatMessages(String chatGroupId) =>
+      super.selectByOne('chat_group_id', chatGroupId);
+
+  Future<Message> lastMessage(
+      String chatGroupId, Future<Chat> Function(String) chatProvider) async {
+    final msgModel = await single('chat_group_id = ?', [chatGroupId]);
+    final from = await chatProvider(msgModel.fromId);
+    final to = await chatProvider(msgModel.chatGroupId);
+    return Message(msgModel.id, msgModel.bodyObj, from, to, msgModel.epoch);
   }
 
-  @override
-  Future<List<MessageModel>> select() async {
-    final ls = await super.select();
-    ls.sort(MessageModel.compareEpoch);
-    return ls;
+  Future<Message> getMessage(
+      String id, Future<Chat> Function(String) chatProvider) async {
+    final msgModel = await single('id = ?', [id]);
+
+    final from = await chatProvider(msgModel.fromId);
+    final to = await chatProvider(msgModel.chatGroupId);
+
+    return Message(msgModel.id, msgModel.bodyObj, from, to, msgModel.epoch);
   }
 }
 
-class MessageModel with ModelBase {
+class MessageModel with sql.ModelBase {
   final String id;
   final String body;
   final String fromId;
@@ -142,5 +184,17 @@ class MessageModel with ModelBase {
       return 1;
     else if (ep2 > ep1) return -1;
     return 0;
+  }
+
+  MBody get bodyObj {
+    switch (mbodyType) {
+      case MBody.IMAGE_MESSAGE:
+        return ImageBody(body);
+      case MBody.FILE_MESSAGE:
+      case MBody.JSON_MESSAGE:
+      case MBody.RAW_MESSAGE:
+      default:
+        return RawBody(body);
+    }
   }
 }

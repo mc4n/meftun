@@ -5,11 +5,10 @@ import '../models/chat.dart' show Chat;
 import '../pages/texting.dart' show TextingPage;
 import '../models/directchat.dart' show DirectChat;
 import '../main.dart';
-import '../helpers/table_helper.dart';
 import '../pages/main.dart';
 
 class ContactList extends StatefulWidget {
-  final bool Function(String, ChatModel) filter;
+  final bool Function(String, Chat) filter;
   final String tsea;
   const ContactList(this.tsea, this.filter, [Key key]) : super(key: key);
 
@@ -24,7 +23,6 @@ class _ContactListState extends State<ContactList> {
 
   _ContactListState() {
     addContactClaimed = (callback) async {
-      //final tsea = tedit.text.trim();
       final tsea = widget.tsea;
       if (tsea != '') {
         final cTAdd = DirectChat(Chat.newId(), tsea, name: 'A new chat item.');
@@ -42,16 +40,17 @@ class _ContactListState extends State<ContactList> {
         color: Colors.yellow.shade200,
         child: Padding(
           padding: EdgeInsets.all(10.0),
-          child: FutureBuilder<List<ChatModel>>(
-              future:
-                  chatTable.selectWhere((_) => widget.filter(widget.tsea, _)),
-              builder: (BuildContext bc, AsyncSnapshot<List<ChatModel>> snap) {
+          child: FutureBuilder<List<Chat>>(
+              future: chatTable.chats(),
+              builder: (BuildContext bc, AsyncSnapshot<List<Chat>> snap) {
                 if (snap.hasData && snap.data.length > 0)
                   return Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Icon(Icons.navigate_before_rounded),
-                        _expan(snap.data.map((m) => m.toChat()).toList()),
+                        _expan(snap.data
+                            .where((m) => widget.filter(widget.tsea, m))
+                            .toList()),
                         Icon(
                           Icons.navigate_next_rounded,
                         )

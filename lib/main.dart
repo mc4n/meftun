@@ -2,14 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import '/pages/main.dart' show MainPage;
 import '/models/directchat.dart' show DirectChat;
+import '/helpers/table_helper.dart' show ChatTable, MessageTable;
+
+/*
 import '/models/groupchat.dart' show GroupChat;
 import '/models/botchat.dart' show BotChat;
-import '/helpers/table_helper.dart' show ChatTable, MessageTable;
 import '/models/mbody.dart' show RawBody;
 import '/models/message.dart' show Message;
+*/
 
 void main() {
-  // temp chats
+/*
   final pac = DirectChat('2', 'pac', name: 'Tupac Shakur', photoURL: 'pac.jpg');
   final thugs = GroupChat('3', 'THUGS');
   final big =
@@ -27,9 +30,7 @@ void main() {
   chatTable.insertChat(big);
   chatTable.insertChat(sqlBot);
   chatTable.insertChat(ali);
-  //
 
-  // temp messages
   messageTable.insertMessage(
       Message('4', RawBody('maan, f this sh.'), meSession, big, 1542450000000));
   messageTable.insertMessage(
@@ -40,8 +41,7 @@ void main() {
       Message('2', RawBody('thug 4 life!'), pac, thugs, 1027675000000));
   messageTable.insertMessage(Message('5', RawBody('heyoooo'), ali, ali,
       DateTime.now().millisecondsSinceEpoch));
-  //
-
+*/
   runApp(Builder(
       builder: (_) => MaterialApp(
             theme: ThemeData(primarySwatch: Colors.indigo),

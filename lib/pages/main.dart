@@ -37,14 +37,14 @@ class MainPageState extends State<MainPage> {
               return _.id != meSession.id &&
                   (!isSearching ||
                       ftext == '' ||
-                      isSearching && ftext != '' && _.userName.contains(ftext));
+                      isSearching && ftext != '' && _.username.contains(ftext));
             }),
             Padding(padding: EdgeInsets.symmetric(vertical: 4.0)),
             ChatList(tedit.text.trim(), (ftext, _) {
               return _.id != meSession.id &&
                   (!isSearching ||
                       ftext == '' ||
-                      isSearching && ftext != '' && _.userName.contains(ftext));
+                      isSearching && ftext != '' && _.username.contains(ftext));
             }),
           ],
         ),

@@ -53,13 +53,16 @@ class BotManager extends BotChat {
     final cmdStr = cmdText.toString();
     for (final _ in commands) {
       if (cmdStr.startsWith(_.cmd)) {
-        final start = _.cmd.length + 1;
-        if (cmdStr.length <= start)
-          return RawBody('ERROR: no arguments supplied!');
-        final _args = cmdStr.substring(start).split(';');
-        if (_args.length != _.argNum)
-          return RawBody('ERROR: number of arguments doesn\'t match!');
-        return _.func(_args.map((s) => RawBody(s)).toList());
+        if (_.argNum > 0) {
+          final start = _.cmd.length + 1;
+          if (cmdStr.length <= start)
+            return RawBody('ERROR: no arguments supplied!');
+          final _args = cmdStr.substring(start).split(';');
+          if (_args.length != _.argNum)
+            return RawBody('ERROR: number of arguments doesn\'t match!');
+          return _.func(_args.map((s) => RawBody(s)).toList());
+        } else
+          return _.func();
       }
     }
     return RawBody('available commands:\n ${commands.join('\n')}');
@@ -74,21 +77,8 @@ class BotManager extends BotChat {
   static Map<String, List<BotCommand>> cmdList = {
     'sql': [
       BotCommand(
-          cmd: 'open',
-          description: 'opens the database specified. \n arg[0]: database name',
-          argNum: 1,
-          func: ([args]) async {
-            try {
-              final na = args[0].toString();
-              final db = await sql.open(na);
-              return RawBody('database $na status : ${db.isOpen}');
-            } catch (_) {
-              return RawBody(_.message);
-            }
-          }),
-      BotCommand(
           cmd: 'select',
-          description: 'lets you run raw queries. \n arg[0]: query text',
+          description: '<String> queryRaw(String queryText)',
           argNum: 1,
           func: ([args]) async {
             try {
@@ -101,42 +91,105 @@ class BotManager extends BotChat {
           }),
       BotCommand(
           cmd: 'insert',
-          description:
-              'lets you execute raw insert commands. \n arg[0]: command text',
+          description: '<int> insertRaw(String cmdText)',
           argNum: 1,
           func: ([args]) async {
             try {
               final na = args[0].toString();
-              await sql.insertRaw(na);
-              return RawBody('OK!');
+              return RawBody('OK! ${await sql.insertRaw(na)} rows effected.');
             } catch (_) {
               return RawBody(_.message);
             }
           }),
       BotCommand(
           cmd: 'update',
-          description:
-              'lets you execute raw update commands. \n arg[0]: command text',
+          description: '<int> updateRaw(String cmdText)',
           argNum: 1,
           func: ([args]) async {
             try {
               final na = args[0].toString();
-              await sql.updateRaw(na);
-              return RawBody('OK!');
+              return RawBody('OK! ${await sql.updateRaw(na)} rows effected.');
             } catch (_) {
               return RawBody(_.message);
             }
           }),
       BotCommand(
           cmd: 'delete',
-          description:
-              'lets you execute raw delete commands. \n arg[0]: command text',
+          description: '<int> deleteRaw(String cmdText)',
           argNum: 1,
           func: ([args]) async {
             try {
               final na = args[0].toString();
-              await sql.deleteRaw(na);
+              return RawBody('OK! ${await sql.deleteRaw(na)} rows effected.');
+            } catch (_) {
+              return RawBody(_.message);
+            }
+          }),
+      BotCommand(
+          cmd: 'all',
+          description: 'Future<String> queryAllAsText(String table)',
+          argNum: 1,
+          func: ([args]) async {
+            try {
+              return RawBody(await sql.queryAllAsText(args[0].toString()));
+            } catch (_) {
+              return RawBody(_.message);
+            }
+          }),
+      BotCommand(
+          cmd: 'list',
+          description:
+              'Future<String> queryAsText(String table, int limit, int offset)',
+          argNum: 3,
+          func: ([args]) async {
+            try {
+              return RawBody(await sql.queryAsText(
+                  args[0].toString(),
+                  int.parse(args[1].toString()),
+                  int.parse(args[2].toString())));
+            } catch (_) {
+              return RawBody(_.message);
+            }
+          }),
+      BotCommand(
+          cmd: 'where',
+          description:
+              '<String> queryWhereAsText(String table, String where, List<String> whereArgs, int limit, int offset)',
+          argNum: 5,
+          func: ([args]) async {
+            try {
+              return RawBody(await sql.queryWhereAsText(
+                  args[0].toString(),
+                  args[1].toString(),
+                  args[2].toString().split(','),
+                  int.parse(args[3].toString()),
+                  int.parse(args[4].toString())));
+            } catch (_) {
+              return RawBody(_.message);
+            }
+          }),
+      BotCommand(
+          cmd: 'execute',
+          description: '<void> execute(String queryText)',
+          argNum: 1,
+          func: ([args]) async {
+            try {
+              await sql.execute(args[0].toString());
               return RawBody('OK!');
+            } catch (_) {
+              return RawBody(_.message);
+            }
+          }),
+      BotCommand(
+          cmd: 'del',
+          description:
+              '<int> deleteAsText(String table, String where, List<String> whereArgs)',
+          argNum: 3,
+          func: ([args]) async {
+            try {
+              return RawBody((await sql.deleteAsText(args[0].toString(),
+                      args[1].toString(), args[2].toString().split(',')))
+                  .toString());
             } catch (_) {
               return RawBody(_.message);
             }

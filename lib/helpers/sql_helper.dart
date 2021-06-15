@@ -1,11 +1,21 @@
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 
-Database db;
-Future<Database> open(String dbName) async {
-  db = db ??
-      await openDatabase(join(await getDatabasesPath(), dbName), version: 1,
-          onCreate: (_, __) async {
+mixin ModelBase {
+  String get getId;
+  Map<String, dynamic> get map;
+}
+
+const DB_NAME = 'demo.db';
+
+Database _db;
+
+Future<Database> open() async =>
+    _db ??
+    (_db = await openDatabase(
+      join(await getDatabasesPath(), DB_NAME),
+      version: 1,
+      onCreate: (_, __) async {
         await _.execute(''' 
   		create table tb_messages (
 					id text primary key not null,
@@ -24,70 +34,64 @@ Future<Database> open(String dbName) async {
 	                photo_url text not null,
   					_type integer not null)
 			''');
-      });
-  return db;
-}
+      },
+    ));
 
-Future<String> queryRaw(String queryText) async {
-  final q = await db.rawQuery(queryText);
-  return q.join(',');
-}
+Future<Iterable<T>> query<T extends ModelBase>(String table, int limit,
+        int offset, T Function(Map<String, Object>) translator) async =>
+    (await (await open()).query(table, limit: limit, offset: offset))
+        .map(translator);
 
-Future<void> insertRaw(String cmdText) async {
-  await db.rawInsert(cmdText);
-}
+Future<Iterable<T>> queryWhere<T extends ModelBase>(
+        String table,
+        String where,
+        List<dynamic> whereArgs,
+        int limit,
+        int offset,
+        T Function(Map<String, Object>) translator) async =>
+    (await (await open()).query(table,
+            where: where, whereArgs: whereArgs, limit: limit, offset: offset))
+        .map(translator);
 
-Future<void> updateRaw(String cmdText) async {
-  await db.rawUpdate(cmdText);
-}
+Future<int> insert<T extends ModelBase>(String table, T item) async =>
+    (await open()).insert(table, item.map);
 
-Future<void> deleteRaw(String cmdText) async {
-  await db.rawDelete(cmdText);
-}
+Future<int> update<T extends ModelBase>(
+        String table, T item, String where, List<dynamic> whereArgs) async =>
+    (await open()).update(table, item.map, where: where, whereArgs: whereArgs);
 
-/*abstract class PersistentTableEntity<T extends ModelBase> {
-  final String name;
-  Database dbase;
-  PersistentTableEntity(this.name);
-}*/
+Future<int> delete(String table, String where, List<dynamic> whereArgs) async =>
+    (await open()).delete(table, where: where, whereArgs: whereArgs);
 
-abstract class TableEntity<T extends ModelBase> {
-  final List<T> _itemList = [];
-  final String tableName;
-  TableEntity(this.tableName);
+//----------FOLLOWINGS ARE FOR BOT USES------------------
+Future<int> deleteAsText(
+        String table, String where, List<String> whereArgs) async =>
+    (await open()).delete(table, where: where, whereArgs: whereArgs);
 
-  T from(Map<String, dynamic> _map);
+Future<String> queryAllAsText(String table) async =>
+    (await (await open()).query(table)).join(',\n');
 
-  Future<List<T>> select() async {
-    return _itemList;
-  }
+Future<String> queryAsText(String table, int limit, int offset) async =>
+    (await (await open()).query(table, limit: limit, offset: offset))
+        .join(',\n');
 
-  Future<T> single(bool Function(T) predicate) async {
-    return (await select()).lastWhere(predicate);
-  }
+Future<String> queryWhereAsText(String table, String where,
+        List<String> whereArgs, int limit, int offset) async =>
+    (await (await open()).query(table,
+            where: where, whereArgs: whereArgs, limit: limit, offset: offset))
+        .join(',\n');
 
-  Future<List<T>> selectWhere(bool Function(T) predicate) async {
-    return (await select()).where(predicate).toList();
-  }
+Future<void> execute(String queryText) async =>
+    await (await open()).execute(queryText);
 
-  Future<void> insert(T item) async {
-    _itemList.add(item);
-  }
+Future<String> queryRaw(String queryText) async =>
+    (await (await open()).rawQuery(queryText)).join(',\n');
 
-  Future<void> delete(String id) async {
-    return deleteWhere((_) => _.getId == id);
-  }
+Future<int> insertRaw(String cmdText) async =>
+    await (await open()).rawInsert(cmdText);
 
-  Future<void> deleteWhere(bool Function(T) predicate) async {
-    while (true) {
-      int i = _itemList.lastIndexWhere(predicate);
-      if (i == -1) break;
-      _itemList.removeAt(i);
-    }
-  }
-}
+Future<int> updateRaw(String cmdText) async =>
+    await (await open()).rawUpdate(cmdText);
 
-mixin ModelBase {
-  String get getId;
-  Map<String, dynamic> get map;
-}
+Future<int> deleteRaw(String cmdText) async =>
+    await (await open()).rawDelete(cmdText);

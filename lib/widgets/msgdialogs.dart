@@ -26,8 +26,7 @@ class _MessageDialogsState extends State<MessageDialogs> {
     });
 
     return FutureBuilder<List<MessageModel>>(
-      future: messageTable
-          .selectWhere((mtbItem) => mtbItem.chatGroupId == widget.chatItem.id),
+      future: messageTable.chatMessages(widget.chatItem.id),
       builder: (BuildContext bc, AsyncSnapshot<List<MessageModel>> snap) {
         if (snap.hasData)
           return Expanded(child: _lv(snap.data, meSession));
@@ -55,8 +54,8 @@ class _MessageDialogsState extends State<MessageDialogs> {
                       isMe ? MainAxisAlignment.end : MainAxisAlignment.start,
                   children: [
                     FutureBuilder<Message>(
-                      future: messageTable.getMessageDetails(
-                          chatTable, (pred) => pred.id == msg.id),
+                      future:
+                          messageTable.getMessage(msg.id, chatTable.getChat),
                       builder: (BuildContext bc, AsyncSnapshot<Message> snap) {
                         if (snap.hasData)
                           return _dsmb(_dialog(snap.data, isMe), snap.data);

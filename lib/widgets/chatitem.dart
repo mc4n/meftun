@@ -24,8 +24,8 @@ class ChatItemState extends State<ChatItem> {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<Message>(
-      future: messageTable.getMessageDetails(
-          chatTable, (m) => m.chatGroupId == widget.chatItem.id),
+      future: messageTable.lastMessage(
+          widget.chatItem.id, (_) async => widget.chatItem),
       builder: (BuildContext bc, AsyncSnapshot<Message> snap) {
         if (snap.hasData)
           return _lastMsgDetailsFrame(snap.data);
@@ -117,8 +117,7 @@ class ChatItemState extends State<ChatItem> {
               icon: Icons.delete,
               closeOnTap: false,
               onTap: () async {
-                await messageTable.deleteWhere(
-                    (msg) => msg.chatGroupId == widget.chatItem.id);
+                await messageTable.clearMessages(widget.chatItem.id);
                 MainPageState.setMainPageState(context);
               }),
         ],

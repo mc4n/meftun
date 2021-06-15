@@ -92,10 +92,10 @@ class TextingPageState extends State<TextingPage> {
                     color: Colors.blue.shade100)),
             TextButton(
                 onPressed: () async {
-                  await messageTable.deleteWhere(
-                      (msg) => msg.chatGroupId == widget.chatItem.id);
-                  setState(() => null);
-                  await widget.setMainState();
+                  if (await messageTable.clearMessages(widget.chatItem.id)) {
+                    setState(() => null);
+                    await widget.setMainState();
+                  }
                 },
                 child: Icon(Icons.delete, color: Colors.yellow.shade100)),
           ])

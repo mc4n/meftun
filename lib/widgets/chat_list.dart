@@ -4,11 +4,10 @@ import 'package:flutter/rendering.dart';
 import 'chatitem.dart' show ChatItem;
 import '../models/chat.dart' show Chat;
 import '../main.dart';
-import '../helpers/table_helper.dart';
 
 class ChatList extends StatefulWidget {
   final String tsea;
-  final bool Function(String, ChatModel) filter;
+  final bool Function(String, Chat) filter;
   const ChatList(this.tsea, this.filter, [Key key]);
   @override
   State<StatefulWidget> createState() => ChatListState();
@@ -17,11 +16,12 @@ class ChatList extends StatefulWidget {
 class ChatListState extends State<ChatList> {
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<List<ChatModel>>(
-      future: chatTable.selectWhere((_) => widget.filter(widget.tsea, _)),
-      builder: (BuildContext bc, AsyncSnapshot<List<ChatModel>> snap) {
+    return FutureBuilder<List<Chat>>(
+      future: chatTable.chats(),
+      builder: (BuildContext bc, AsyncSnapshot<List<Chat>> snap) {
         if (snap.hasData)
-          return _expan(snap.data.map((m) => m.toChat()).toList());
+          return _expan(
+              snap.data.where((m) => widget.filter(widget.tsea, m)).toList());
         else
           return Text('no item');
       },
