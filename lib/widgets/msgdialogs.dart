@@ -7,7 +7,6 @@ import '../models/message.dart' show Message;
 import 'dart:io' show File;
 import '../models/mbody.dart' show ImageBody;
 import '../main.dart';
-import '../helpers/table_helper.dart';
 
 class MessageDialogs extends StatefulWidget {
   final Chat chatItem;
@@ -25,9 +24,10 @@ class _MessageDialogsState extends State<MessageDialogs> {
       if (sc.hasClients) sc.jumpTo(sc.position.maxScrollExtent);
     });
 
-    return FutureBuilder<List<MessageModel>>(
-      future: messageTable.chatMessages(widget.chatItem.id),
-      builder: (BuildContext bc, AsyncSnapshot<List<MessageModel>> snap) {
+    return FutureBuilder<List<Message>>(
+      future: messageTable.chatMessages(
+          widget.chatItem.id, (_) async => widget.chatItem),
+      builder: (BuildContext bc, AsyncSnapshot<List<Message>> snap) {
         if (snap.hasData)
           return Expanded(child: _lv(snap.data, meSession));
         else
@@ -36,7 +36,7 @@ class _MessageDialogsState extends State<MessageDialogs> {
     );
   }
 
-  Widget _lv(final List<MessageModel> messages, DirectChat owner) =>
+  Widget _lv(final List<Message> messages, DirectChat owner) =>
       ListView.builder(
           //reverse: true,
           physics: BouncingScrollPhysics(),
@@ -45,26 +45,17 @@ class _MessageDialogsState extends State<MessageDialogs> {
           shrinkWrap: false,
           itemBuilder: (_, __) {
             var msg = messages[__];
-            var isMe = msg.fromId == owner.id;
+            var isMe = msg.from == owner;
             return Container(
-                child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: 15),
-              child: Row(
+              child: Padding(
+                padding: EdgeInsets.symmetric(horizontal: 15),
+                child: Row(
                   mainAxisAlignment:
                       isMe ? MainAxisAlignment.end : MainAxisAlignment.start,
-                  children: [
-                    FutureBuilder<Message>(
-                      future:
-                          messageTable.getMessage(msg.id, chatTable.getChat),
-                      builder: (BuildContext bc, AsyncSnapshot<Message> snap) {
-                        if (snap.hasData)
-                          return _dsmb(_dialog(snap.data, isMe), snap.data);
-                        else
-                          return Text('no item');
-                      },
-                    )
-                  ]),
-            ));
+                  children: [_dsmb(_dialog(msg, isMe), msg)],
+                ),
+              ),
+            );
           });
 
   Widget _dialog(Message msg, bool isRight) => GestureDetector(

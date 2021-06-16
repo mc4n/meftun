@@ -37,21 +37,26 @@ Future<Database> open() async =>
       },
     ));
 
-Future<Iterable<T>> query<T extends ModelBase>(String table, int limit,
-        int offset, T Function(Map<String, Object>) translator) async =>
-    (await (await open()).query(table, limit: limit, offset: offset))
-        .map(translator);
-
-Future<Iterable<T>> queryWhere<T extends ModelBase>(
-        String table,
-        String where,
+Future<List<T>> query<T extends ModelBase>(
+        String table, T Function(Map<String, Object>) translator,
+        {String where,
         List<dynamic> whereArgs,
         int limit,
         int offset,
-        T Function(Map<String, Object>) translator) async =>
+        String orderBy,
+        bool distinct,
+        String groupBy,
+        String having}) async =>
     (await (await open()).query(table,
-            where: where, whereArgs: whereArgs, limit: limit, offset: offset))
-        .map(translator);
+            limit: limit,
+            offset: offset,
+            orderBy: orderBy,
+            distinct: distinct,
+            where: where,
+            whereArgs: whereArgs,
+            having: having))
+        .map(translator)
+        .toList();
 
 Future<int> insert<T extends ModelBase>(String table, T item) async =>
     (await open()).insert(table, item.map);

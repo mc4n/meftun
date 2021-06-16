@@ -33,19 +33,9 @@ class MainPageState extends State<MainPage> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
-            ContactList(tedit.text.trim(), (ftext, _) {
-              return _.id != meSession.id &&
-                  (!isSearching ||
-                      ftext == '' ||
-                      isSearching && ftext != '' && _.username.contains(ftext));
-            }),
+            ContactList(tedit.text.trim(), isSearching),
             Padding(padding: EdgeInsets.symmetric(vertical: 4.0)),
-            ChatList(tedit.text.trim(), (ftext, _) {
-              return _.id != meSession.id &&
-                  (!isSearching ||
-                      ftext == '' ||
-                      isSearching && ftext != '' && _.username.contains(ftext));
-            }),
+            ChatList(tedit.text.trim(), isSearching),
           ],
         ),
       ),

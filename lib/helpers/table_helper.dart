@@ -14,36 +14,43 @@ abstract class TableEntity<T extends sql.ModelBase> {
 
   T from(Map<String, dynamic> _map);
 
-  Future<List<T>> select([int pageNum = 0]) async =>
-      (await sql.query(tableName, PAGE_LEN, pageNum * PAGE_LEN, from)).toList();
+  Future<List<T>> _select(
+          {String where,
+          List<dynamic> whereArgs,
+          int pageNum,
+          String orderBy}) async =>
+      sql.query(tableName, from,
+          where: where,
+          whereArgs: whereArgs,
+          limit: PAGE_LEN,
+          orderBy: orderBy,
+          offset: pageNum * PAGE_LEN);
 
-  Future<List<T>> selectWhere(String _where, List<dynamic> whereArgs,
-          [int pageNum = 0]) async =>
-      (await sql.queryWhere(
-              tableName, _where, whereArgs, PAGE_LEN, pageNum * PAGE_LEN, from))
-          .toList();
+  Future<List<T>> _selectWhere(String _where, List<dynamic> whereArgs,
+          {int pageNum, String orderBy}) async =>
+      _select(
+          where: _where,
+          whereArgs: whereArgs,
+          pageNum: pageNum,
+          orderBy: orderBy);
 
-  Future<List<T>> selectByOne(String field, dynamic value,
-          [int pageNum = 0]) async =>
-      (await sql.queryWhere(tableName, '$field = ?', [value], PAGE_LEN,
-              pageNum * PAGE_LEN, from))
-          .toList();
-
-  Future<T> single(String _where, List<dynamic> whereArgs) async {
-    final res =
-        (await sql.queryWhere(tableName, _where, whereArgs, 1, 0, from));
+  Future<T> _single(String _where, List<dynamic> whereArgs,
+      {String orderBy}) async {
+    final res = (await sql.query(tableName, from,
+        where: _where,
+        orderBy: orderBy,
+        whereArgs: whereArgs,
+        limit: 1,
+        offset: 0));
     return res != null && res.length == 1 ? res.first : null;
   }
 
-  Future<bool> insert(T item) async => (await sql.insert(tableName, item)) > 0;
+  Future<bool> _insert(T item) async => (await sql.insert(tableName, item)) > 0;
 
-  Future<bool> deleteWhere(String _where, List<dynamic> whereArgs) async =>
+  Future<bool> _deleteWhere(String _where, List<dynamic> whereArgs) async =>
       (await sql.delete(tableName, _where, whereArgs)) > 0;
 
-  Future<bool> deleteByOne(String field, dynamic value) async =>
-      deleteWhere('$field = ?', value);
-
-  Future<bool> delete(String id) async => deleteByOne('id', id);
+  Future<bool> _delete(String id) async => _deleteWhere('id = ?', [id]);
 }
 
 //-------
@@ -62,14 +69,21 @@ class ChatTable extends TableEntity<ChatModel> {
     );
   }
 
-  Future<bool> insertChat(Chat item) async => super.insert(
+  Future<bool> insertChat(Chat item) async => super._insert(
       ChatModel(item.id, item.username, item.name, item.photoURL, item.type));
 
+  Future<bool> deleteChat(Chat c) async => super._delete(c.id);
+
   Future<Chat> getChat(String id) async =>
-      (await super.single('id = ?', [id])).asChat;
+      (await super._single('id = ?', [id])).asChat;
 
   Future<List<Chat>> chats() async =>
-      (await super.select()).map((cm) => cm.asChat).toList();
+      (await super._select()).map((cm) => cm.asChat).toList();
+
+  Future<List<Chat>> filterChats(String ftext) async =>
+      (await super._selectWhere('user_name = ?', [ftext]))
+          .map((cm) => cm.asChat)
+          .toList();
 }
 
 class ChatModel with sql.ModelBase {
@@ -124,20 +138,28 @@ class MessageTable extends TableEntity<MessageModel> {
 
   Future<Message> insertMessage(Draft dr) async {
     final item = dr is Message ? dr : dr.toMessage();
-    insert(MessageModel(item.id, item.body.toString(), item.from.id,
+    _insert(MessageModel(item.id, item.body.toString(), item.from.id,
         item.chatGroup.id, item.epoch, item.body.bodyType));
     return item;
   }
 
-  Future<bool> clearMessages(String chatGroupId) async =>
-      super.deleteWhere('chat_group_id = ?', [chatGroupId]);
+  Future<bool> deleteMessage(Message msg) async => super._delete(msg.id);
 
-  Future<List<MessageModel>> chatMessages(String chatGroupId) =>
-      super.selectByOne('chat_group_id', chatGroupId);
+  Future<bool> clearMessages(String chatGroupId) async =>
+      super._deleteWhere('chat_group_id = ?', [chatGroupId]);
+
+  Future<List<Message>> chatMessages(
+      String chatGroupId, Future<Chat> Function(String) chatProvider) async {
+    final _trans = (model) async => getMessage(model.id, chatProvider);
+    final _res = await super._selectWhere('chat_group_id = ?', [chatGroupId]);
+    final List<Message> msgs = [];
+    for (final _ in _res) msgs.add(await _trans(_));
+    return msgs;
+  }
 
   Future<Message> lastMessage(
       String chatGroupId, Future<Chat> Function(String) chatProvider) async {
-    final msgModel = await single('chat_group_id = ?', [chatGroupId]);
+    final msgModel = await _single('chat_group_id = ?', [chatGroupId]);
     final from = await chatProvider(msgModel.fromId);
     final to = await chatProvider(msgModel.chatGroupId);
     return Message(msgModel.id, msgModel.bodyObj, from, to, msgModel.epoch);
@@ -145,11 +167,9 @@ class MessageTable extends TableEntity<MessageModel> {
 
   Future<Message> getMessage(
       String id, Future<Chat> Function(String) chatProvider) async {
-    final msgModel = await single('id = ?', [id]);
-
+    final msgModel = await _single('id = ?', [id]);
     final from = await chatProvider(msgModel.fromId);
     final to = await chatProvider(msgModel.chatGroupId);
-
     return Message(msgModel.id, msgModel.bodyObj, from, to, msgModel.epoch);
   }
 }

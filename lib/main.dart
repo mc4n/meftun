@@ -4,31 +4,35 @@ import '/pages/main.dart' show MainPage;
 import '/models/directchat.dart' show DirectChat;
 import '/helpers/table_helper.dart' show ChatTable, MessageTable;
 
-/*
-import '/models/groupchat.dart' show GroupChat;
+//import '/models/groupchat.dart' show GroupChat;
 import '/models/botchat.dart' show BotChat;
-import '/models/mbody.dart' show RawBody;
-import '/models/message.dart' show Message;
-*/
+//import '/models/mbody.dart' show RawBody;
+//import '/models/message.dart' show Message;
 
 void main() {
-/*
-  final pac = DirectChat('2', 'pac', name: 'Tupac Shakur', photoURL: 'pac.jpg');
-  final thugs = GroupChat('3', 'THUGS');
-  final big =
-      DirectChat('4', 'big', name: 'Notorious BIG', photoURL: 'big.jpg');
   final botEfendi = BotChat('5', meSession, 'efendi', name: 'Bot Efendi');
   final apiBot = BotChat('6', botEfendi, 'api', name: 'API helper bot');
   final sqlBot = BotChat('7', botEfendi, 'sql', name: 'SQLite helper bot');
-  final ali = DirectChat('8', 'ali');
+
+  chatTable.deleteChat(meSession);
+  chatTable.deleteChat(botEfendi);
+  chatTable.deleteChat(apiBot);
+  chatTable.deleteChat(sqlBot);
 
   chatTable.insertChat(meSession);
   chatTable.insertChat(botEfendi);
+  chatTable.insertChat(apiBot);
+  chatTable.insertChat(sqlBot);
+  /*
+   
+  final pac = DirectChat('2', 'pac', name: 'Tupac Shakur', photoURL: 'pac.jpg');
+  final thugs = GroupChat('3', 'THUGS');
+  final big = DirectChat('4', 'big', name: 'Notorious BIG', photoURL: 'big.jpg');
+  final ali = DirectChat('8', 'ali');
+   
   chatTable.insertChat(pac);
   chatTable.insertChat(thugs);
-  chatTable.insertChat(apiBot);
   chatTable.insertChat(big);
-  chatTable.insertChat(sqlBot);
   chatTable.insertChat(ali);
 
   messageTable.insertMessage(

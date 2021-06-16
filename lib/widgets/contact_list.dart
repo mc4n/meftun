@@ -8,9 +8,9 @@ import '../main.dart';
 import '../pages/main.dart';
 
 class ContactList extends StatefulWidget {
-  final bool Function(String, Chat) filter;
   final String tsea;
-  const ContactList(this.tsea, this.filter, [Key key]) : super(key: key);
+  final bool isSearching;
+  const ContactList(this.tsea, this.isSearching, [Key key]) : super(key: key);
 
   @override
   _ContactListState createState() => _ContactListState();
@@ -41,16 +41,16 @@ class _ContactListState extends State<ContactList> {
         child: Padding(
           padding: EdgeInsets.all(10.0),
           child: FutureBuilder<List<Chat>>(
-              future: chatTable.chats(),
+              future: widget.isSearching
+                  ? chatTable.filterChats(widget.tsea)
+                  : chatTable.chats(),
               builder: (BuildContext bc, AsyncSnapshot<List<Chat>> snap) {
                 if (snap.hasData && snap.data.length > 0)
                   return Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Icon(Icons.navigate_before_rounded),
-                        _expan(snap.data
-                            .where((m) => widget.filter(widget.tsea, m))
-                            .toList()),
+                        _expan(snap.data),
                         Icon(
                           Icons.navigate_next_rounded,
                         )

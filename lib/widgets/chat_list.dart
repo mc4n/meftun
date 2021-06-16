@@ -7,8 +7,8 @@ import '../main.dart';
 
 class ChatList extends StatefulWidget {
   final String tsea;
-  final bool Function(String, Chat) filter;
-  const ChatList(this.tsea, this.filter, [Key key]);
+  final bool isSearching;
+  const ChatList(this.tsea, this.isSearching, [Key key]);
   @override
   State<StatefulWidget> createState() => ChatListState();
 }
@@ -17,11 +17,12 @@ class ChatListState extends State<ChatList> {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<List<Chat>>(
-      future: chatTable.chats(),
+      future: widget.isSearching
+          ? chatTable.filterChats(widget.tsea)
+          : chatTable.chats(),
       builder: (BuildContext bc, AsyncSnapshot<List<Chat>> snap) {
         if (snap.hasData)
-          return _expan(
-              snap.data.where((m) => widget.filter(widget.tsea, m)).toList());
+          return _expan(snap.data);
         else
           return Text('no item');
       },

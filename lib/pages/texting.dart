@@ -49,7 +49,7 @@ class TextingPageState extends State<TextingPage> {
 
   Future<void> onMsgRemoveClaimed(
       Message msg, Function(bool isSucceed, {String errorMsg}) callback) async {
-    await messageTable.delete(msg.id);
+    await messageTable.deleteMessage(msg);
     setState(() {
       callback(true);
     });
@@ -84,7 +84,7 @@ class TextingPageState extends State<TextingPage> {
           Row(children: [
             TextButton(
                 onPressed: () async {
-                  await chatTable.delete(widget.chatItem.id);
+                  await chatTable.deleteChat(widget.chatItem);
                   await widget.setMainState();
                   Navigator.of(context).pop();
                 },
