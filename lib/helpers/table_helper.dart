@@ -14,32 +14,25 @@ abstract class TableEntity<T extends sql.ModelBase> {
 
   T from(Map<String, dynamic> _map);
 
-  Future<List<T>> _select(
-          {String where,
-          List<dynamic> whereArgs,
-          int pageNum,
-          String orderBy}) async =>
+  Future<List<T>> _select({int pageNum = 0, String orderBy = 'id ASC'}) async =>
       sql.query(tableName, from,
-          where: where,
-          whereArgs: whereArgs,
-          limit: PAGE_LEN,
-          orderBy: orderBy,
-          offset: pageNum * PAGE_LEN);
+          orderBy: orderBy, limit: PAGE_LEN, offset: pageNum * PAGE_LEN);
 
   Future<List<T>> _selectWhere(String _where, List<dynamic> whereArgs,
-          {int pageNum, String orderBy}) async =>
-      _select(
+          {int pageNum = 0, String orderBy = 'id ASC'}) async =>
+      sql.query(tableName, from,
           where: _where,
           whereArgs: whereArgs,
-          pageNum: pageNum,
-          orderBy: orderBy);
+          orderBy: orderBy,
+          limit: PAGE_LEN,
+          offset: pageNum * PAGE_LEN);
 
   Future<T> _single(String _where, List<dynamic> whereArgs,
-      {String orderBy}) async {
+      {String orderBy = 'id ASC'}) async {
     final res = (await sql.query(tableName, from,
         where: _where,
-        orderBy: orderBy,
         whereArgs: whereArgs,
+        orderBy: orderBy,
         limit: 1,
         offset: 0));
     return res != null && res.length == 1 ? res.first : null;
@@ -53,7 +46,57 @@ abstract class TableEntity<T extends sql.ModelBase> {
   Future<bool> _delete(String id) async => _deleteWhere('id = ?', [id]);
 }
 
-//-------
+abstract class SafeTableEntity<T extends sql.ModelBase> extends TableEntity<T> {
+  List<Map<String, dynamic>> _itemStore = [];
+
+  SafeTableEntity(String tbName) : super(tbName);
+
+  @override
+  Future<List<T>> _select({int pageNum = 0, String orderBy = 'id ASC'}) async =>
+      _itemStore.map((m) => from(m)).toList();
+
+  @override
+  Future<List<T>> _selectWhere(String _where, List<dynamic> whereArgs,
+      {int pageNum = 0, String orderBy = 'id ASC'}) async {
+    if (whereArgs.length == 1) {
+      final cond = _where.replaceAll('= ?', '').trim();
+      final ls = _itemStore.where((m) => m[cond] == whereArgs[0]);
+      return ls.map((m) => from(m)).toList();
+    } else
+      return throw Exception('yorma beni birader!');
+  }
+
+  @override
+  Future<T> _single(String _where, List<dynamic> whereArgs,
+      {String orderBy = 'id ASC'}) async {
+    final ls = await _selectWhere(_where, whereArgs, orderBy: orderBy);
+    return ls != null && ls.length > 0 ? ls.last : null;
+  }
+
+  @override
+  Future<bool> _insert(T item) async {
+    _itemStore.add(item.map);
+    return _exists('id', item.getId);
+  }
+
+  @override
+  Future<bool> _deleteWhere(String _where, List<dynamic> whereArgs) async {
+    if (whereArgs.length == 1) {
+      final cond = _where.replaceAll('= ?', '').trim();
+      _itemStore.removeWhere((m) => m[cond] == whereArgs[0]);
+      return !(await _exists(cond, whereArgs[0]));
+    } else
+      return throw Exception('yorma beni birader!');
+  }
+
+  @override
+  Future<bool> _delete(String id) async => _deleteWhere('id = ?', [id]);
+
+  Future<bool> _exists(String key, dynamic value) async =>
+      _itemStore.any((m) => m[key] == value);
+}
+
+// ----- TABLES -----
 
 class ChatTable extends TableEntity<ChatModel> {
   ChatTable() : super('tb_chats');
@@ -80,46 +123,12 @@ class ChatTable extends TableEntity<ChatModel> {
   Future<List<Chat>> chats() async =>
       (await super._select()).map((cm) => cm.asChat).toList();
 
-  Future<List<Chat>> filterChats(String ftext) async =>
-      (await super._selectWhere('user_name = ?', [ftext]))
-          .map((cm) => cm.asChat)
-          .toList();
+  Future<List<Chat>> filterChats(String ftext) async => (ftext != ''
+          ? await super._selectWhere('user_name = ?', [ftext])
+          : await super._select())
+      .map((cm) => cm.asChat)
+      .toList();
 }
-
-class ChatModel with sql.ModelBase {
-  final String id;
-  final String userName;
-  final String name;
-  final String photoURL;
-  final String type;
-  const ChatModel(this.id, this.userName, this.name, this.photoURL, this.type);
-
-  @override
-  String get getId => id;
-
-  @override
-  Map<String, dynamic> get map => {
-        'id': id,
-        'user_name': userName,
-        'name': name,
-        'photo_url': photoURL,
-        '_type': type,
-      };
-
-  Chat get asChat {
-    switch (type) {
-      case Chat.BOT:
-        return BotChat(id, null, userName, name: name, photoURL: photoURL);
-      case Chat.DIRECT:
-        return DirectChat(id, userName, name: name, photoURL: photoURL);
-      case Chat.GROUP:
-      default:
-        return GroupChat(id, userName, name: name, photoURL: photoURL);
-    }
-  }
-}
-
-// /// ////
 
 class MessageTable extends TableEntity<MessageModel> {
   MessageTable() : super('tb_messages');
@@ -151,26 +160,65 @@ class MessageTable extends TableEntity<MessageModel> {
   Future<List<Message>> chatMessages(
       String chatGroupId, Future<Chat> Function(String) chatProvider) async {
     final _trans = (model) async => getMessage(model.id, chatProvider);
-    final _res = await super._selectWhere('chat_group_id = ?', [chatGroupId]);
+    final _res = await super
+        ._selectWhere('chat_group_id = ?', [chatGroupId], orderBy: 'epoch ASC');
     final List<Message> msgs = [];
     for (final _ in _res) msgs.add(await _trans(_));
+    //msgs.sort(Message.compareEpoch);
     return msgs;
   }
 
-  Future<Message> lastMessage(
-      String chatGroupId, Future<Chat> Function(String) chatProvider) async {
-    final msgModel = await _single('chat_group_id = ?', [chatGroupId]);
+  Future<Message> lastMessage(String chatGroupId,
+          Future<Chat> Function(String) chatProvider) async =>
+      asMessage(
+          await _single('chat_group_id = ?', [chatGroupId],
+              orderBy: 'epoch DESC'),
+          chatProvider);
+
+  Future<Message> getMessage(
+          String id, Future<Chat> Function(String) chatProvider) async =>
+      asMessage(await _single('id = ?', [id]), chatProvider);
+
+  Future<Message> asMessage(
+      MessageModel msgModel, Future<Chat> Function(String) chatProvider) async {
     final from = await chatProvider(msgModel.fromId);
     final to = await chatProvider(msgModel.chatGroupId);
     return Message(msgModel.id, msgModel.bodyObj, from, to, msgModel.epoch);
   }
+}
 
-  Future<Message> getMessage(
-      String id, Future<Chat> Function(String) chatProvider) async {
-    final msgModel = await _single('id = ?', [id]);
-    final from = await chatProvider(msgModel.fromId);
-    final to = await chatProvider(msgModel.chatGroupId);
-    return Message(msgModel.id, msgModel.bodyObj, from, to, msgModel.epoch);
+// ------ MODELS ----
+
+class ChatModel with sql.ModelBase {
+  final String id;
+  final String userName;
+  final String name;
+  final String photoURL;
+  final String type;
+  const ChatModel(this.id, this.userName, this.name, this.photoURL, this.type);
+
+  @override
+  String get getId => id;
+
+  @override
+  Map<String, dynamic> get map => {
+        'id': id,
+        'user_name': userName,
+        'name': name,
+        'photo_url': photoURL,
+        '_type': type,
+      };
+
+  Chat get asChat {
+    switch (type) {
+      case Chat.BOT:
+        return BotChat(id, null, userName, name: name, photoURL: photoURL);
+      case Chat.DIRECT:
+        return DirectChat(id, userName, name: name, photoURL: photoURL);
+      case Chat.GROUP:
+      default:
+        return GroupChat(id, userName, name: name, photoURL: photoURL);
+    }
   }
 }
 

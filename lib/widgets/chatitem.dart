@@ -24,8 +24,7 @@ class ChatItemState extends State<ChatItem> {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<Message>(
-      future: messageTable.lastMessage(
-          widget.chatItem.id, (_) async => widget.chatItem),
+      future: messageTable.lastMessage(widget.chatItem.id, chatTable.getChat),
       builder: (BuildContext bc, AsyncSnapshot<Message> snap) {
         if (snap.hasData)
           return _lastMsgDetailsFrame(snap.data);
