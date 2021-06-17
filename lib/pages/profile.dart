@@ -44,6 +44,7 @@ class ProfilePage extends StatelessWidget {
                         return Scaffold(
                           appBar: AppBar(
                             leading: CloseButton(),
+                            title: Text('Usage Data'),
                           ),
                           body: UsageInfoPage(),
                         );
