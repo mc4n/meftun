@@ -200,17 +200,31 @@ class BotManager extends BotChat {
     'api': [
       BotCommand(
           cmd: 'get',
-          description: 'get request for an URL.',
+          description: 'get data from a URL.',
           argNum: 1,
           func: ([args]) async {
             try {
-              // https://jsonplaceholder.typicode.com/albums/1
+              // get https://reqres.in/api/users?delay=3
               final uri = Uri.parse(args[0].toString());
               final response = await http.get(uri);
-              if (response.statusCode == 200)
-                return RawBody('${response.body}');
-              else
-                return RawBody('invalid url');
+              return RawBody('${response.body}');
+            } catch (_) {
+              return RawBody(_.message);
+            }
+          }),
+      BotCommand(
+          cmd: 'post',
+          description: 'post data to a URL.',
+          argNum: 2,
+          func: ([args]) async {
+            try {
+              // post https://reqres.in/api/users;{"name": "ali", "job": "doctor"}
+              final response = await http.post(Uri.parse(args[0].toString()),
+                  headers: {
+                    'Content-Type': 'application/json; charset=UTF-8',
+                  },
+                  body: args[1].toString());
+              return RawBody('${response.body}');
             } catch (_) {
               return RawBody(_.message);
             }
@@ -219,5 +233,3 @@ class BotManager extends BotChat {
     'efendi': []
   };
 }
-
-// // //
