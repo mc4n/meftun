@@ -8,6 +8,7 @@ import '../pages/profile.dart' show ProfilePage;
 import 'package:flutter_slidable/flutter_slidable.dart';
 import '../main.dart';
 import '../pages/main.dart';
+import '../pages/msgpreview.dart' show MessagePreview;
 
 class ChatItem extends StatefulWidget {
   final Chat chatItem;
@@ -47,7 +48,7 @@ class ChatItemState extends State<ChatItem> {
 
     final _av = (String whois, String avAss) => Column(
           children: [
-            _wrapInGd(CircleAvatar(backgroundImage: AssetImage(avAss))),
+            CircleAvatar(backgroundImage: AssetImage(avAss)),
             Text(whois)
           ],
         );
@@ -62,7 +63,7 @@ class ChatItemState extends State<ChatItem> {
 
     final _avarettin = [_av(from, fromAv), _ar, _av(to, toAv)];
 
-    return _sl(_frame(Padding(
+    final _framecomp = _frame(Padding(
         padding: EdgeInsets.symmetric(horizontal: 20),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -72,7 +73,9 @@ class ChatItemState extends State<ChatItem> {
                 child: Row(children: _avarettin)),
             _midSect(lastMsg.body.toString()),
           ],
-        ))));
+        )));
+
+    return _sl(_wrapInGd(_framecomp, lastMsg));
   }
 
   Widget _midSect(String lastMsg) => Row(
@@ -91,8 +94,9 @@ class ChatItemState extends State<ChatItem> {
         child: _inner,
       ));
 
-  GestureDetector _wrapInGd(Widget item) =>
-      GestureDetector(onLongPress: () => null, child: item);
+  GestureDetector _wrapInGd(Widget item, Message msg) => GestureDetector(
+      onLongPress: () async => await MessagePreview.sneakOut(context, msg),
+      child: item);
 
   Slidable _sl(Widget _inner) => Slidable(
         key: Key(widget.chatItem.id),
