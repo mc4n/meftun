@@ -4,9 +4,8 @@ import '../models/chat.dart' show Chat;
 import '../models/directchat.dart' show DirectChat;
 import '../pages/texting.dart' show TextingPageState;
 import '../models/message.dart' show Message;
-import 'dart:io' show File;
-import '../models/mbody.dart' show ImageBody;
 import '../main.dart';
+import '../pages/msgpreview.dart' show MessagePreviewState;
 
 class MessageDialogs extends StatefulWidget {
   final Chat chatItem;
@@ -63,28 +62,7 @@ class _MessageDialogsState extends State<MessageDialogs> {
             .findAncestorStateOfType<TextingPageState>()
             .onMsgRemoveClaimed(msg, (isSucceed, {errorMsg}) => null);
       },
-      child: Card(
-          color: !isRight ? Colors.grey.shade200 : Colors.lightGreen.shade300,
-          child: Padding(
-            padding: EdgeInsets.all(3),
-            child: Column(children: [
-              Text('${msg.epochToTimeString()}',
-                  style: TextStyle(fontSize: 11)),
-              Padding(padding: EdgeInsets.symmetric(vertical: 2)),
-              !isRight ? Text('${msg.from.caption}:') : Row(),
-              Padding(padding: EdgeInsets.symmetric(vertical: 3)),
-              msg.body is ImageBody
-                  ? Container(
-                      width: 180,
-                      height: 180,
-                      child: Image.file(File(msg.body.toString())))
-                  : Container(
-                      constraints: BoxConstraints(
-                          minWidth: 100,
-                          maxWidth: MediaQuery.of(context).size.width * 9 / 10),
-                      child: Text('${msg.body}'))
-            ]),
-          )));
+      child: MessagePreviewState.msgCard(context, msg, isRight));
 
   Dismissible _dsmb(Widget _inner, Message msg) => Dismissible(
         key: Key(widget.chatItem.id),
