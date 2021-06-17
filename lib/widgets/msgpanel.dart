@@ -43,8 +43,6 @@ class MessagingPanelState extends State<MessagingPanel> {
     final _ = mb.toString();
     if (_.trim() != '') {
       currentDraft.setBody = mb;
-      /*await messagingMiddleware(currentDraft);
-      MainPageState.mainPageState(context).onMsgSent(_);*/
       parentState.onMsgSendClaimed(currentDraft, ({itemAdded, errorMsg}) {
         // fired back here...
         if (itemAdded != null)
@@ -79,11 +77,18 @@ class MessagingPanelState extends State<MessagingPanel> {
                         Padding(padding: EdgeInsets.symmetric(vertical: 2)),
                         Text('${parentState.quotedMessage.from.caption}:'),
                         Padding(padding: EdgeInsets.symmetric(vertical: 3)),
-                        /*quotedMessage.body is ImageBody
-                                                        ? Container(width: 180, height: 180,
-                                                            child: Image.file(File(quotedMessage.body.toString())))
-                                                        : */
-                        Text('${parentState.quotedMessage.body}'),
+                        GestureDetector(
+                          onTap: () {
+                            teC.text =
+                                parentState.quotedMessage.body.toString();
+                          },
+                          child: Text(parentState.quotedMessage.body
+                                      .toString()
+                                      .length >
+                                  497
+                              ? '${parentState.quotedMessage.body.toString().substring(0, 497)}...'
+                              : '${parentState.quotedMessage.body}'),
+                        )
                       ])),
                 ),
                 onDismissed: (_) => parentState.onMsgQuoted?.call(null),
@@ -97,11 +102,10 @@ class MessagingPanelState extends State<MessagingPanel> {
         color: Colors.grey.shade200,
         margin: EdgeInsets.all(4),
         child: Row(children: [
-          //
           Expanded(
             child: TextField(
-              minLines: 1,
-              maxLines: 5,
+              //minLines: 1,
+              //maxLines: 4,
               controller: teC,
               onSubmitted: _sendMes,
               style: TextStyle(fontSize: 16),
@@ -110,12 +114,11 @@ class MessagingPanelState extends State<MessagingPanel> {
                 hintText: 'type a message.',
                 hintStyle: TextStyle(color: Colors.grey),
                 border: OutlineInputBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(15.0)),
+                  borderRadius: BorderRadius.all(Radius.circular(10.0)),
                 ),
               ),
             ),
           ),
-          //
           Row(children: [
             TextButton(
               onPressed: _sendMes,
