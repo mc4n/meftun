@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import '../models/chat.dart' show Chat;
+import '../main.dart';
+import 'usageinfo.dart' show UsageInfoPage;
 
 class ProfilePage extends StatelessWidget {
   final Chat chatItem;
@@ -32,6 +34,24 @@ class ProfilePage extends StatelessWidget {
                       style: TextStyle(fontSize: 15)),
                 ])
               ],
-            )));
+            )),
+        persistentFooterButtons: chatItem == meSession
+            ? [
+                ElevatedButton(
+                    onPressed: () {
+                      Navigator.of(context)
+                          .push(MaterialPageRoute(builder: (_) {
+                        return Scaffold(
+                          appBar: AppBar(
+                            leading: CloseButton(),
+                          ),
+                          body: UsageInfoPage(),
+                        );
+                      }));
+                    },
+                    child: Text('Usage Statistics')),
+                Text('Settings')
+              ]
+            : [Row()]);
   }
 }

@@ -19,6 +19,7 @@ dependencies:
   file_picker: ^3.0.2+2
   http: ^0.13.3
   sqflite:
+  fl_chart: ^0.36.2
 
 dev_dependencies:
   flutter_test:
