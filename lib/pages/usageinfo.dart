@@ -1,45 +1,56 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/gestures.dart';
+import 'dart:math';
 
-class UsageInfoPage extends StatefulWidget {
-  @override
-  State<StatefulWidget> createState() => UsageInfoPageState();
-}
+class UsageInfoPage extends StatelessWidget {
+  static const _monthLabels = [
+    'Jan',
+    'Feb',
+    'Mar',
+    'Apr',
+    'May',
+    'Jun',
+    'Jul',
+    'Aug',
+    'Sep',
+    'Oct',
+    'Nov',
+    'Dec'
+  ];
+  static const _dayWeekLabels = ['Mn', 'Te', 'Wd', 'Tu', 'Fr', 'St', 'Sn'];
 
-class UsageInfoPageState extends State<UsageInfoPage> {
-  @override
-  Widget build(BuildContext context) {
-    return Column(children: [_asp(), _asp()]);
-  }
-
-  Widget _asp() => AspectRatio(
+  Widget _barChart(
+          double maxYValue, FlTitlesData td, List<BarChartGroupData> bg) =>
+      AspectRatio(
         aspectRatio: 1.7,
         child: Card(
           elevation: 0,
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
           color: const Color(0xff2c4260),
-          child: _barChart(),
+          child: BarChart(
+            BarChartData(
+              alignment: BarChartAlignment.spaceAround,
+              maxY: maxYValue,
+              barTouchData: BarTouchData(
+                enabled: true,
+                touchTooltipData: BarTouchTooltipData(
+                    tooltipBgColor: Colors.transparent,
+                    tooltipPadding: const EdgeInsets.all(0),
+                    tooltipMargin: 8,
+                    getTooltipItem: _toolt),
+              ),
+              titlesData: td,
+              borderData: FlBorderData(
+                show: false,
+              ),
+              barGroups: bg,
+            ),
+          ),
         ),
       );
 
-  BarChart _barChart() => BarChart(
-        BarChartData(
-          alignment: BarChartAlignment.spaceAround,
-          maxY: 20,
-          barTouchData: BarTouchData(
-            enabled: false,
-            touchTooltipData: _barTip(),
-          ),
-          titlesData: _titleData(),
-          borderData: FlBorderData(
-            show: false,
-          ),
-          barGroups: _barGrps(),
-        ),
-      );
-
-  FlTitlesData _titleData() => FlTitlesData(
+  FlTitlesData _titleData(List<String> labelList) => FlTitlesData(
         show: true,
         bottomTitles: SideTitles(
           showTitles: true,
@@ -48,98 +59,73 @@ class UsageInfoPageState extends State<UsageInfoPage> {
               fontWeight: FontWeight.bold,
               fontSize: 14),
           margin: 20,
-          getTitles: (double value) {
-            switch (value.toInt()) {
-              case 0:
-                return 'Mn';
-              case 1:
-                return 'Te';
-              case 2:
-                return 'Wd';
-              case 3:
-                return 'Tu';
-              case 4:
-                return 'Fr';
-              case 5:
-                return 'St';
-              case 6:
-                return 'Sn';
-              default:
-                return '';
-            }
-          },
+          getTitles: (double value) => labelList[value as int],
         ),
         leftTitles: SideTitles(showTitles: false),
       );
 
-  List<BarChartGroupData> _barGrps() => [
-        BarChartGroupData(
-          x: 0,
-          barRods: [
-            BarChartRodData(
-                y: 8, colors: [Colors.lightBlueAccent, Colors.greenAccent])
-          ],
-          showingTooltipIndicators: [0],
-        ),
-        BarChartGroupData(
-          x: 1,
-          barRods: [
-            BarChartRodData(
-                y: 10, colors: [Colors.lightBlueAccent, Colors.greenAccent])
-          ],
-          showingTooltipIndicators: [0],
-        ),
-        BarChartGroupData(
-          x: 2,
-          barRods: [
-            BarChartRodData(
-                y: 14, colors: [Colors.lightBlueAccent, Colors.greenAccent])
-          ],
-          showingTooltipIndicators: [0],
-        ),
-        BarChartGroupData(
-          x: 3,
-          barRods: [
-            BarChartRodData(
-                y: 15, colors: [Colors.lightBlueAccent, Colors.greenAccent])
-          ],
-          showingTooltipIndicators: [0],
-        ),
-        BarChartGroupData(
-          x: 3,
-          barRods: [
-            BarChartRodData(
-                y: 13, colors: [Colors.lightBlueAccent, Colors.greenAccent])
-          ],
-          showingTooltipIndicators: [0],
-        ),
-        BarChartGroupData(
-          x: 3,
-          barRods: [
-            BarChartRodData(
-                y: 10, colors: [Colors.lightBlueAccent, Colors.greenAccent])
-          ],
-          showingTooltipIndicators: [0],
-        ),
-      ];
+  BarTooltipItem _toolt(
+    BarChartGroupData group,
+    int groupIndex,
+    BarChartRodData rod,
+    int rodIndex,
+  ) {
+    return BarTooltipItem(
+      rod.y.toString(),
+      TextStyle(
+        color: Colors.white,
+        fontWeight: FontWeight.bold,
+      ),
+    );
+  }
 
-  BarTouchTooltipData _barTip() => BarTouchTooltipData(
-        tooltipBgColor: Colors.transparent,
-        tooltipPadding: const EdgeInsets.all(0),
-        tooltipMargin: 8,
-        getTooltipItem: (
-          BarChartGroupData group,
-          int groupIndex,
-          BarChartRodData rod,
-          int rodIndex,
-        ) {
-          return BarTooltipItem(
-            rod.y.round().toString(),
-            TextStyle(
-              color: Colors.white,
-              fontWeight: FontWeight.bold,
-            ),
-          );
-        },
-      );
+  Iterable<BarChartGroupData> _barGrps(List<List<double>> yAxisVals) sync* {
+    _(int _x, double _y1, _y2) => BarChartGroupData(
+          x: _x,
+          barRods: [
+            BarChartRodData(
+                y: _y1, colors: [Colors.lightBlueAccent, Colors.green]),
+            BarChartRodData(
+                y: _y2, colors: [Colors.yellowAccent, Colors.redAccent])
+          ],
+          showingTooltipIndicators: [0, 1],
+        );
+    for (int i = 0; i < yAxisVals.length; i++)
+      yield _(i, yAxisVals[i][0], yAxisVals[i][1]);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    // --------------------
+    final firstDSet = <List<double>>[
+      [1, 6],
+      [1, 6],
+      [1, 6],
+      [1, 6],
+      [1, 6],
+      [1, 6],
+      [1, 6]
+    ];
+    final secondDSet = <List<double>>[
+      [1, 6],
+      [1, 6],
+      [1, 6],
+      [1, 6],
+      [1, 6],
+      [1, 6],
+      [1, 6],
+      [1, 6],
+      [1, 6],
+      [1, 6],
+      [1, 6],
+      [1, 6]
+    ];
+    // --------------------
+    return Column(children: [
+      _barChart(firstDSet.map((m) => m[0]).reduce(max) + 6,
+          _titleData(_dayWeekLabels), _barGrps(firstDSet).toList()),
+      _barChart(secondDSet.map((m) => m[1]).reduce(max) + 8,
+          _titleData(_monthLabels), _barGrps(secondDSet).toList())
+    ]);
+  }
 }
