@@ -97,6 +97,7 @@ class UsageInfoPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // --------------------
+    //
     final firstDSet = <List<double>>[
       [1, 4],
       [3, 6],
@@ -120,24 +121,25 @@ class UsageInfoPage extends StatelessWidget {
       [0, 0],
       [0, 0]
     ];
+    //
     // --------------------
     return Column(children: [
       Row(children: [
-        Container(width: 20, height: 20, color: Colors.yellowAccent),
-        Text(' : messages received    '),
         Container(width: 20, height: 20, color: Colors.lightBlueAccent),
-        Text(' : messages sent')
+        Text(' : messages sent    '),
+        Container(width: 20, height: 20, color: Colors.yellowAccent),
+        Text(' : messages received')
       ]),
       Padding(padding: EdgeInsets.symmetric(vertical: 4)),
       Text('Weekly:'),
       Container(
-          child: _barChart(firstDSet.map((m) => m.reduce(max)).reduce(max) + 10,
+          child: _barChart(firstDSet.map((m) => m.reduce(max)).reduce(max) + 4,
               _titleData(_dayWeekLabels), _barGrps(firstDSet).toList())),
       Padding(padding: EdgeInsets.symmetric(vertical: 5)),
       Text('Monthly:'),
       Container(
           child: _barChart(
-              secondDSet.map((m) => m.reduce(max)).reduce(max) + 10,
+              secondDSet.map((m) => m.reduce(max)).reduce(max) + 12,
               _titleData(_monthLabels),
               _barGrps(secondDSet).toList()))
     ]);
