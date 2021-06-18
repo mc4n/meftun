@@ -1,10 +1,6 @@
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
-
-mixin ModelBase {
-  String get getId;
-  Map<String, dynamic> get map;
-}
+import 'models.dart' show ModelBase;
 
 const DB_NAME = 'demo.db';
 

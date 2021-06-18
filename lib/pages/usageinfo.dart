@@ -1,6 +1,6 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/gestures.dart';
+// import 'package:flutter/gestures.dart';
 import 'dart:math';
 
 class UsageInfoPage extends StatelessWidget {
@@ -19,6 +19,76 @@ class UsageInfoPage extends StatelessWidget {
     'Dec'
   ];
   static const _dayWeekLabels = ['Mn', 'Te', 'Wd', 'Tu', 'Fr', 'St', 'Sn'];
+
+  @override
+  Widget build(BuildContext context) {
+    //messageTable.count('epoch between ? and ??');
+
+    final dSet1 = <List<double>>[
+      [1, 4],
+      [3, 6],
+      [5, 2],
+      [4, 2],
+      [2, 1],
+      [0, 0],
+      [0, 0]
+    ];
+    final dSet2 = <List<double>>[
+      [5, 3],
+      [13, 7],
+      [55, 32],
+      [63, 76],
+      [65, 23],
+      [33, 56],
+      [0, 0],
+      [0, 0],
+      [0, 0],
+      [0, 0],
+      [0, 0],
+      [0, 0]
+    ];
+    return _content(dSet1, dSet2);
+  }
+
+  Widget _content(
+          List<List<double>> firstDSet, List<List<double>> secondDSet) =>
+      Column(children: [
+        Row(children: [
+          Container(width: 20, height: 20, color: Colors.lightBlueAccent),
+          Text(' : messages sent    '),
+          Container(width: 20, height: 20, color: Colors.yellowAccent),
+          Text(' : messages received')
+        ]),
+        Padding(padding: EdgeInsets.symmetric(vertical: 4)),
+        Text('Weekly:'),
+        Container(
+            child: _barChart(
+                firstDSet.map((m) => m.reduce(max)).reduce(max) + 4,
+                _titleData(_dayWeekLabels),
+                _barGrps(firstDSet).toList())),
+        Padding(padding: EdgeInsets.symmetric(vertical: 5)),
+        Text('Monthly:'),
+        Container(
+            child: _barChart(
+                secondDSet.map((m) => m.reduce(max)).reduce(max) + 12,
+                _titleData(_monthLabels),
+                _barGrps(secondDSet).toList()))
+      ]);
+
+  Iterable<BarChartGroupData> _barGrps(List<List<double>> yAxisVals) sync* {
+    _(int _x, double _y1, _y2) => BarChartGroupData(
+          x: _x,
+          barRods: [
+            BarChartRodData(
+                y: _y1, colors: [Colors.lightBlueAccent, Colors.greenAccent]),
+            BarChartRodData(
+                y: _y2, colors: [Colors.yellowAccent, Colors.redAccent])
+          ],
+          showingTooltipIndicators: [0, 1],
+        );
+    for (int i = 0; i < yAxisVals.length; i++)
+      yield _(i, yAxisVals[i][0], yAxisVals[i][1]);
+  }
 
   Widget _barChart(
           double maxYValue, FlTitlesData td, List<BarChartGroupData> bg) =>
@@ -77,71 +147,5 @@ class UsageInfoPage extends StatelessWidget {
         fontWeight: FontWeight.bold,
       ),
     );
-  }
-
-  Iterable<BarChartGroupData> _barGrps(List<List<double>> yAxisVals) sync* {
-    _(int _x, double _y1, _y2) => BarChartGroupData(
-          x: _x,
-          barRods: [
-            BarChartRodData(
-                y: _y1, colors: [Colors.lightBlueAccent, Colors.greenAccent]),
-            BarChartRodData(
-                y: _y2, colors: [Colors.yellowAccent, Colors.redAccent])
-          ],
-          showingTooltipIndicators: [0, 1],
-        );
-    for (int i = 0; i < yAxisVals.length; i++)
-      yield _(i, yAxisVals[i][0], yAxisVals[i][1]);
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    // --------------------
-    //
-    final firstDSet = <List<double>>[
-      [1, 4],
-      [3, 6],
-      [5, 2],
-      [4, 2],
-      [2, 1],
-      [0, 0],
-      [0, 0]
-    ];
-    final secondDSet = <List<double>>[
-      [5, 3],
-      [13, 7],
-      [55, 32],
-      [63, 76],
-      [65, 23],
-      [33, 56],
-      [0, 0],
-      [0, 0],
-      [0, 0],
-      [0, 0],
-      [0, 0],
-      [0, 0]
-    ];
-    //
-    // --------------------
-    return Column(children: [
-      Row(children: [
-        Container(width: 20, height: 20, color: Colors.lightBlueAccent),
-        Text(' : messages sent    '),
-        Container(width: 20, height: 20, color: Colors.yellowAccent),
-        Text(' : messages received')
-      ]),
-      Padding(padding: EdgeInsets.symmetric(vertical: 4)),
-      Text('Weekly:'),
-      Container(
-          child: _barChart(firstDSet.map((m) => m.reduce(max)).reduce(max) + 4,
-              _titleData(_dayWeekLabels), _barGrps(firstDSet).toList())),
-      Padding(padding: EdgeInsets.symmetric(vertical: 5)),
-      Text('Monthly:'),
-      Container(
-          child: _barChart(
-              secondDSet.map((m) => m.reduce(max)).reduce(max) + 12,
-              _titleData(_monthLabels),
-              _barGrps(secondDSet).toList()))
-    ]);
   }
 }
