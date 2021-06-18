@@ -66,8 +66,18 @@ abstract class MessageTable extends BaseTable<MessageModel> {
         orderBy: 'epoch ASC');
     final List<Message> msgs = [];
     for (final _ in _res) msgs.add(await _trans(_));
-    //msgs.sort(Message.compareEpoch);
     return msgs;
+  }
+
+  // idareten ...
+  Future<List<double>> countMessages(int start, int end, Chat me) async {
+    final sel = await _store.select();
+    final total =
+        sel.where((m) => m.epoch >= start && m.epoch <= end).length as double;
+    final mines = sel
+        .where((m) => m.epoch >= start && m.epoch <= end && m.fromId == me.id)
+        .length as double;
+    return [mines, total - mines];
   }
 
   Future<Message> lastMessage(String chatGroupId,

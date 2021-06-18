@@ -1,7 +1,8 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
-// import 'package:flutter/gestures.dart';
+//import 'package:flutter/gestures.dart';
 import 'dart:math';
+import '../main.dart';
 
 class UsageInfoPage extends StatelessWidget {
   static const _monthLabels = [
@@ -20,60 +21,75 @@ class UsageInfoPage extends StatelessWidget {
   ];
   static const _dayWeekLabels = ['Mn', 'Te', 'Wd', 'Tu', 'Fr', 'St', 'Sn'];
 
-  @override
-  Widget build(BuildContext context) {
-    //messageTable.count('epoch between ? and ??');
-
-    final dSet1 = <List<double>>[
-      [1, 4],
-      [3, 6],
-      [5, 2],
-      [4, 2],
-      [2, 1],
-      [0, 0],
-      [0, 0]
-    ];
-    final dSet2 = <List<double>>[
-      [5, 3],
-      [13, 7],
-      [55, 32],
-      [63, 76],
-      [65, 23],
-      [33, 56],
-      [0, 0],
-      [0, 0],
-      [0, 0],
-      [0, 0],
-      [0, 0],
-      [0, 0]
-    ];
-    return _content(dSet1, dSet2);
+  Future<List<List<double>>> _initS1() async {
+    var lsToReturn = <List<double>>[];
+    final no = DateTime.now();
+    final weekd = no.weekday;
+    final start = no.subtract(Duration(days: weekd));
+    for (int i = 0; i < _dayWeekLabels.length; i++) {
+      final drange = Duration(days: 1).inMilliseconds;
+      final stEpo = start.millisecondsSinceEpoch;
+      final re = await messageTable.countMessages(
+          stEpo + i * drange, stEpo + (i + 1) * drange, meSession);
+      lsToReturn.add([re[0], re[1]]);
+    }
+    return lsToReturn;
   }
 
-  Widget _content(
-          List<List<double>> firstDSet, List<List<double>> secondDSet) =>
-      Column(children: [
-        Row(children: [
-          Container(width: 20, height: 20, color: Colors.lightBlueAccent),
-          Text(' : messages sent    '),
-          Container(width: 20, height: 20, color: Colors.yellowAccent),
-          Text(' : messages received')
-        ]),
-        Padding(padding: EdgeInsets.symmetric(vertical: 4)),
-        Text('Weekly:'),
-        Container(
-            child: _barChart(
-                firstDSet.map((m) => m.reduce(max)).reduce(max) + 4,
+  Future<List<List<double>>> _initS2() async {
+    var lsToReturn = <List<double>>[];
+    final start = DateTime(DateTime.now().year, 1, 1, 0, 0);
+    for (int i = 0; i < _monthLabels.length; i++) {
+      final mrange = 30 * Duration(days: 1).inMilliseconds;
+      final stEpo = start.millisecondsSinceEpoch;
+      final re = await messageTable.countMessages(
+          stEpo + i * mrange, stEpo + (i + 1) * mrange, meSession);
+      lsToReturn.add([re[0], re[1]]);
+    }
+    return lsToReturn;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(children: [
+      Row(children: [
+        Container(width: 20, height: 20, color: Colors.lightBlueAccent),
+        Text(' : messages sent    '),
+        Container(width: 20, height: 20, color: Colors.yellowAccent),
+        Text(' : messages received')
+      ]),
+      Padding(padding: EdgeInsets.symmetric(vertical: 4)),
+      Text('Weekly:'),
+      Container(
+          child: FutureBuilder<List<List<double>>>(
+        future: _initS1(),
+        builder: (bc, snap) {
+          if (snap.hasData)
+            return _barChart(
+                snap.data.map((m) => m.reduce(max)).reduce(max) + 4,
                 _titleData(_dayWeekLabels),
-                _barGrps(firstDSet).toList())),
-        Padding(padding: EdgeInsets.symmetric(vertical: 5)),
-        Text('Monthly:'),
-        Container(
-            child: _barChart(
-                secondDSet.map((m) => m.reduce(max)).reduce(max) + 12,
+                _barGrps(snap.data).toList());
+          else
+            return Row();
+        },
+      )),
+      Padding(padding: EdgeInsets.symmetric(vertical: 5)),
+      Text('Monthly:'),
+      Container(
+          child: FutureBuilder<List<List<double>>>(
+        future: _initS2(),
+        builder: (bc, snap) {
+          if (snap.hasData)
+            return _barChart(
+                snap.data.map((m) => m.reduce(max)).reduce(max) + 12,
                 _titleData(_monthLabels),
-                _barGrps(secondDSet).toList()))
-      ]);
+                _barGrps(snap.data).toList());
+          else
+            return Row();
+        },
+      ))
+    ]);
+  }
 
   Iterable<BarChartGroupData> _barGrps(List<List<double>> yAxisVals) sync* {
     _(int _x, double _y1, _y2) => BarChartGroupData(
