@@ -4,7 +4,13 @@ import 'package:flutter/material.dart';
 import 'dart:math';
 import '../main.dart';
 
-class UsageInfoPage extends StatelessWidget {
+class UsageInfoPage extends StatefulWidget {
+  @override
+  State<StatefulWidget> createState() => _UsageInfoPageState();
+}
+
+class _UsageInfoPageState extends State<UsageInfoPage> {
+  _UsageInfoPageState();
   static const _monthLabels = [
     'Jan',
     'Feb',
@@ -21,14 +27,12 @@ class UsageInfoPage extends StatelessWidget {
   ];
   static const _dayWeekLabels = ['Mn', 'Te', 'Wd', 'Tu', 'Fr', 'St', 'Sn'];
 
-  Future<List<List<double>>> _initS1() async {
+  Future<List<List<double>>> _fillCounts(
+      DateTime start, int rangeCoeff, int iterLen) async {
     var lsToReturn = <List<double>>[];
-    final no = DateTime.now();
-    final weekd = no.weekday;
-    final start = no.subtract(Duration(days: weekd));
-    for (int i = 0; i < _dayWeekLabels.length; i++) {
-      final drange = Duration(days: 1).inMilliseconds;
-      final stEpo = start.millisecondsSinceEpoch;
+    final stEpo = start.millisecondsSinceEpoch;
+    for (int i = 0; i < iterLen; i++) {
+      final drange = rangeCoeff * Duration(days: 1).inMilliseconds;
       final re = await messageTable.countMessages(
           stEpo + i * drange, stEpo + (i + 1) * drange, meSession);
       lsToReturn.add([re[0], re[1]]);
@@ -36,18 +40,29 @@ class UsageInfoPage extends StatelessWidget {
     return lsToReturn;
   }
 
-  Future<List<List<double>>> _initS2() async {
-    var lsToReturn = <List<double>>[];
-    final start = DateTime(DateTime.now().year, 1, 1, 0, 0);
-    for (int i = 0; i < _monthLabels.length; i++) {
-      final mrange = 30 * Duration(days: 1).inMilliseconds;
-      final stEpo = start.millisecondsSinceEpoch;
-      final re = await messageTable.countMessages(
-          stEpo + i * mrange, stEpo + (i + 1) * mrange, meSession);
-      lsToReturn.add([re[0], re[1]]);
-    }
-    return lsToReturn;
+  Future<List<List<double>>> _initS1() async {
+    final no = DateTime.now();
+    return _fillCounts(no.subtract(Duration(days: no.weekday)), 1, 7);
   }
+
+  Future<List<List<double>>> _initS2() async =>
+      _fillCounts(DateTime(DateTime.now().year, 1, 1, 0, 0), 30, 12);
+
+  Widget _makeChart(String caption, [isWeekly = false]) => Column(children: [
+        Text(caption),
+        Container(
+            child: FutureBuilder<List<List<double>>>(
+          future: isWeekly ? _initS1() : _initS2(),
+          builder: (bc, snap) {
+            return snap.hasData
+                ? _barChart(
+                    snap.data.map((m) => m.reduce(max)).reduce(max) + 4,
+                    _titleData(isWeekly ? _dayWeekLabels : _monthLabels),
+                    _barGrps(snap.data).toList())
+                : Row();
+          },
+        )),
+      ]);
 
   @override
   Widget build(BuildContext context) {
@@ -59,35 +74,8 @@ class UsageInfoPage extends StatelessWidget {
         Text(' : messages received')
       ]),
       Padding(padding: EdgeInsets.symmetric(vertical: 4)),
-      Text('Weekly:'),
-      Container(
-          child: FutureBuilder<List<List<double>>>(
-        future: _initS1(),
-        builder: (bc, snap) {
-          if (snap.hasData)
-            return _barChart(
-                snap.data.map((m) => m.reduce(max)).reduce(max) + 4,
-                _titleData(_dayWeekLabels),
-                _barGrps(snap.data).toList());
-          else
-            return Row();
-        },
-      )),
-      Padding(padding: EdgeInsets.symmetric(vertical: 5)),
-      Text('Monthly:'),
-      Container(
-          child: FutureBuilder<List<List<double>>>(
-        future: _initS2(),
-        builder: (bc, snap) {
-          if (snap.hasData)
-            return _barChart(
-                snap.data.map((m) => m.reduce(max)).reduce(max) + 12,
-                _titleData(_monthLabels),
-                _barGrps(snap.data).toList());
-          else
-            return Row();
-        },
-      ))
+      _makeChart('Weekly:', true),
+      _makeChart('Monthly:'),
     ]);
   }
 
