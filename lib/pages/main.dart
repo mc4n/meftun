@@ -4,11 +4,13 @@ import '../main.dart';
 import '../widgets/chat_list.dart' show ChatList;
 import '../widgets/contact_list.dart' show ContactList;
 import '../pages/profile.dart' show ProfilePage;
+import 'about.dart' show aboutPage;
+//import 'package:firebase_core/firebase_core.dart';
+//import 'package:firebase_auth/firebase_auth.dart';
+//import 'package:cloud_firestore/cloud_firestore.dart';
 
 class MainPage extends StatefulWidget {
-  MainPage({
-    Key key,
-  }) : super(key: key);
+  MainPage();
 
   @override
   State<StatefulWidget> createState() => MainPageState();
@@ -73,6 +75,27 @@ class MainPageState extends State<MainPage> {
           body: TabBarView(
             children: tail,
           ),
+          persistentFooterButtons: [
+            aboutPage(context),
+            /*FutureBuilder<FirebaseApp>(
+              future: Firebase.initializeApp(),
+              builder: (b, s) {
+                  if (__.connectionState == ConnectionState.done && s.hasData)
+                          return FutureBuilder(
+                                  future:  FirebaseAuth.instance.signInAnonymously(),
+                                  builder: (_, __) {
+                                  if (__.hasError)
+                                    return Text('Firebase-User: <error>');
+                                  else if (__.connectionState != ConnectionState.done)
+                                    return Text('Firebase-User: <connecting...>');
+                                  else
+                                    return Text(
+                                        'Firebase-User: ${__.data.user.email ?? '<anonymous>'}');
+                                });
+                  else Text('error!');
+              }
+            ),*/
+          ],
         ),
       );
 
