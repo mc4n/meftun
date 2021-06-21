@@ -7,7 +7,6 @@ import '../pages/profile.dart' show ProfilePage;
 import 'about.dart' show aboutPage;
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-//import 'package:cloud_firestore/cloud_firestore.dart';
 
 class MainPage extends StatefulWidget {
   MainPage();
@@ -61,7 +60,7 @@ class MainPageState extends State<MainPage> {
                 TextButton(
                   onPressed: () {
                     Navigator.of(context).push(MaterialPageRoute(
-                        builder: (_) => ProfilePage(meSession)));
+                        builder: (_) => ProfilePage(meSession.username, true)));
                   },
                   child: CircleAvatar(
                       backgroundImage: AssetImage(meSession.photoURL)),

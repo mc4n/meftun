@@ -111,7 +111,8 @@ class ChatItemState extends State<ChatItem> {
               closeOnTap: false,
               onTap: () {
                 Navigator.of(context).push(MaterialPageRoute(
-                    builder: (_) => ProfilePage(widget.chatItem)));
+                    builder: (_) => ProfilePage(widget.chatItem.username,
+                        widget.chatItem == meSession)));
               })
         ],
         secondaryActions: [
