@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "640592488428",
+    "project_id": "meftune-59c6d",
+    "storage_bucket": "meftune-59c6d.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:640592488428:android:33d84b6371ae3818c302c9",
+        "android_client_info": {
+          "package_name": "com.example.me_flutting"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "640592488428-ept313q8hahoqqsmkhpic6j2d9uh5ktp.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAVw8ZKdTXUiZzBQy478mFXp5ln-T6lPaU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "640592488428-ept313q8hahoqqsmkhpic6j2d9uh5ktp.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
