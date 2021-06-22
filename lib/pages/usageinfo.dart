@@ -10,7 +10,6 @@ class UsageInfoPage extends StatefulWidget {
 }
 
 class _UsageInfoPageState extends State<UsageInfoPage> {
-  _UsageInfoPageState();
   static const _monthLabels = [
     'Jan',
     'Feb',
@@ -27,6 +26,19 @@ class _UsageInfoPageState extends State<UsageInfoPage> {
   ];
   static const _dayWeekLabels = ['Mn', 'Te', 'Wd', 'Tu', 'Fr', 'St', 'Sn'];
 
+  @override
+  Widget build(BuildContext context) {
+    return DefaultTabController(
+      length: 2,
+      child: Scaffold(
+          appBar: TabBar(
+              labelColor: Colors.black,
+              unselectedLabelColor: Colors.grey,
+              tabs: [Tab(text: 'Weekly'), Tab(text: 'Monthly')]),
+          body: TabBarView(children: [_makeChart(true), _makeChart()])),
+    );
+  }
+
   Future<List<List<double>>> _fillCounts(
       DateTime start, int rangeCoeff, int iterLen) async {
     var lsToReturn = <List<double>>[];
@@ -42,42 +54,36 @@ class _UsageInfoPageState extends State<UsageInfoPage> {
 
   Future<List<List<double>>> _initS1() async {
     final no = DateTime.now();
-    return _fillCounts(no.subtract(Duration(days: no.weekday)), 1, 7);
+    return _fillCounts(no.subtract(Duration(days: no.weekday)), 1, no.weekday);
   }
 
-  Future<List<List<double>>> _initS2() async =>
-      _fillCounts(DateTime(DateTime.now().year, 1, 1, 0, 0), 30, 12);
+  Future<List<List<double>>> _initS2() async {
+    final no = DateTime.now();
+    return _fillCounts(DateTime(no.year, 1, 1, 0, 0), 30, no.month);
+  }
 
-  Widget _makeChart(String caption, [isWeekly = false]) => Column(children: [
-        Text(caption),
+  Widget _makeChart([isWeekly = false]) => Column(children: [
         Container(
             child: FutureBuilder<List<List<double>>>(
           future: isWeekly ? _initS1() : _initS2(),
-          builder: (bc, snap) {
+          builder: (_, snap) {
             return snap.hasData
                 ? _barChart(
-                    snap.data.map((m) => m.reduce(max)).reduce(max) + 4,
+                    snap.data.map((m) => m.reduce(max)).reduce(max) +
+                        (isWeekly ? 4 : 9),
                     _titleData(isWeekly ? _dayWeekLabels : _monthLabels),
                     _barGrps(snap.data).toList())
-                : Row();
+                : Text(snap.error ?? '...');
           },
         )),
+        Padding(padding: EdgeInsets.symmetric(vertical: 4)),
+        Row(children: [
+          Container(width: 20, height: 20, color: Colors.lightBlueAccent),
+          Text(' : messages sent    '),
+          Container(width: 20, height: 20, color: Colors.yellowAccent),
+          Text(' : messages received')
+        ]),
       ]);
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(children: [
-      Row(children: [
-        Container(width: 20, height: 20, color: Colors.lightBlueAccent),
-        Text(' : messages sent    '),
-        Container(width: 20, height: 20, color: Colors.yellowAccent),
-        Text(' : messages received')
-      ]),
-      Padding(padding: EdgeInsets.symmetric(vertical: 4)),
-      _makeChart('Weekly:', true),
-      _makeChart('Monthly:'),
-    ]);
-  }
 
   Iterable<BarChartGroupData> _barGrps(List<List<double>> yAxisVals) sync* {
     _(int _x, double _y1, _y2) => BarChartGroupData(
@@ -88,7 +94,7 @@ class _UsageInfoPageState extends State<UsageInfoPage> {
             BarChartRodData(
                 y: _y2, colors: [Colors.yellowAccent, Colors.redAccent])
           ],
-          showingTooltipIndicators: [0, 1],
+          //showingTooltipIndicators: [0, 1],
         );
     for (int i = 0; i < yAxisVals.length; i++)
       yield _(i, yAxisVals[i][0], yAxisVals[i][1]);
@@ -96,30 +102,30 @@ class _UsageInfoPageState extends State<UsageInfoPage> {
 
   Widget _barChart(
           double maxYValue, FlTitlesData td, List<BarChartGroupData> bg) =>
-      AspectRatio(
-        aspectRatio: 1.7,
-        child: Card(
-          elevation: 0,
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
-          color: const Color(0xff2c4260),
-          child: BarChart(
-            BarChartData(
-              alignment: BarChartAlignment.spaceAround,
-              maxY: maxYValue,
-              barTouchData: BarTouchData(
-                enabled: false,
-                touchTooltipData: BarTouchTooltipData(
-                    tooltipBgColor: Colors.transparent,
-                    tooltipPadding: const EdgeInsets.all(0),
-                    tooltipMargin: 8,
-                    getTooltipItem: _toolt),
-              ),
-              titlesData: td,
-              borderData: FlBorderData(
-                show: false,
-              ),
-              barGroups: bg,
+      Container(
+        constraints: BoxConstraints(
+            maxHeight: MediaQuery.of(context).size.height - 200,
+            maxWidth: MediaQuery.of(context).size.width - 50),
+        //elevation: 0,
+        //shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
+        color: const Color(0xff2c4260),
+        child: BarChart(
+          BarChartData(
+            alignment: BarChartAlignment.spaceAround,
+            maxY: maxYValue,
+            barTouchData: BarTouchData(
+              enabled: true,
+              touchTooltipData: BarTouchTooltipData(
+                  tooltipBgColor: Colors.transparent,
+                  tooltipPadding: const EdgeInsets.all(0),
+                  tooltipMargin: 8,
+                  getTooltipItem: _toolt),
             ),
+            titlesData: td,
+            borderData: FlBorderData(
+              show: false,
+            ),
+            barGroups: bg,
           ),
         ),
       );
