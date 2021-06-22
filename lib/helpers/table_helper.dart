@@ -1,11 +1,11 @@
-import 'sql_helper.dart' as sql;
+import 'sql_context.dart' show SqlDbaseContext;
 import 'models.dart' show ModelBase;
 
 typedef FnFrom<T extends ModelBase> = T Function(Map<String, dynamic>);
 
-abstract class TableBaseEntity<T extends ModelBase> {
+abstract class TableBaseHelper<T extends ModelBase> {
   final FnFrom<T> from;
-  TableBaseEntity(this.from);
+  TableBaseHelper(this.from);
 
   Future<List<T>> select({int pageNum = 0, String orderBy = 'id ASC'});
 
@@ -22,10 +22,11 @@ abstract class TableBaseEntity<T extends ModelBase> {
   Future<bool> delete(String id);
 }
 
-class SqlTableEntity<T extends ModelBase> extends TableBaseEntity<T> {
+class SqlTableHelper<T extends ModelBase> extends TableBaseHelper<T> {
   static const PAGE_LEN = 25;
   final String tableName;
-  SqlTableEntity(this.tableName, FnFrom<T> fnFrom) : super(fnFrom);
+  SqlDbaseContext sql = SqlDbaseContext.instance();
+  SqlTableHelper(this.tableName, FnFrom<T> fnFrom) : super(fnFrom);
 
   @override
   Future<List<T>> select({int pageNum = 0, String orderBy = 'id ASC'}) async =>
@@ -65,9 +66,9 @@ class SqlTableEntity<T extends ModelBase> extends TableBaseEntity<T> {
   Future<bool> delete(String id) async => deleteWhere('id = ?', [id]);
 }
 
-class SafeTableEntity<T extends ModelBase> extends TableBaseEntity<T> {
+class SafeTableHelper<T extends ModelBase> extends TableBaseHelper<T> {
   List<Map<String, dynamic>> _itemStore = [];
-  SafeTableEntity(FnFrom<T> fnFrom) : super(fnFrom);
+  SafeTableHelper(FnFrom<T> fnFrom) : super(fnFrom);
 
   @override
   Future<List<T>> select({int pageNum = 0, String orderBy = 'id ASC'}) async =>

@@ -9,7 +9,7 @@ import '/models/groupchat.dart' show GroupChat;
 import '/models/mbody.dart' show RawBody;
 import '/models/message.dart' show Message;
 
-const SAFE_MODE = true;
+const SAFE_MODE = false;
 
 final botEfendi = BotChat('5', meSession, 'efendi', name: 'Bot Efendi');
 final apiBot = BotChat('6', botEfendi, 'api', name: 'API helper bot');

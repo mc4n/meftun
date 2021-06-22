@@ -21,7 +21,7 @@ class TextingPage extends StatefulWidget {
 
   @override
   State<StatefulWidget> createState() => TextingPageState(chatItem.type == 'B'
-      ? BotManager.findManagerByBot(chatItem).msgMiddleMan
+      ? BotManager.findManagerByBot(chatItem, messageTable).msgMiddleMan
       : messageTable.insertMessage);
 
   final Future<void> Function() setMainState;
@@ -39,9 +39,11 @@ class TextingPageState extends State<TextingPage> {
     final msgResult = await messagingMiddleware(draft);
     if (msgResult != null) {
       widget.setMainState();
-      setState(() {
-        callback(itemAdded: msgResult);
-      });
+      if (this.mounted) {
+        setState(() {
+          callback(itemAdded: msgResult);
+        });
+      }
     } else {
       callback(errorMsg: 'msg not sent!');
     }

@@ -5,12 +5,12 @@ import 'models.dart';
 import 'table_helper.dart';
 
 abstract class BaseTable<T extends ModelBase> {
-  final TableBaseEntity<T> _store;
+  final TableBaseHelper<T> _store;
   BaseTable(this._store);
 }
 
 abstract class ChatTable extends BaseTable<ChatModel> {
-  ChatTable(TableBaseEntity<ChatModel> _store) : super(_store);
+  ChatTable(TableBaseHelper<ChatModel> _store) : super(_store);
 
   static ChatModel from(Map<String, dynamic> _map) => ChatModel(_map['id'],
       _map['user_name'], _map['name'], _map['photo_url'], _map['_type']);
@@ -34,7 +34,7 @@ abstract class ChatTable extends BaseTable<ChatModel> {
 }
 
 abstract class MessageTable extends BaseTable<MessageModel> {
-  MessageTable(TableBaseEntity<MessageModel> _store) : super(_store);
+  MessageTable(TableBaseHelper<MessageModel> _store) : super(_store);
 
   static MessageModel from(Map<String, dynamic> _map) {
     return MessageModel(
@@ -100,18 +100,18 @@ abstract class MessageTable extends BaseTable<MessageModel> {
 }
 
 class SqlChatTable extends ChatTable {
-  SqlChatTable() : super(SqlTableEntity<ChatModel>('tb_chats', ChatTable.from));
+  SqlChatTable() : super(SqlTableHelper<ChatModel>('tb_chats', ChatTable.from));
 }
 
 class SafeChatTable extends ChatTable {
-  SafeChatTable() : super(SafeTableEntity<ChatModel>(ChatTable.from));
+  SafeChatTable() : super(SafeTableHelper<ChatModel>(ChatTable.from));
 }
 
 class SqlMessageTable extends MessageTable {
   SqlMessageTable()
-      : super(SqlTableEntity<MessageModel>('tb_messages', MessageTable.from));
+      : super(SqlTableHelper<MessageModel>('tb_messages', MessageTable.from));
 }
 
 class SafeMessageTable extends MessageTable {
-  SafeMessageTable() : super(SafeTableEntity<MessageModel>(MessageTable.from));
+  SafeMessageTable() : super(SafeTableHelper<MessageModel>(MessageTable.from));
 }

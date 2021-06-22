@@ -1,11 +1,11 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:me_flutting/models/botchat.dart';
-import 'package:me_flutting/main.dart';
-import 'package:me_flutting/models/message.dart';
-import '../models/draft.dart' show Draft;
-import 'package:me_flutting/models/mbody.dart';
 import 'package:http/http.dart' as http;
-import 'sql_helper.dart' as sql;
+import '../models/botchat.dart';
+import '../models/message.dart';
+import '../models/draft.dart' show Draft;
+import '../models/mbody.dart';
+import 'sql_context.dart' show SqlDbaseContext;
+import 'tables.dart' show MessageTable;
 
 class BotCommand {
   final String cmd;
@@ -32,7 +32,9 @@ class BotCommand {
 
 class BotManager extends BotChat {
   final List<BotCommand> commands;
-  BotManager(this.commands, BotChat botObj)
+  final MessageTable messageTable;
+  static SqlDbaseContext sql = SqlDbaseContext.instance();
+  BotManager(this.commands, BotChat botObj, this.messageTable)
       : super(botObj.id, botObj.owner, botObj.username);
 
   Future<Message> msgMiddleMan(Draft draft) async {
@@ -69,9 +71,10 @@ class BotManager extends BotChat {
   }
 
   static Map<String, BotManager> memoizer = Map();
-  static BotManager findManagerByBot(BotChat bc) {
+  static BotManager findManagerByBot(BotChat bc, MessageTable msgTable) {
     final _key = bc.username;
-    return memoizer.putIfAbsent(_key, () => BotManager(cmdList[_key], bc));
+    return memoizer.putIfAbsent(
+        _key, () => BotManager(cmdList[_key], bc, msgTable));
   }
 
   static Map<String, List<BotCommand>> cmdList = {

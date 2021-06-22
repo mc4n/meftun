@@ -29,13 +29,13 @@ class _UsageInfoPageState extends State<UsageInfoPage> {
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-      length: 2,
+      length: 1, //2,
       child: Scaffold(
           appBar: TabBar(
               labelColor: Colors.black,
               unselectedLabelColor: Colors.grey,
-              tabs: [Tab(text: 'Weekly'), Tab(text: 'Monthly')]),
-          body: TabBarView(children: [_makeChart(true), _makeChart()])),
+              tabs: [Tab(text: 'Weekly') /*, Tab(text: 'Monthly')*/]),
+          body: TabBarView(children: [_makeChart(true) /*, _makeChart()*/])),
     );
   }
 
@@ -102,33 +102,33 @@ class _UsageInfoPageState extends State<UsageInfoPage> {
 
   Widget _barChart(
           double maxYValue, FlTitlesData td, List<BarChartGroupData> bg) =>
-      Container(
-        constraints: BoxConstraints(
-            maxHeight: MediaQuery.of(context).size.height - 200,
-            maxWidth: MediaQuery.of(context).size.width - 50),
-        //elevation: 0,
-        //shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
-        color: const Color(0xff2c4260),
-        child: BarChart(
-          BarChartData(
-            alignment: BarChartAlignment.spaceAround,
-            maxY: maxYValue,
-            barTouchData: BarTouchData(
-              enabled: true,
-              touchTooltipData: BarTouchTooltipData(
-                  tooltipBgColor: Colors.transparent,
-                  tooltipPadding: const EdgeInsets.all(0),
-                  tooltipMargin: 8,
-                  getTooltipItem: _toolt),
+      AspectRatio(
+          aspectRatio: 1.7,
+          child: Card(
+            elevation: 0,
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
+            color: const Color(0xff2c4260),
+            child: BarChart(
+              BarChartData(
+                alignment: BarChartAlignment.spaceAround,
+                maxY: maxYValue,
+                barTouchData: BarTouchData(
+                  enabled: true,
+                  touchTooltipData: BarTouchTooltipData(
+                      tooltipBgColor: Colors.transparent,
+                      tooltipPadding: const EdgeInsets.all(0),
+                      tooltipMargin: 8,
+                      getTooltipItem: _toolt),
+                ),
+                titlesData: td,
+                borderData: FlBorderData(
+                  show: false,
+                ),
+                barGroups: bg,
+              ),
             ),
-            titlesData: td,
-            borderData: FlBorderData(
-              show: false,
-            ),
-            barGroups: bg,
-          ),
-        ),
-      );
+          ));
 
   FlTitlesData _titleData(List<String> labelList) => FlTitlesData(
         show: true,
