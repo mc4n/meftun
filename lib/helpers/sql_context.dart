@@ -1,11 +1,18 @@
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 import 'models.dart' show ModelBase;
+import 'table_helper.dart' show SqlTableHelper;
 
 class SqlDbaseContext {
   final String dbname;
   Database _db;
+  Map<String, SqlTableHelper> _thelps;
   SqlDbaseContext(this.dbname);
+
+  void putTableHelper(SqlTableHelper helper) {
+    if (_thelps == null) _thelps = Map();
+    _thelps.putIfAbsent(helper.tableName, () => helper);
+  }
 
   static Map<String, SqlDbaseContext> _inst;
 
@@ -14,31 +21,17 @@ class SqlDbaseContext {
     return _inst.putIfAbsent(dbaseName, () => SqlDbaseContext(dbaseName));
   }
 
-  Future<Database> open() async =>
-      _db ??
-      (_db = await openDatabase(
-        join(await getDatabasesPath(), dbname),
-        version: 1,
-        onCreate: (_, __) async {
-          await _.execute(''' 
-          create table tb_messages (
-              id text primary key not null,
-                      body text not null,
-                      from_id text not null,
-                      chat_group_id text not null,
-                      epoch integer not null,
-                      mbody_type text not null)
-          ''');
-          await _.execute(''' 
-              create table tb_chats (
-                      id text primary key not null,
-                      user_name text not null,
-                      name text not null,
-                      photo_url text not null,
-                _type integer not null)
-          ''');
-        },
-      ));
+  Future<Database> open() async {
+    return _db ??
+        (_db = await openDatabase(
+          join(await getDatabasesPath(), dbname),
+          version: 1,
+          onCreate: (_, __) async {
+            for (final _cmd in _thelps.values)
+              await _.execute(_cmd.generatorCommand);
+          },
+        ));
+  }
 
   Future<List<T>> query<T extends ModelBase>(
           String table, T Function(Map<String, Object>) translator,

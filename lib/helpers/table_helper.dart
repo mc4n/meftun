@@ -25,8 +25,12 @@ abstract class TableBaseHelper<T extends ModelBase> {
 class SqlTableHelper<T extends ModelBase> extends TableBaseHelper<T> {
   static const PAGE_LEN = 25;
   final String tableName;
+  final String generatorCommand;
   SqlDbaseContext sql = SqlDbaseContext.instance();
-  SqlTableHelper(this.tableName, FnFrom<T> fnFrom) : super(fnFrom);
+  SqlTableHelper(this.tableName, this.generatorCommand, FnFrom<T> fnFrom)
+      : super(fnFrom) {
+    sql.putTableHelper(this);
+  }
 
   @override
   Future<List<T>> select({int pageNum = 0, String orderBy = 'id ASC'}) async =>

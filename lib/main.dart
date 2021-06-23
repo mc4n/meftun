@@ -10,25 +10,25 @@ import '/models/mbody.dart' show RawBody;
 import '/models/message.dart' show Message;
 
 const SAFE_MODE = false;
-
-final botEfendi = BotChat('5', meSession, 'efendi', name: 'Bot Efendi');
-final apiBot = BotChat('6', botEfendi, 'api', name: 'API helper bot');
-final sqlBot = BotChat('7', botEfendi, 'sql', name: 'SQLite helper bot');
-
 const APP_TITLE = SAFE_MODE ? 'Meftune(Safe Mode)' : 'Meftune';
-
 final meSession = DirectChat('1', 'mcan', name: 'Mustafa Can');
 
-final chatTable = SAFE_MODE ? SafeChatTable() : SqlChatTable();
-final messageTable = SAFE_MODE ? SafeMessageTable() : SqlMessageTable();
+ChatTable chatTable;
+MessageTable messageTable;
 
 void main() {
+  chatTable = SAFE_MODE ? SafeChatTable() : SqlChatTable();
+  messageTable = SAFE_MODE ? SafeMessageTable() : SqlMessageTable();
+
   if (!SAFE_MODE) WidgetsFlutterBinding.ensureInitialized();
 
-  chatTable.insertChat(botEfendi);
   chatTable.insertChat(meSession);
-  chatTable.insertChat(apiBot);
-  chatTable.insertChat(sqlBot);
+
+  final botEfendi = BotChat('5', meSession, 'efendi', name: 'Bot Efendi');
+  chatTable.insertChat(botEfendi);
+  chatTable.insertChat(BotChat('6', botEfendi, 'api', name: 'API helper bot'));
+  chatTable
+      .insertChat(BotChat('7', botEfendi, 'sql', name: 'SQLite helper bot'));
 
   if (SAFE_MODE) {
     final pac = DirectChat('2', 'pac', name: 'Tupac Shakur');

@@ -100,7 +100,18 @@ abstract class MessageTable extends BaseTable<MessageModel> {
 }
 
 class SqlChatTable extends ChatTable {
-  SqlChatTable() : super(SqlTableHelper<ChatModel>('tb_chats', ChatTable.from));
+  SqlChatTable()
+      : super(SqlTableHelper<ChatModel>(
+            'tb_chats',
+            ''' 
+              create table tb_chats (
+                      id text primary key not null,
+                      user_name text not null,
+                      name text not null,
+                      photo_url text not null,
+                _type integer not null)
+          ''',
+            ChatTable.from));
 }
 
 class SafeChatTable extends ChatTable {
@@ -109,7 +120,18 @@ class SafeChatTable extends ChatTable {
 
 class SqlMessageTable extends MessageTable {
   SqlMessageTable()
-      : super(SqlTableHelper<MessageModel>('tb_messages', MessageTable.from));
+      : super(SqlTableHelper<MessageModel>(
+            'tb_messages',
+            ''' 
+          create table tb_messages (
+              id text primary key not null,
+                      body text not null,
+                      from_id text not null,
+                      chat_group_id text not null,
+                      epoch integer not null,
+                      mbody_type text not null)
+          ''',
+            MessageTable.from));
 }
 
 class SafeMessageTable extends MessageTable {
