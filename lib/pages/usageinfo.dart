@@ -28,14 +28,27 @@ class _UsageInfoPageState extends State<UsageInfoPage> {
 
   @override
   Widget build(BuildContext context) {
+    List<List<double>> zeroedSample(int len, [double zero = 0]) => () sync* {
+          for (int i = 0; i < len; i++) yield <double>[zero, zero];
+        }()
+            .toList();
+
+    final futBuilder = ([bool isWeekly = false]) =>
+        FutureBuilder<List<List<double>>>(
+            future: isWeekly ? _initS1() : _initS2(),
+            builder: (_, snap) => _makeChart(
+                snap.hasData ? snap.data : zeroedSample(isWeekly ? 7 : 12),
+                isWeekly ? 4 : 9,
+                isWeekly ? _dayWeekLabels : _monthLabels));
+
     return DefaultTabController(
-      length: 1, //2,
+      length: 2,
       child: Scaffold(
           appBar: TabBar(
               labelColor: Colors.black,
               unselectedLabelColor: Colors.grey,
-              tabs: [Tab(text: 'Weekly') /*, Tab(text: 'Monthly')*/]),
-          body: TabBarView(children: [_makeChart(true) /*, _makeChart()*/])),
+              tabs: [Tab(text: 'Weekly'), Tab(text: 'Monthly')]),
+          body: TabBarView(children: [futBuilder(true), futBuilder()])),
     );
   }
 
@@ -62,20 +75,11 @@ class _UsageInfoPageState extends State<UsageInfoPage> {
     return _fillCounts(DateTime(no.year, 1, 1, 0, 0), 30, no.month);
   }
 
-  Widget _makeChart([isWeekly = false]) => Column(children: [
-        Container(
-            child: FutureBuilder<List<List<double>>>(
-          future: isWeekly ? _initS1() : _initS2(),
-          builder: (_, snap) {
-            return snap.hasData
-                ? _barChart(
-                    snap.data.map((m) => m.reduce(max)).reduce(max) +
-                        (isWeekly ? 4 : 9),
-                    _titleData(isWeekly ? _dayWeekLabels : _monthLabels),
-                    _barGrps(snap.data).toList())
-                : Text(snap.error ?? '...');
-          },
-        )),
+  Widget _makeChart(
+          List<List<double>> _data, int topSpace, List<String> labelSource) =>
+      Column(children: [
+        _barChart(_data.map((m) => m.reduce(max)).reduce(max) + topSpace,
+            _titleData(labelSource), _barGrps(_data).toList()),
         Padding(padding: EdgeInsets.symmetric(vertical: 4)),
         Row(children: [
           Container(width: 20, height: 20, color: Colors.lightBlueAccent),
