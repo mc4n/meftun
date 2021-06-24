@@ -1,8 +1,12 @@
 import '../models/chat.dart' show Chat;
 import '../models/message.dart' show Message;
+import '../models/mbody.dart' show RawBody;
 import '../models/draft.dart' show Draft;
+import '../models/directchat.dart' show DirectChat;
+import '../models/groupchat.dart' show GroupChat;
 import 'models.dart';
 import 'table_helper.dart';
+import '/helpers/bot_helper.dart' show fillDefaultBots;
 
 abstract class BaseTable<T extends ModelBase> {
   final TableBaseHelper<T> _store;
@@ -115,7 +119,19 @@ class SqlChatTable extends ChatTable {
 }
 
 class SafeChatTable extends ChatTable {
-  SafeChatTable() : super(SafeTableHelper<ChatModel>(ChatTable.from));
+  static DirectChat mockSessionOwner =
+      DirectChat('1', 'mcan', name: 'Mustafa Can');
+
+  SafeChatTable() : super(SafeTableHelper<ChatModel>(ChatTable.from)) {
+    final pac = DirectChat('2', 'pac', name: 'Tupac Shakur');
+    final thugs = GroupChat('3', 'THUGS');
+    final big = DirectChat('4', 'big', name: 'Notorious BIG');
+    insertChat(SafeChatTable.mockSessionOwner);
+    fillDefaultBots(this);
+    insertChat(pac);
+    insertChat(thugs);
+    insertChat(big);
+  }
 }
 
 class SqlMessageTable extends MessageTable {
@@ -135,5 +151,17 @@ class SqlMessageTable extends MessageTable {
 }
 
 class SafeMessageTable extends MessageTable {
-  SafeMessageTable() : super(SafeTableHelper<MessageModel>(MessageTable.from));
+  SafeMessageTable() : super(SafeTableHelper<MessageModel>(MessageTable.from)) {
+    final pac = DirectChat('2', 'pac', name: 'Tupac Shakur');
+    final thugs = GroupChat('3', 'THUGS');
+    final big = DirectChat('4', 'big', name: 'Notorious BIG');
+    insertMessage(Message('4', RawBody('maan, f this sh.'),
+        SafeChatTable.mockSessionOwner, big, 1542450000000));
+    insertMessage(
+        Message('1', RawBody('whutsup bro?'), pac, pac, 1042342000000));
+    insertMessage(
+        Message('3', RawBody('yeah, indeed.'), big, thugs, 1622450000000));
+    insertMessage(
+        Message('2', RawBody('thug 4 life!'), pac, thugs, 1027675000000));
+  }
 }

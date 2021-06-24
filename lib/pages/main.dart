@@ -9,8 +9,8 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class MainPage extends StatefulWidget {
-  MainPage();
-
+  final String title;
+  const MainPage(this.title);
   @override
   State<StatefulWidget> createState() => MainPageState();
 }
@@ -101,5 +101,5 @@ class MainPageState extends State<MainPage> {
           onSubmitted: (_) => setState(() => null),
           controller: tedit,
           style: TextStyle(fontSize: 17, color: Colors.white))
-      : Text(APP_TITLE, style: TextStyle(fontSize: 22, color: Colors.white));
+      : Text(widget.title, style: TextStyle(fontSize: 22, color: Colors.white));
 }

@@ -5,7 +5,15 @@ import '../models/message.dart';
 import '../models/draft.dart' show Draft;
 import '../models/mbody.dart';
 import 'sql_context.dart' show SqlDbaseContext;
-import 'tables.dart' show MessageTable;
+import 'tables.dart' show ChatTable, MessageTable;
+
+void fillDefaultBots(ChatTable chatTable) {
+  final botEfendi = BotChat('5', null, 'efendi', name: 'Bot Efendi');
+  chatTable.insertChat(botEfendi);
+  chatTable.insertChat(BotChat('6', botEfendi, 'api', name: 'API helper bot'));
+  chatTable
+      .insertChat(BotChat('7', botEfendi, 'sql', name: 'SQLite helper bot'));
+}
 
 class BotCommand {
   final String cmd;
