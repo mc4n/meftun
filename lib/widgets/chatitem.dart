@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/rendering.dart';
-import '../models/chat.dart' show Chat;
-import '../models/message.dart' show Message;
+import '../types/chat.dart' show Chat;
+import '../types/message.dart' show Message;
 import '../pages/texting.dart' show TextingPage;
 import '../pages/profile.dart' show ProfilePage;
 import 'package:flutter_slidable/flutter_slidable.dart';

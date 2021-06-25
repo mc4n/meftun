@@ -3,7 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/widgets.dart';
 import '/pages/main.dart' show MainPage;
 import '/helpers/tables.dart';
-import '/helpers/bot_helper.dart' show fillDefaultBots;
+import '/helpers/bot_context.dart' show fillDefaultBots;
 
 final meSession = SafeChatTable.mockSessionOwner;
 ChatTable chatTable;

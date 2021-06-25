@@ -1,7 +1,7 @@
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 import 'models.dart' show ModelBase;
-import 'table_helper.dart' show SqlTableHelper;
+import 'table_helpers.dart' show SqlTableHelper;
 
 class SqlDbaseContext {
   final String dbname;

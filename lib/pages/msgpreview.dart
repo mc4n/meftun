@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import '../models/message.dart' show Message;
+import '../types/message.dart' show Message;
 import 'dart:io' show File;
-import '../models/mbody.dart' show ImageBody;
+import '../types/mbody.dart' show ImageBody;
 
 class MessagePreview extends StatefulWidget {
   static Future<Widget> sneakOut(BuildContext context, Message messageItem) =>

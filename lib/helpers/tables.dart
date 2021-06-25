@@ -1,12 +1,12 @@
-import '../models/chat.dart' show Chat;
-import '../models/message.dart' show Message;
-import '../models/mbody.dart' show RawBody;
-import '../models/draft.dart' show Draft;
-import '../models/directchat.dart' show DirectChat;
-import '../models/groupchat.dart' show GroupChat;
+import '../types/chat.dart' show Chat;
+import '../types/message.dart' show Message;
+import '../types/mbody.dart' show RawBody;
+import '../types/draft.dart' show Draft;
+import '../types/directchat.dart' show DirectChat;
+import '../types/groupchat.dart' show GroupChat;
 import 'models.dart';
-import 'table_helper.dart';
-import '/helpers/bot_helper.dart' show fillDefaultBots;
+import 'table_helpers.dart';
+import '/helpers/bot_context.dart' show fillDefaultBots;
 
 abstract class BaseTable<T extends ModelBase> {
   final TableBaseHelper<T> _store;

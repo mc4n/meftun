@@ -1,9 +1,9 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
-import '../models/botchat.dart';
-import '../models/message.dart';
-import '../models/draft.dart' show Draft;
-import '../models/mbody.dart';
+import '../types/botchat.dart';
+import '../types/message.dart';
+import '../types/draft.dart' show Draft;
+import '../types/mbody.dart';
 import 'sql_context.dart' show SqlDbaseContext;
 import 'tables.dart' show ChatTable, MessageTable;
 

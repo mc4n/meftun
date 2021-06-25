@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import '../pages/profile.dart' show ProfilePage;
 import '../widgets/msgdialogs.dart' show MessageDialogs;
-import '../models/chat.dart' show Chat;
-import '../models/message.dart' show Message;
-import '../models/draft.dart' show Draft;
+import '../types/chat.dart' show Chat;
+import '../types/message.dart' show Message;
+import '../types/draft.dart' show Draft;
 import '../main.dart';
 import '../widgets/msgpanel.dart';
-import '../helpers/bot_helper.dart';
+import '../helpers/bot_context.dart';
 
 class TextingPage extends StatefulWidget {
   static void letTheGameBegin(BuildContext context, Chat chatItem,

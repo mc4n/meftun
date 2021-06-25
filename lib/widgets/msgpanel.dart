@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-import '../models/chat.dart' show Chat;
-import '../models/draft.dart' show Draft;
-import '../models/mbody.dart' show RawBody, ImageBody;
+import '../types/chat.dart' show Chat;
+import '../types/draft.dart' show Draft;
+import '../types/mbody.dart' show RawBody, ImageBody;
 import 'package:file_picker/file_picker.dart';
-import '../helpers/filehelpers.dart';
+import '../helpers/file_context.dart';
 import '../main.dart';
 import '../pages/texting.dart';
 

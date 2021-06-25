@@ -1,9 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import '../models/chat.dart' show Chat;
-import '../models/directchat.dart' show DirectChat;
+import '../types/chat.dart' show Chat;
+import '../types/directchat.dart' show DirectChat;
 import '../pages/texting.dart' show TextingPageState;
-import '../models/message.dart' show Message;
+import '../types/message.dart' show Message;
 import '../main.dart';
 import '../pages/msgpreview.dart' show MessagePreviewState;
 

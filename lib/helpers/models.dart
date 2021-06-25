@@ -1,15 +1,15 @@
-import '../models/chat.dart' show Chat;
-import '../models/directchat.dart' show DirectChat;
-import '../models/groupchat.dart' show GroupChat;
-import '../models/botchat.dart' show BotChat;
-import '../models/mbody.dart' show MBody, RawBody, ImageBody;
+import '../types/chat.dart' show Chat;
+import '../types/directchat.dart' show DirectChat;
+import '../types/groupchat.dart' show GroupChat;
+import '../types/botchat.dart' show BotChat;
+import '../types/mbody.dart' show MBody, RawBody, ImageBody;
 
-mixin ModelBase {
+abstract class ModelBase {
   String get getId;
   Map<String, dynamic> get map;
 }
 
-class ChatModel with ModelBase {
+class ChatModel implements ModelBase {
   final String id;
   final String userName;
   final String name;
@@ -42,7 +42,7 @@ class ChatModel with ModelBase {
   }
 }
 
-class MessageModel with ModelBase {
+class MessageModel implements ModelBase {
   final String id;
   final String body;
   final String fromId;

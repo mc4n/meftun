@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/rendering.dart';
 import 'chatitem.dart' show ChatItem;
-import '../models/chat.dart' show Chat;
+import '../types/chat.dart' show Chat;
 import '../main.dart';
 
 class ChatList extends StatefulWidget {
