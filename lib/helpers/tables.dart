@@ -1,9 +1,9 @@
-import '../types/chat.dart' show Chat;
-import '../types/message.dart' show Message;
-import '../types/mbody.dart' show RawBody;
-import '../types/draft.dart' show Draft;
-import '../types/directchat.dart' show DirectChat;
-import '../types/groupchat.dart' show GroupChat;
+import 'package:me_flutting/types/chat.dart' show Chat;
+import 'package:me_flutting/types/message.dart' show Message;
+import 'package:me_flutting/types/mbody.dart' show RawBody;
+import 'package:me_flutting/types/draft.dart' show Draft;
+import 'package:me_flutting/types/directchat.dart' show DirectChat;
+import 'package:me_flutting/types/groupchat.dart' show GroupChat;
 import 'models.dart';
 import 'table_helpers.dart';
 import '/helpers/bot_context.dart' show fillDefaultBots;

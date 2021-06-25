@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/widgets.dart';
-import '/pages/main.dart' show MainPage;
+import '/views/pages/main.dart' show MainPage;
 import '/helpers/tables.dart';
 import '/helpers/bot_context.dart' show fillDefaultBots;
 

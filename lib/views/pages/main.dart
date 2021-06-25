@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-import '../main.dart';
-import '../widgets/chat_list.dart' show ChatList;
-import '../widgets/contact_list.dart' show ContactList;
-import '../pages/profile.dart' show ProfilePage;
+import 'package:me_flutting/main.dart';
+import 'package:me_flutting/views/widgets/chat_list.dart' show ChatList;
+import 'package:me_flutting/views/widgets/contact_list.dart' show ContactList;
+import 'package:me_flutting/views/pages/profile.dart' show ProfilePage;
 import 'about.dart' show aboutPage;
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';

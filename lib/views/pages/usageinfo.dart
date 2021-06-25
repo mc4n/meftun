@@ -2,7 +2,7 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 //import 'package:flutter/gestures.dart';
 import 'dart:math';
-import '../main.dart';
+import 'package:me_flutting/main.dart';
 
 class UsageInfoPage extends StatefulWidget {
   @override

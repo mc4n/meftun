@@ -1,8 +1,8 @@
-import '../types/chat.dart' show Chat;
-import '../types/directchat.dart' show DirectChat;
-import '../types/groupchat.dart' show GroupChat;
-import '../types/botchat.dart' show BotChat;
-import '../types/mbody.dart' show MBody, RawBody, ImageBody;
+import 'package:me_flutting/types/chat.dart' show Chat;
+import 'package:me_flutting/types/directchat.dart' show DirectChat;
+import 'package:me_flutting/types/groupchat.dart' show GroupChat;
+import 'package:me_flutting/types/botchat.dart' show BotChat;
+import 'package:me_flutting/types/mbody.dart' show MBody, RawBody, ImageBody;
 
 abstract class ModelBase {
   String get getId;

@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-import '../types/chat.dart' show Chat;
-import '../types/draft.dart' show Draft;
-import '../types/mbody.dart' show RawBody, ImageBody;
+import 'package:me_flutting/types/chat.dart' show Chat;
+import 'package:me_flutting/types/draft.dart' show Draft;
+import 'package:me_flutting/types/mbody.dart' show RawBody, ImageBody;
 import 'package:file_picker/file_picker.dart';
-import '../helpers/file_context.dart';
-import '../main.dart';
-import '../pages/texting.dart';
+import 'package:me_flutting/helpers/file_context.dart';
+import 'package:me_flutting/main.dart';
+import 'package:me_flutting/views/pages/texting.dart';
 
 class MessagingPanel extends StatefulWidget {
   final Chat chatItem;

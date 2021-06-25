@@ -1,11 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import '../types/chat.dart' show Chat;
-import '../types/directchat.dart' show DirectChat;
-import '../pages/texting.dart' show TextingPageState;
-import '../types/message.dart' show Message;
-import '../main.dart';
-import '../pages/msgpreview.dart' show MessagePreviewState;
+import 'package:me_flutting/types/chat.dart' show Chat;
+import 'package:me_flutting/types/directchat.dart' show DirectChat;
+import 'package:me_flutting/types/message.dart' show Message;
+import 'package:me_flutting/main.dart';
+import 'package:me_flutting/views/pages/texting.dart' show TextingPageState;
+import 'package:me_flutting/views/pages/msgpreview.dart'
+    show MessagePreviewState;
 
 class MessageDialogs extends StatefulWidget {
   final Chat chatItem;

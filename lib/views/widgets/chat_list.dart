@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/rendering.dart';
 import 'chatitem.dart' show ChatItem;
-import '../types/chat.dart' show Chat;
-import '../main.dart';
+import 'package:me_flutting/types/chat.dart' show Chat;
+import 'package:me_flutting/main.dart';
 
 class ChatList extends StatefulWidget {
   final String tsea;
