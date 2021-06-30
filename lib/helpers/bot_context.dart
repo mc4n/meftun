@@ -5,7 +5,8 @@ import 'package:me_flutting/types/message.dart';
 import 'package:me_flutting/types/draft.dart' show Draft;
 import 'package:me_flutting/types/mbody.dart';
 import 'sql_context.dart' show SqlDbaseContext;
-import 'tables.dart' show ChatTable, MessageTable;
+import 'package:me_flutting/tables/chattable.dart' show ChatTable;
+import 'package:me_flutting/tables/messagetable.dart' show MessageTable;
 
 void fillDefaultBots(ChatTable chatTable) {
   final botEfendi = BotChat('5', null, 'efendi', name: 'Bot Efendi');
