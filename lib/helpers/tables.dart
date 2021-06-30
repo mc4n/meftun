@@ -4,9 +4,11 @@ import 'package:me_flutting/types/mbody.dart' show RawBody;
 import 'package:me_flutting/types/draft.dart' show Draft;
 import 'package:me_flutting/types/directchat.dart' show DirectChat;
 import 'package:me_flutting/types/groupchat.dart' show GroupChat;
-import 'models.dart';
 import 'table_helpers.dart';
 import '/helpers/bot_context.dart' show fillDefaultBots;
+import 'package:me_flutting/models/basemodel.dart' show ModelBase;
+import 'package:me_flutting/models/chatmodel.dart' show ChatModel;
+import 'package:me_flutting/models/messagemodel.dart' show MessageModel;
 
 abstract class BaseTable<T extends ModelBase> {
   final TableBaseHelper<T> _store;

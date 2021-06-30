@@ -1,6 +1,6 @@
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
-import 'models.dart' show ModelBase;
+import 'package:me_flutting/models/basemodel.dart' show ModelBase;
 import 'table_helpers.dart' show SqlTableHelper;
 
 class SqlDbaseContext {
