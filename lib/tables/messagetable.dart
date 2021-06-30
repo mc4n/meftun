@@ -4,13 +4,13 @@ import 'package:me_flutting/types/mbody.dart' show RawBody;
 import 'package:me_flutting/types/draft.dart' show Draft;
 import 'package:me_flutting/types/directchat.dart' show DirectChat;
 import 'package:me_flutting/types/groupchat.dart' show GroupChat;
-import 'package:me_flutting/helpers/table_helpers.dart';
 import 'package:me_flutting/models/messagemodel.dart' show MessageModel;
-import 'basetable.dart';
+import 'table_helpers.dart';
 import 'chattable.dart';
 
-abstract class MessageTable extends BaseTable<MessageModel> {
-  MessageTable(TableBaseHelper<MessageModel> store) : super(store);
+abstract class MessageTable {
+  final TableBaseHelper<MessageModel> store;
+  MessageTable(this.store);
 
   static MessageModel from(Map<String, dynamic> _map) {
     return MessageModel(

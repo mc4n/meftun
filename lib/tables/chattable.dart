@@ -1,13 +1,13 @@
 import 'package:me_flutting/types/chat.dart' show Chat;
 import 'package:me_flutting/types/directchat.dart' show DirectChat;
 import 'package:me_flutting/types/groupchat.dart' show GroupChat;
-import 'package:me_flutting/helpers/table_helpers.dart';
 import 'package:me_flutting/helpers/bot_context.dart' show fillDefaultBots;
 import 'package:me_flutting/models/chatmodel.dart' show ChatModel;
-import 'basetable.dart';
+import 'table_helpers.dart';
 
-abstract class ChatTable extends BaseTable<ChatModel> {
-  ChatTable(TableBaseHelper<ChatModel> store) : super(store);
+abstract class ChatTable {
+  final TableBaseHelper<ChatModel> store;
+  ChatTable(this.store);
 
   static ChatModel from(Map<String, dynamic> _map) => ChatModel(_map['id'],
       _map['user_name'], _map['name'], _map['photo_url'], _map['_type']);

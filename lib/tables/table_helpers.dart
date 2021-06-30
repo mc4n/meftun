@@ -4,9 +4,6 @@ import 'package:me_flutting/models/basemodel.dart' show ModelBase;
 typedef FnFrom<T extends ModelBase> = T Function(Map<String, dynamic>);
 
 abstract class TableBaseHelper<T extends ModelBase> {
-  final FnFrom<T> from;
-  TableBaseHelper(this.from);
-
   Future<List<T>> select({int pageNum = 0, String orderBy = 'id ASC'});
 
   Future<List<T>> selectWhere(String _where, List<dynamic> whereArgs,
@@ -22,13 +19,13 @@ abstract class TableBaseHelper<T extends ModelBase> {
   Future<bool> delete(String id);
 }
 
-class SqlTableHelper<T extends ModelBase> extends TableBaseHelper<T> {
+class SqlTableHelper<T extends ModelBase> implements TableBaseHelper<T> {
+  final FnFrom<T> from;
   static const PAGE_LEN = 25;
   final String tableName;
   final String generatorCommand;
   SqlDbaseContext sql = SqlDbaseContext.instance();
-  SqlTableHelper(this.tableName, this.generatorCommand, FnFrom<T> fnFrom)
-      : super(fnFrom) {
+  SqlTableHelper(this.tableName, this.generatorCommand, this.from) {
     sql.putTableHelper(this);
   }
 
@@ -70,9 +67,10 @@ class SqlTableHelper<T extends ModelBase> extends TableBaseHelper<T> {
   Future<bool> delete(String id) async => deleteWhere('id = ?', [id]);
 }
 
-class SafeTableHelper<T extends ModelBase> extends TableBaseHelper<T> {
+class SafeTableHelper<T extends ModelBase> implements TableBaseHelper<T> {
+  final FnFrom<T> from;
   List<Map<String, dynamic>> _itemStore = [];
-  SafeTableHelper(FnFrom<T> fnFrom) : super(fnFrom);
+  SafeTableHelper(this.from);
 
   @override
   Future<List<T>> select({int pageNum = 0, String orderBy = 'id ASC'}) async =>
