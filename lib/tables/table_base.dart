@@ -1,6 +1,8 @@
 import 'package:me_flutting/models/basemodel.dart' show ModelBase;
 
 abstract class TableBase<T extends ModelBase> {
+  String get name;
+
   Future<List<T>> select({int pageNum = 0, String orderBy});
 
   Future<List<T>> selectWhere(String _where, List<dynamic> whereArgs,

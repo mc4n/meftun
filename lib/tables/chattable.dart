@@ -7,6 +7,7 @@ import 'package:me_flutting/models/chatmodel.dart'
     show ChatModel, ChatModelFrom;
 import 'package:me_flutting/tables/table_base.dart' show TableBase;
 import 'safe_table.dart' show SafeTable;
+import 'sembast_table.dart' show SembastTable;
 
 abstract class ChatTable with ChatModelFrom implements TableBase<ChatModel> {
   static Chat asChat(ChatModel cm) {
@@ -42,6 +43,9 @@ abstract class ChatTable with ChatModelFrom implements TableBase<ChatModel> {
 }
 
 class SafeChatTable extends ChatTable with SafeTable<ChatModel> {
+  @override
+  String get name => 'chats';
+
   static DirectChat mockSessionOwner =
       DirectChat('1', 'mcan', name: 'Mustafa Can');
 
@@ -55,4 +59,9 @@ class SafeChatTable extends ChatTable with SafeTable<ChatModel> {
     insertChat(thugs);
     insertChat(big);
   }
+}
+
+class SembastChatTable extends ChatTable with SembastTable<ChatModel> {
+  @override
+  String get name => 'chats';
 }

@@ -7,8 +7,9 @@ import 'package:me_flutting/types/groupchat.dart' show GroupChat;
 import 'package:me_flutting/models/messagemodel.dart'
     show MessageModel, MessageModelFrom;
 import 'package:me_flutting/tables/table_base.dart' show TableBase;
-import 'safe_table.dart' show SafeTable;
 import 'chattable.dart' show SafeChatTable;
+import 'safe_table.dart' show SafeTable;
+import 'sembast_table.dart' show SembastTable;
 
 abstract class MessageTable
     with MessageModelFrom
@@ -78,6 +79,8 @@ abstract class MessageTable
 }
 
 class SafeMessageTable extends MessageTable with SafeTable<MessageModel> {
+  @override
+  String get name => 'messages';
   SafeMessageTable() {
     final pac = DirectChat('2', 'pac', name: 'Tupac Shakur');
     final thugs = GroupChat('3', 'THUGS');
@@ -91,4 +94,9 @@ class SafeMessageTable extends MessageTable with SafeTable<MessageModel> {
     insertMessage(
         Message('2', RawBody('thug 4 life!'), pac, thugs, 1027675000000));
   }
+}
+
+class SembastMessageTable extends MessageTable with SembastTable<MessageModel> {
+  @override
+  String get name => 'messages';
 }
