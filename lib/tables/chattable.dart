@@ -1,55 +1,52 @@
 import 'package:me_flutting/types/chat.dart' show Chat;
 import 'package:me_flutting/types/directchat.dart' show DirectChat;
 import 'package:me_flutting/types/groupchat.dart' show GroupChat;
+import 'package:me_flutting/types/botchat.dart' show BotChat;
 import 'package:me_flutting/helpers/bot_context.dart' show fillDefaultBots;
-import 'package:me_flutting/models/chatmodel.dart' show ChatModel;
+import 'package:me_flutting/models/chatmodel.dart'
+    show ChatModel, ChatModelFrom;
 import 'table_helpers.dart';
 
-abstract class ChatTable {
-  final TableBaseHelper<ChatModel> store;
-  ChatTable(this.store);
+abstract class ChatTable
+    with ChatModelFrom
+    implements TableBaseHelper<ChatModel> {
+  static Chat asChat(ChatModel cm) {
+    switch (cm.type) {
+      case Chat.BOT:
+        return BotChat(cm.id, null, cm.userName,
+            name: cm.name, photoURL: cm.photoURL);
+      case Chat.DIRECT:
+        return DirectChat(cm.id, cm.userName,
+            name: cm.name, photoURL: cm.photoURL);
+      case Chat.GROUP:
+      default:
+        return GroupChat(cm.id, cm.userName,
+            name: cm.name, photoURL: cm.photoURL);
+    }
+  }
 
-  static ChatModel from(Map<String, dynamic> _map) => ChatModel(_map['id'],
-      _map['user_name'], _map['name'], _map['photo_url'], _map['_type']);
-
-  Future<bool> insertChat(Chat item) async => store.insert(
+  Future<bool> insertChat(Chat item) async => insert(
       ChatModel(item.id, item.username, item.name, item.photoURL, item.type));
 
-  Future<bool> deleteChat(Chat c) async => store.delete(c.id);
+  Future<bool> deleteChat(Chat c) async => delete(c.id);
 
-  Future<Chat> getChat(String id) async =>
-      (await store.single('id = ?', [id])).asChat;
+  Future<Chat> getChat(String id) async => asChat(await single('id = ?', [id]));
 
   Future<List<Chat>> chats() async =>
-      (await store.select()).map((cm) => cm.asChat).toList();
+      (await select()).map((cm) => asChat(cm)).toList();
 
   Future<List<Chat>> filterChats(String ftext) async => (ftext != ''
-          ? await store.selectWhere('user_name = ?', [ftext])
-          : await store.select())
-      .map((cm) => cm.asChat)
+          ? await selectWhere('user_name = ?', [ftext])
+          : await select())
+      .map((cm) => asChat(cm))
       .toList();
 }
 
-class SqlChatTable extends ChatTable {
-  SqlChatTable()
-      : super(SqlTableHelper<ChatModel>(
-            'tb_chats',
-            ''' 
-              create table tb_chats (
-                      id text primary key not null,
-                      user_name text not null,
-                      name text not null,
-                      photo_url text not null,
-                _type integer not null)
-          ''',
-            ChatTable.from));
-}
-
-class SafeChatTable extends ChatTable {
+class SafeChatTable extends ChatTable with SafeTableHelper<ChatModel> {
   static DirectChat mockSessionOwner =
       DirectChat('1', 'mcan', name: 'Mustafa Can');
 
-  SafeChatTable() : super(SafeTableHelper<ChatModel>(ChatTable.from)) {
+  SafeChatTable() {
     final pac = DirectChat('2', 'pac', name: 'Tupac Shakur');
     final thugs = GroupChat('3', 'THUGS');
     final big = DirectChat('4', 'big', name: 'Notorious BIG');

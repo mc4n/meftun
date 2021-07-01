@@ -13,8 +13,8 @@ MessageTable messageTable;
 void main() {
   const SAFE_MODE = true;
 
-  chatTable = SAFE_MODE ? SafeChatTable() : SqlChatTable();
-  messageTable = SAFE_MODE ? SafeMessageTable() : SqlMessageTable();
+  chatTable = SAFE_MODE ? SafeChatTable() : null;
+  messageTable = SAFE_MODE ? SafeMessageTable() : null;
 
   if (!SAFE_MODE) {
     WidgetsFlutterBinding.ensureInitialized();

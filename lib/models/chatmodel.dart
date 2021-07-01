@@ -1,7 +1,3 @@
-import 'package:me_flutting/types/chat.dart' show Chat;
-import 'package:me_flutting/types/directchat.dart' show DirectChat;
-import 'package:me_flutting/types/groupchat.dart' show GroupChat;
-import 'package:me_flutting/types/botchat.dart' show BotChat;
 import 'basemodel.dart';
 
 class ChatModel implements ModelBase {
@@ -23,16 +19,10 @@ class ChatModel implements ModelBase {
         'photo_url': photoURL,
         '_type': type,
       };
+}
 
-  Chat get asChat {
-    switch (type) {
-      case Chat.BOT:
-        return BotChat(id, null, userName, name: name, photoURL: photoURL);
-      case Chat.DIRECT:
-        return DirectChat(id, userName, name: name, photoURL: photoURL);
-      case Chat.GROUP:
-      default:
-        return GroupChat(id, userName, name: name, photoURL: photoURL);
-    }
-  }
+abstract class ChatModelFrom implements ModelFrom<ChatModel> {
+  @override
+  ChatModel modelFrom(Map<String, dynamic> _map) => ChatModel(_map['id'],
+      _map['user_name'], _map['name'], _map['photo_url'], _map['_type']);
 }

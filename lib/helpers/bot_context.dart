@@ -1,19 +1,13 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:http/http.dart' as http;
 import 'package:me_flutting/types/botchat.dart';
 import 'package:me_flutting/types/message.dart';
 import 'package:me_flutting/types/draft.dart' show Draft;
 import 'package:me_flutting/types/mbody.dart';
-import 'package:me_flutting/helpers/sql_context.dart' show SqlDbaseContext;
 import 'package:me_flutting/tables/chattable.dart' show ChatTable;
 import 'package:me_flutting/tables/messagetable.dart' show MessageTable;
 
 void fillDefaultBots(ChatTable chatTable) {
-  final botEfendi = BotChat('5', null, 'efendi', name: 'Bot Efendi');
-  chatTable.insertChat(botEfendi);
-  chatTable.insertChat(BotChat('6', botEfendi, 'api', name: 'API helper bot'));
-  chatTable
-      .insertChat(BotChat('7', botEfendi, 'sql', name: 'SQLite helper bot'));
+  BotChat('5', null, 'efendi', name: 'Bot Efendi');
 }
 
 class BotCommand {
@@ -42,7 +36,6 @@ class BotCommand {
 class BotManager extends BotChat {
   final List<BotCommand> commands;
   final MessageTable messageTable;
-  static SqlDbaseContext sql = SqlDbaseContext.instance();
   BotManager(this.commands, BotChat botObj, this.messageTable)
       : super(botObj.id, botObj.owner, botObj.username);
 
@@ -87,161 +80,18 @@ class BotManager extends BotChat {
   }
 
   static Map<String, List<BotCommand>> cmdList = {
-    'sql': [
+    'efendi': [
       BotCommand(
-          cmd: 'select',
-          description: '<String> queryRaw(String queryText)',
-          argNum: 1,
-          func: ([args]) async {
-            try {
-              final na = args[0].toString();
-              final result = await sql.queryRaw(na);
-              return RawBody(result);
-            } catch (_) {
-              return RawBody(_.message);
-            }
-          }),
-      BotCommand(
-          cmd: 'insert',
-          description: '<int> insertRaw(String cmdText)',
-          argNum: 1,
-          func: ([args]) async {
-            try {
-              final na = args[0].toString();
-              return RawBody('OK! ${await sql.insertRaw(na)} rows effected.');
-            } catch (_) {
-              return RawBody(_.message);
-            }
-          }),
-      BotCommand(
-          cmd: 'update',
-          description: '<int> updateRaw(String cmdText)',
-          argNum: 1,
-          func: ([args]) async {
-            try {
-              final na = args[0].toString();
-              return RawBody('OK! ${await sql.updateRaw(na)} rows effected.');
-            } catch (_) {
-              return RawBody(_.message);
-            }
-          }),
-      BotCommand(
-          cmd: 'delete',
-          description: '<int> deleteRaw(String cmdText)',
-          argNum: 1,
-          func: ([args]) async {
-            try {
-              final na = args[0].toString();
-              return RawBody('OK! ${await sql.deleteRaw(na)} rows effected.');
-            } catch (_) {
-              return RawBody(_.message);
-            }
-          }),
-      BotCommand(
-          cmd: 'all',
-          description: 'Future<String> queryAllAsText(String table)',
-          argNum: 1,
-          func: ([args]) async {
-            try {
-              return RawBody(await sql.queryAllAsText(args[0].toString()));
-            } catch (_) {
-              return RawBody(_.message);
-            }
-          }),
-      BotCommand(
-          cmd: 'list',
-          description:
-              'Future<String> queryAsText(String table, int limit, int offset)',
-          argNum: 3,
-          func: ([args]) async {
-            try {
-              return RawBody(await sql.queryAsText(
-                  args[0].toString(),
-                  int.parse(args[1].toString()),
-                  int.parse(args[2].toString())));
-            } catch (_) {
-              return RawBody(_.message);
-            }
-          }),
-      BotCommand(
-          cmd: 'where',
-          description:
-              '<String> queryWhereAsText(String table, String where, List<String> whereArgs, int limit, int offset)',
-          argNum: 5,
-          func: ([args]) async {
-            try {
-              return RawBody(await sql.queryWhereAsText(
-                  args[0].toString(),
-                  args[1].toString(),
-                  args[2].toString().split(','),
-                  int.parse(args[3].toString()),
-                  int.parse(args[4].toString())));
-            } catch (_) {
-              return RawBody(_.message);
-            }
-          }),
-      BotCommand(
-          cmd: 'execute',
-          description: '<void> execute(String queryText)',
-          argNum: 1,
-          func: ([args]) async {
-            try {
-              await sql.execute(args[0].toString());
-              return RawBody('OK!');
-            } catch (_) {
-              return RawBody(_.message);
-            }
-          }),
-      BotCommand(
-          cmd: 'del',
-          description:
-              '<int> deleteAsText(String table, String where, List<String> whereArgs)',
-          argNum: 3,
-          func: ([args]) async {
-            try {
-              return RawBody((await sql.deleteAsText(args[0].toString(),
-                      args[1].toString(), args[2].toString().split(',')))
-                  .toString());
-            } catch (_) {
-              return RawBody(_.message);
-            }
-          }),
-    ],
-
-// --------------------
-    'api': [
-      BotCommand(
-          cmd: 'get',
-          description: 'get data from a URL.',
-          argNum: 1,
-          func: ([args]) async {
-            try {
-              // get https://reqres.in/api/users?delay=3
-              final uri = Uri.parse(args[0].toString());
-              final response = await http.get(uri);
-              return RawBody('${response.body}');
-            } catch (_) {
-              return RawBody(_.message);
-            }
-          }),
-      BotCommand(
-          cmd: 'post',
-          description: 'post data to a URL.',
+          cmd: 'config',
+          description: 'set a configuration.',
           argNum: 2,
           func: ([args]) async {
             try {
-              // post https://reqres.in/api/users;{"name": "ali", "job": "doctor"}
-              final response = await http.post(Uri.parse(args[0].toString()),
-                  headers: {
-                    'Content-Type': 'application/json; charset=UTF-8',
-                  },
-                  body: args[1].toString());
-              return RawBody('${response.body}');
+              return throw Exception();
             } catch (_) {
               return RawBody(_.message);
             }
           }),
     ],
-    'efendi': []
   };
 }
