@@ -6,12 +6,13 @@ import 'package:me_flutting/types/directchat.dart' show DirectChat;
 import 'package:me_flutting/types/groupchat.dart' show GroupChat;
 import 'package:me_flutting/models/messagemodel.dart'
     show MessageModel, MessageModelFrom;
-import 'table_helpers.dart';
-import 'chattable.dart';
+import 'package:me_flutting/tables/table_base.dart' show TableBase;
+import 'safe_table.dart' show SafeTable;
+import 'chattable.dart' show SafeChatTable;
 
 abstract class MessageTable
     with MessageModelFrom
-    implements TableBaseHelper<MessageModel> {
+    implements TableBase<MessageModel> {
   static MBody bodyObj(MessageModel mm) {
     switch (mm.mbodyType) {
       case MBody.IMAGE_MESSAGE:
@@ -76,7 +77,7 @@ abstract class MessageTable
   }
 }
 
-class SafeMessageTable extends MessageTable with SafeTableHelper<MessageModel> {
+class SafeMessageTable extends MessageTable with SafeTable<MessageModel> {
   SafeMessageTable() {
     final pac = DirectChat('2', 'pac', name: 'Tupac Shakur');
     final thugs = GroupChat('3', 'THUGS');

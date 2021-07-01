@@ -5,11 +5,10 @@ import 'package:me_flutting/types/botchat.dart' show BotChat;
 import 'package:me_flutting/helpers/bot_context.dart' show fillDefaultBots;
 import 'package:me_flutting/models/chatmodel.dart'
     show ChatModel, ChatModelFrom;
-import 'table_helpers.dart';
+import 'package:me_flutting/tables/table_base.dart' show TableBase;
+import 'safe_table.dart' show SafeTable;
 
-abstract class ChatTable
-    with ChatModelFrom
-    implements TableBaseHelper<ChatModel> {
+abstract class ChatTable with ChatModelFrom implements TableBase<ChatModel> {
   static Chat asChat(ChatModel cm) {
     switch (cm.type) {
       case Chat.BOT:
@@ -42,7 +41,7 @@ abstract class ChatTable
       .toList();
 }
 
-class SafeChatTable extends ChatTable with SafeTableHelper<ChatModel> {
+class SafeChatTable extends ChatTable with SafeTable<ChatModel> {
   static DirectChat mockSessionOwner =
       DirectChat('1', 'mcan', name: 'Mustafa Can');
 
