@@ -1,4 +1,4 @@
-import 'sql_context.dart' show SqlDbaseContext;
+import 'package:me_flutting/helpers/sql_context.dart' show SqlDbaseContext;
 import 'package:me_flutting/models/basemodel.dart' show ModelBase;
 
 typedef FnFrom<T extends ModelBase> = T Function(Map<String, dynamic>);

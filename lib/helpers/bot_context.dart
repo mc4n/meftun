@@ -4,7 +4,7 @@ import 'package:me_flutting/types/botchat.dart';
 import 'package:me_flutting/types/message.dart';
 import 'package:me_flutting/types/draft.dart' show Draft;
 import 'package:me_flutting/types/mbody.dart';
-import 'package:me_flutting/tables/sql_context.dart' show SqlDbaseContext;
+import 'package:me_flutting/helpers/sql_context.dart' show SqlDbaseContext;
 import 'package:me_flutting/tables/chattable.dart' show ChatTable;
 import 'package:me_flutting/tables/messagetable.dart' show MessageTable;
 
