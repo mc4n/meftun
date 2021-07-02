@@ -7,16 +7,18 @@ import 'package:sembast/sembast.dart' as semba;
 abstract class SembastTable<T extends ModelBase>
     implements ModelFrom<T>, TableBase<T> {
   @override
-  Future<List<T>> select({int pageNum = 0, String orderBy}) async =>
-      (await store.find(await manager.dbase))
-          .map((i) => modelFrom(i.value))
-          .toList();
+  Future<List<T>> select({int pageNum = 0, String orderBy}) async {
+    return (await store.find(await manager.dbase))
+        .map((i) => modelFrom(i.value))
+        .toList();
+  }
 
   @override
   Future<List<T>> selectWhere(String _where, List<dynamic> whereArgs,
       {int pageNum = 0, String orderBy}) async {
-    final finder =
-        semba.Finder(filter: semba.Filter.equals(_where, whereArgs[0]));
+    final finder = semba.Finder(
+        filter: semba.Filter.equals(_where, whereArgs[0]),
+        sortOrders: [semba.SortOrder(orderBy)]);
     return (await store.find(await manager.dbase, finder: finder))
         .map((i) => modelFrom(i.value))
         .toList();
@@ -25,8 +27,9 @@ abstract class SembastTable<T extends ModelBase>
   @override
   Future<T> single(String _where, List<dynamic> whereArgs,
       {String orderBy}) async {
-    final finder =
-        semba.Finder(filter: semba.Filter.equals(_where, whereArgs[0]));
+    final finder = semba.Finder(
+        filter: semba.Filter.equals(_where, whereArgs[0]),
+        sortOrders: [semba.SortOrder(orderBy, false)]);
     return modelFrom(
         (await store.findFirst(await manager.dbase, finder: finder)).value);
   }

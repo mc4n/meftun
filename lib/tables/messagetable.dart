@@ -25,7 +25,7 @@ abstract class MessageTable
 
   Future<Message> insertMessage(Draft dr) async {
     final item = dr is Message ? dr : dr.toMessage();
-    insert(MessageModel(item.id, item.body.toString(), item.from.id,
+    await insert(MessageModel(item.id, item.body.toString(), item.from.id,
         item.chatGroup.id, item.epoch, item.body.bodyType));
     return item;
   }
@@ -38,7 +38,8 @@ abstract class MessageTable
   Future<List<Message>> chatMessages(
       String chatGroupId, Future<Chat> Function(String) chatProvider) async {
     final _trans = (model) async => getMessage(model.id, chatProvider);
-    final _res = await selectWhere('chat_group_id', [chatGroupId]);
+    final _res =
+        await selectWhere('chat_group_id', [chatGroupId], orderBy: 'epoch');
     final List<Message> msgs = [];
     for (final _ in _res) msgs.add(await _trans(_));
     return msgs;
@@ -57,11 +58,12 @@ abstract class MessageTable
 
   Future<Message> lastMessage(String chatGroupId,
           Future<Chat> Function(String) chatProvider) async =>
-      asMessage(await single('chat_group_id', [chatGroupId]), chatProvider);
+      asMessage(await single('chat_group_id', [chatGroupId], orderBy: 'epoch'),
+          chatProvider);
 
   Future<Message> getMessage(
           String id, Future<Chat> Function(String) chatProvider) async =>
-      asMessage(await single('id', [id]), chatProvider);
+      asMessage(await single('id', [id], orderBy: 'epoch'), chatProvider);
 
   Future<Message> asMessage(
       MessageModel msgModel, Future<Chat> Function(String) chatProvider) async {
