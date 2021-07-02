@@ -31,16 +31,15 @@ abstract class ChatTable with ChatModelFrom implements TableBase<ChatModel> {
 
   Future<bool> deleteChat(Chat c) async => delete(c.id);
 
-  Future<Chat> getChat(String id) async => asChat(await single('id = ?', [id]));
+  Future<Chat> getChat(String id) async => asChat(await single('id', [id]));
 
   Future<List<Chat>> chats() async =>
       (await select()).map((cm) => asChat(cm)).toList();
 
-  Future<List<Chat>> filterChats(String ftext) async => (ftext != ''
-          ? await selectWhere('user_name = ?', [ftext])
-          : await select())
-      .map((cm) => asChat(cm))
-      .toList();
+  Future<List<Chat>> filterChats(String ftext) async =>
+      (ftext != '' ? await selectWhere('user_name', [ftext]) : await select())
+          .map((cm) => asChat(cm))
+          .toList();
 }
 
 class SafeChatTable extends ChatTable with SafeTable<ChatModel> {

@@ -12,7 +12,7 @@ ChatTable chatTable;
 MessageTable messageTable;
 
 void main() {
-  const SAFE_MODE = true;
+  const SAFE_MODE = false;
 
   final _ = SembastDbManager(true);
   final chats =
@@ -23,11 +23,11 @@ void main() {
   chatTable = SAFE_MODE ? SafeChatTable() : chats;
   messageTable = SAFE_MODE ? SafeMessageTable() : messages;
 
-  if (!SAFE_MODE) {
+  /*if (!SAFE_MODE) {
     WidgetsFlutterBinding.ensureInitialized();
     chatTable.insertChat(meSession);
     fillDefaultBots(chatTable);
-  }
+  }*/
 
   const APP_TITLE = SAFE_MODE ? 'Meftune(Safe Mode)' : 'Meftune';
   runApp(MaterialApp(

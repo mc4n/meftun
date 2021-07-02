@@ -37,13 +37,12 @@ abstract class MessageTable
   Future<bool> deleteMessage(Message msg) async => delete(msg.id);
 
   Future<bool> clearMessages(String chatGroupId) async =>
-      deleteWhere('chat_group_id = ?', [chatGroupId]);
+      deleteWhere('chat_group_id', [chatGroupId]);
 
   Future<List<Message>> chatMessages(
       String chatGroupId, Future<Chat> Function(String) chatProvider) async {
     final _trans = (model) async => getMessage(model.id, chatProvider);
-    final _res = await selectWhere('chat_group_id = ?', [chatGroupId],
-        orderBy: 'epoch ASC');
+    final _res = await selectWhere('chat_group_id', [chatGroupId]);
     final List<Message> msgs = [];
     for (final _ in _res) msgs.add(await _trans(_));
     return msgs;
@@ -62,14 +61,11 @@ abstract class MessageTable
 
   Future<Message> lastMessage(String chatGroupId,
           Future<Chat> Function(String) chatProvider) async =>
-      asMessage(
-          await single('chat_group_id = ?', [chatGroupId],
-              orderBy: 'epoch DESC'),
-          chatProvider);
+      asMessage(await single('chat_group_id', [chatGroupId]), chatProvider);
 
   Future<Message> getMessage(
           String id, Future<Chat> Function(String) chatProvider) async =>
-      asMessage(await single('id = ?', [id]), chatProvider);
+      asMessage(await single('id', [id]), chatProvider);
 
   Future<Message> asMessage(
       MessageModel msgModel, Future<Chat> Function(String) chatProvider) async {

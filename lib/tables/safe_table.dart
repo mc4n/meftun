@@ -11,10 +11,9 @@ abstract class SafeTable<T extends ModelBase>
 
   @override
   Future<List<T>> selectWhere(String _where, List<dynamic> whereArgs,
-      {int pageNum = 0, String orderBy = 'id ASC'}) async {
+      {int pageNum = 0, String orderBy}) async {
     if (whereArgs.length == 1) {
-      final cond = _where.replaceAll('= ?', '').trim();
-      final ls = _itemStore.where((m) => m[cond] == whereArgs[0]);
+      final ls = _itemStore.where((m) => m[_where] == whereArgs[0]);
       return ls.map((m) => modelFrom(m)).toList();
     } else
       return throw Exception('yorma beni birader!');
@@ -22,7 +21,7 @@ abstract class SafeTable<T extends ModelBase>
 
   @override
   Future<T> single(String _where, List<dynamic> whereArgs,
-      {String orderBy = 'id ASC'}) async {
+      {String orderBy}) async {
     final ls = await selectWhere(_where, whereArgs, orderBy: orderBy);
     return ls != null && ls.length > 0 ? ls.last : null;
   }
@@ -36,15 +35,14 @@ abstract class SafeTable<T extends ModelBase>
   @override
   Future<bool> deleteWhere(String _where, List<dynamic> whereArgs) async {
     if (whereArgs.length == 1) {
-      final cond = _where.replaceAll('= ?', '').trim();
-      _itemStore.removeWhere((m) => m[cond] == whereArgs[0]);
-      return !(await exists(cond, whereArgs[0]));
+      _itemStore.removeWhere((m) => m[_where] == whereArgs[0]);
+      return !(await exists(_where, whereArgs[0]));
     } else
       return throw Exception('yorma beni birader!');
   }
 
   @override
-  Future<bool> delete(String id) async => deleteWhere('id = ?', [id]);
+  Future<bool> delete(String id) async => deleteWhere('id', [id]);
 
   Future<bool> exists(String key, dynamic value) async =>
       _itemStore.any((m) => m[key] == value);
