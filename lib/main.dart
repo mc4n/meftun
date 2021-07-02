@@ -5,31 +5,21 @@ import 'package:me_flutting/views/pages/main.dart' show MainPage;
 import 'package:me_flutting/tables/chattable.dart';
 import 'package:me_flutting/tables/messagetable.dart';
 import 'package:me_flutting/tables/dbase_manager.dart';
-import 'package:me_flutting/helpers/bot_context.dart' show fillDefaultBots;
+import 'package:me_flutting/types/directchat.dart';
 
-final meSession = SafeChatTable.mockSessionOwner;
+final DirectChat meSession = DirectChat('1', 'mca');
 ChatTable chatTable;
 MessageTable messageTable;
 
 void main() {
-  const SAFE_MODE = false;
-
   final _ = SembastDbManager(true);
-  final chats =
-      _.table('chats', tableFactory: (m, [_]) => SembastChatTable(m, _));
-  final messages =
-      _.table('messages', tableFactory: (m, [_]) => SembastMessageTable(m, _));
 
-  chatTable = SAFE_MODE ? SafeChatTable() : chats;
-  messageTable = SAFE_MODE ? SafeMessageTable() : messages;
+  chatTable = _.table('chats', tableFactory: (m, [_]) => SembastChatTable(m, _))
+      as ChatTable;
+  messageTable = _.table('messages',
+      tableFactory: (m, [_]) => SembastMessageTable(m, _)) as MessageTable;
 
-  /*if (!SAFE_MODE) {
-    WidgetsFlutterBinding.ensureInitialized();
-    chatTable.insertChat(meSession);
-    fillDefaultBots(chatTable);
-  }*/
-
-  const APP_TITLE = SAFE_MODE ? 'Meftune(Safe Mode)' : 'Meftune';
+  const APP_TITLE = 'Meftune';
   runApp(MaterialApp(
       theme: ThemeData(primarySwatch: Colors.indigo),
       title: APP_TITLE,

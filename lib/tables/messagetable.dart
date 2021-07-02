@@ -2,13 +2,9 @@ import 'package:me_flutting/types/chat.dart' show Chat;
 import 'package:me_flutting/types/message.dart' show Message;
 import 'package:me_flutting/types/mbody.dart' show MBody, RawBody, ImageBody;
 import 'package:me_flutting/types/draft.dart' show Draft;
-import 'package:me_flutting/types/directchat.dart' show DirectChat;
-import 'package:me_flutting/types/groupchat.dart' show GroupChat;
 import 'package:me_flutting/models/messagemodel.dart'
     show MessageModel, MessageModelFrom;
 import 'package:me_flutting/tables/table_base.dart' show TableBase;
-import 'package:me_flutting/tables/chattable.dart' show SafeChatTable;
-import 'package:me_flutting/tables/safe_table.dart' show SafeTable;
 import 'package:me_flutting/tables/sembast_table.dart' show SembastTable;
 import 'package:me_flutting/tables/dbase_manager.dart';
 
@@ -72,24 +68,6 @@ abstract class MessageTable
     final from = await chatProvider(msgModel.fromId);
     final to = await chatProvider(msgModel.chatGroupId);
     return Message(msgModel.id, bodyObj(msgModel), from, to, msgModel.epoch);
-  }
-}
-
-class SafeMessageTable extends MessageTable with SafeTable<MessageModel> {
-  @override
-  String get name => 'messages';
-  SafeMessageTable() {
-    final pac = DirectChat('2', 'pac', name: 'Tupac Shakur');
-    final thugs = GroupChat('3', 'THUGS');
-    final big = DirectChat('4', 'big', name: 'Notorious BIG');
-    insertMessage(Message('4', RawBody('maan, f this sh.'),
-        SafeChatTable.mockSessionOwner, big, 1542450000000));
-    insertMessage(
-        Message('1', RawBody('whutsup bro?'), pac, pac, 1042342000000));
-    insertMessage(
-        Message('3', RawBody('yeah, indeed.'), big, thugs, 1622450000000));
-    insertMessage(
-        Message('2', RawBody('thug 4 life!'), pac, thugs, 1027675000000));
   }
 }
 
