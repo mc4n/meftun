@@ -11,7 +11,8 @@ class SembastDbManager {
 
   String get dbPath => join('databases', '$DB_NAME.db');
 
-  final StoreRef<int, Map<String, Object>> store = intMapStoreFactory.store();
+  static StoreRef<int, Map<String, Object>> getStore(String nm) =>
+      intMapStoreFactory.store(nm);
 
   DatabaseFactory get dbFactory =>
       isWeb ? databaseFactoryWeb : databaseFactoryIo;

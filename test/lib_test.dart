@@ -1,8 +1,23 @@
-// import 'package:flutter_test/flutter_test.dart';
+import 'package:flutter_test/flutter_test.dart';
 // import 'package:me_flutting/models/directchat.dart';
 // import 'package:me_flutting/helpers/msghelper.dart';
 
+import 'package:me_flutting/tables/chattable.dart';
+import 'package:me_flutting/tables/messagetable.dart';
+import 'package:me_flutting/tables/dbase_manager.dart';
+
 void main() {
+  test('test sembast', () async {
+    final _ = SembastDbManager(false);
+    final chats =
+        _.table('chats', tableFactory: (m, [_]) => SembastChatTable(m, _));
+    final messages = _.table('messages',
+        tableFactory: (m, [_]) => SembastMessageTable(m, _));
+
+    expect(chats, isNotNull);
+    expect(messages, isNotNull);
+  });
+
   // test('test contacts', () async {
   //   var chatFact = ChatFactory(DirectChat('admin', 'adamin dibi'));
   //   final peeps = ['2pac', 'bigg', 'cube', 'ali', 'ayse'];

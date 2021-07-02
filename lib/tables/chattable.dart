@@ -73,4 +73,7 @@ class SembastChatTable extends ChatTable with SembastTable<ChatModel> {
 
   @override
   SembastDbManager get manager => _manager;
+
+  @override
+  get store => SembastDbManager.getStore(_name);
 }

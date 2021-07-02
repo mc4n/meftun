@@ -108,4 +108,7 @@ class SembastMessageTable extends MessageTable with SembastTable<MessageModel> {
 
   @override
   SembastDbManager get manager => _manager;
+
+  @override
+  get store => SembastDbManager.getStore(_name);
 }
