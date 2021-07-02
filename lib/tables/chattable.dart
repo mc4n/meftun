@@ -6,8 +6,9 @@ import 'package:me_flutting/helpers/bot_context.dart' show fillDefaultBots;
 import 'package:me_flutting/models/chatmodel.dart'
     show ChatModel, ChatModelFrom;
 import 'package:me_flutting/tables/table_base.dart' show TableBase;
-import 'safe_table.dart' show SafeTable;
-import 'sembast_table.dart' show SembastTable;
+import 'package:me_flutting/tables/safe_table.dart' show SafeTable;
+import 'package:me_flutting/tables/sembast_table.dart' show SembastTable;
+import 'package:me_flutting/tables/dbase_manager.dart';
 
 abstract class ChatTable with ChatModelFrom implements TableBase<ChatModel> {
   static Chat asChat(ChatModel cm) {
@@ -62,6 +63,14 @@ class SafeChatTable extends ChatTable with SafeTable<ChatModel> {
 }
 
 class SembastChatTable extends ChatTable with SembastTable<ChatModel> {
+  final String _name;
+  final SembastDbManager _manager;
+
+  SembastChatTable(this._manager, [this._name = 'chats']);
+
   @override
-  String get name => 'chats';
+  String get name => _name;
+
+  @override
+  SembastDbManager get manager => _manager;
 }

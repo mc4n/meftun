@@ -7,9 +7,10 @@ import 'package:me_flutting/types/groupchat.dart' show GroupChat;
 import 'package:me_flutting/models/messagemodel.dart'
     show MessageModel, MessageModelFrom;
 import 'package:me_flutting/tables/table_base.dart' show TableBase;
-import 'chattable.dart' show SafeChatTable;
-import 'safe_table.dart' show SafeTable;
-import 'sembast_table.dart' show SembastTable;
+import 'package:me_flutting/tables/chattable.dart' show SafeChatTable;
+import 'package:me_flutting/tables/safe_table.dart' show SafeTable;
+import 'package:me_flutting/tables/sembast_table.dart' show SembastTable;
+import 'package:me_flutting/tables/dbase_manager.dart';
 
 abstract class MessageTable
     with MessageModelFrom
@@ -97,6 +98,14 @@ class SafeMessageTable extends MessageTable with SafeTable<MessageModel> {
 }
 
 class SembastMessageTable extends MessageTable with SembastTable<MessageModel> {
+  final String _name;
+  final SembastDbManager _manager;
+
+  SembastMessageTable(this._manager, [this._name = 'messages']);
+
   @override
-  String get name => 'messages';
+  String get name => _name;
+
+  @override
+  SembastDbManager get manager => _manager;
 }
