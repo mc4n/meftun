@@ -6,10 +6,10 @@ class GroupChat extends Chat {
       {String name,
       String photoURL = 'group_avatar.png',
       this.maximumParticipants = 10})
-      : super(id, username, name, photoURL);
+      : super(id, username, photoURL);
 
   @override
-  String get caption => username;
+  String get caption => displayName;
 
   @override
   String get type => Chat.GROUP;

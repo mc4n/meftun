@@ -11,16 +11,15 @@ abstract class Chat {
 
   static Uuid uuid = Uuid();
   final String id;
-  final String username;
-  final String name;
+  final String displayName;
   final String photoURL;
-  Chat(this.id, this.username, this.name, this.photoURL);
+  Chat(this.id, this.displayName, this.photoURL);
 
   static String newId() => Chat.uuid.v4();
 
   @override
   String toString() {
-    return '[Chat]\nid : ${id ?? ""} \n name: $name??""';
+    return '[Chat]\nid : ${id ?? ""} \n display name: $displayName??""';
   }
 
   Draft createDraft(DirectChat from, [MBody body]) => Draft(body, from, this);

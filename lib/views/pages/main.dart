@@ -58,7 +58,8 @@ class MainPageState extends State<MainPage> {
                 TextButton(
                   onPressed: () {
                     Navigator.of(context).push(MaterialPageRoute(
-                        builder: (_) => ProfilePage(meSession.username, true)));
+                        builder: (_) =>
+                            ProfilePage(meSession.displayName, true)));
                   },
                   child: CircleAvatar(
                       backgroundImage: AssetImage(meSession.photoURL)),

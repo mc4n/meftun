@@ -7,7 +7,7 @@ class BotChat extends DirectChat {
       : super(id, username, name: name, photoURL: photoURL);
 
   @override
-  String get caption => '$username[Bot]';
+  String get caption => '$displayName[Bot]';
 
   @override
   String get type => 'B';

@@ -74,7 +74,7 @@ class TextingPageState extends State<TextingPage> {
           TextButton(
               onPressed: () {
                 Navigator.of(context).push(MaterialPageRoute(
-                    builder: (_) => ProfilePage(widget.chatItem.username,
+                    builder: (_) => ProfilePage(widget.chatItem.displayName,
                         widget.chatItem == meSession)));
               },
               child: Row(children: [

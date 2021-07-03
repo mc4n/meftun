@@ -13,20 +13,17 @@ abstract class ChatTable with ChatModelFrom implements TableBase<ChatModel> {
     if (cm == null) return DirectChat('-1', '[deleted_contact]');
     switch (cm.type) {
       case Chat.BOT:
-        return BotChat(cm.id, null, cm.userName,
-            name: cm.name, photoURL: cm.photoURL);
+        return BotChat(cm.id, null, cm.displayName, photoURL: cm.photoURL);
       case Chat.DIRECT:
-        return DirectChat(cm.id, cm.userName,
-            name: cm.name, photoURL: cm.photoURL);
+        return DirectChat(cm.id, cm.displayName, photoURL: cm.photoURL);
       case Chat.GROUP:
       default:
-        return GroupChat(cm.id, cm.userName,
-            name: cm.name, photoURL: cm.photoURL);
+        return GroupChat(cm.id, cm.displayName, photoURL: cm.photoURL);
     }
   }
 
-  Future<bool> insertChat(Chat item) async => insert(
-      ChatModel(item.id, item.username, item.name, item.photoURL, item.type));
+  Future<bool> insertChat(Chat item) async =>
+      insert(ChatModel(item.id, item.displayName, item.photoURL, item.type));
 
   Future<bool> deleteChat(Chat c) async => delete(c.id);
 

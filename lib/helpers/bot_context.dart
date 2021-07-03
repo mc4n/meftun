@@ -38,7 +38,7 @@ class BotManager extends BotChat {
   final List<BotCommand> commands;
   final MessageTable messageTable;
   BotManager(this.commands, BotChat botObj, this.messageTable)
-      : super(botObj.id, botObj.owner, botObj.username);
+      : super(botObj.id, botObj.owner, botObj.displayName);
 
   Future<Message> msgMiddleMan(Draft draft) async {
     final msg = await messageTable.insertMessage(draft);
@@ -75,13 +75,13 @@ class BotManager extends BotChat {
 
   static Map<String, BotManager> memoizer = Map();
   static BotManager findManagerByBot(BotChat bc, MessageTable msgTable) {
-    final _key = bc.username;
+    final _key = bc.id;
     return memoizer.putIfAbsent(
         _key, () => BotManager(cmdList[_key], bc, msgTable));
   }
 
   static Map<String, List<BotCommand>> cmdList = {
-    'efendi': [
+    '0': [
       BotCommand(
           cmd: 'config',
           description: 'set a configuration.',

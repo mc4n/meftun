@@ -106,7 +106,7 @@ class ChatItemState extends State<ChatItem> {
               onTap: () {
                 Navigator.of(context).push(MaterialPageRoute(
                     builder: (_) => ProfilePage(
-                        widget.chatItem.chatGroup.username,
+                        widget.chatItem.chatGroup.displayName,
                         widget.chatItem.chatGroup == meSession)));
               })
         ],
