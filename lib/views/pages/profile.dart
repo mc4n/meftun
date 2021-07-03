@@ -4,10 +4,10 @@ import 'usageinfo.dart' show UsageInfoPage;
 // import 'dart:convert';
 
 class ProfilePage extends StatefulWidget {
-  final String userName;
+  final String displayName;
   final bool isMe;
 
-  const ProfilePage(this.userName, [this.isMe = false]);
+  const ProfilePage(this.displayName, [this.isMe = false]);
 
   @override
   State<StatefulWidget> createState() => _ProfilePageState();
@@ -61,7 +61,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                 TextButton(
                                     onPressed: () async {
                                       // await meColl
-                                      //     .doc(widget.userName)
+                                      //     .doc(widget.displayName)
                                       //     ?.update({'$_ky': null});
                                       // setState(() => null);
                                     },
@@ -99,9 +99,9 @@ class _ProfilePageState extends State<ProfilePage> {
     return Scaffold(
         appBar: AppBar(
           leading: BackButton(),
-          title: Text('Profile/${widget.userName}'),
+          title: Text('Profile/${widget.displayName}'),
         ),
-        body: _body(widget.userName),
+        body: _body(widget.displayName),
         persistentFooterButtons: _footers(widget.isMe));
   }
 

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/rendering.dart';
-import 'chatitem.dart' show ChatItem;
+import 'message_tile.dart' show MessageTile;
 import 'package:me_flutting/types/message.dart' show Message;
 import 'package:me_flutting/main.dart';
 //import 'package:me_flutting/types/directchat.dart';
@@ -39,7 +39,8 @@ class ChatListState extends State<ChatList> {
         shrinkWrap: true,
         physics: BouncingScrollPhysics(),
         itemCount: msgs.length,
-        itemBuilder: (BuildContext context, int index) => ChatItem(msgs[index]),
+        itemBuilder: (BuildContext context, int index) =>
+            MessageTile(msgs[index]),
       )),
     );
   }

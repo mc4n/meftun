@@ -25,11 +25,11 @@ class _ContactListState extends State<ContactList> {
     addContactClaimed = (callback) async {
       final tsea = widget.tsea;
       if (tsea != '') {
-        final cTAdd = DirectChat(Chat.newId(), tsea, name: 'A new chat item.');
+        final cTAdd = DirectChat(Chat.newId(), tsea);
         await chatTable.insertChat(cTAdd);
         callback(cTAdd);
       } else
-        callback(null, 'username cannot be empty ');
+        callback(null, 'displayName cannot be empty ');
     };
   }
 
@@ -90,7 +90,8 @@ class _ContactListState extends State<ContactList> {
                 Text(contacts[index].caption,
                     style: TextStyle(color: Colors.grey.shade800)),
                 CircleAvatar(
-                    backgroundImage: AssetImage(contacts[index].photoURL)),
+                    backgroundImage:
+                        AssetImage(contacts[index].defaultPhotoURL)),
               ]))),
     );
   }

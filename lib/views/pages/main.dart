@@ -62,7 +62,7 @@ class MainPageState extends State<MainPage> {
                             ProfilePage(meSession.displayName, true)));
                   },
                   child: CircleAvatar(
-                      backgroundImage: AssetImage(meSession.photoURL)),
+                      backgroundImage: AssetImage(meSession.defaultPhotoURL)),
                 )
               ]),
               bottom: TabBar(

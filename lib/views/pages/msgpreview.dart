@@ -58,7 +58,8 @@ class MessagePreviewState extends State<MessagePreview>
                     ),
                     Padding(padding: const EdgeInsets.all(10.0)),
                     Container(
-                        child: Image.asset(widget.messageItem.from.photoURL)),
+                        child: Image.asset(
+                            widget.messageItem.from.defaultPhotoURL)),
                   ])),
         ),
       );

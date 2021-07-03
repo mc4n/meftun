@@ -79,7 +79,8 @@ class TextingPageState extends State<TextingPage> {
               },
               child: Row(children: [
                 CircleAvatar(
-                    backgroundImage: AssetImage(widget.chatItem.photoURL)),
+                    backgroundImage:
+                        AssetImage(widget.chatItem.defaultPhotoURL)),
                 Padding(padding: EdgeInsets.symmetric(horizontal: 5)),
                 Text('${widget.chatItem.caption}',
                     style: TextStyle(color: Colors.white, fontSize: 23))

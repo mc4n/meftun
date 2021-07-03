@@ -10,21 +10,21 @@ import 'package:me_flutting/views/pages/profile.dart' show ProfilePage;
 import 'package:me_flutting/views/pages/texting.dart' show TextingPage;
 import 'package:me_flutting/views/pages/msgpreview.dart' show MessagePreview;
 
-class ChatItem extends StatefulWidget {
-  final Message chatItem;
-  const ChatItem(this.chatItem, [Key key]) : super(key: key);
+class MessageTile extends StatefulWidget {
+  final Message msgItem;
+  const MessageTile(this.msgItem, [Key key]) : super(key: key);
 
   @override
-  State<StatefulWidget> createState() => ChatItemState();
+  State<StatefulWidget> createState() => MessageTileState();
 }
 
-class ChatItemState extends State<ChatItem> {
+class MessageTileState extends State<MessageTile> {
   static const PAD_AV_AR = 30.0;
   final SlidableController sldCont = SlidableController();
 
   @override
   Widget build(BuildContext context) {
-    return _lastMsgDetailsFrame(widget.chatItem);
+    return _lastMsgDetailsFrame(widget.msgItem);
   }
 
   Widget _lastMsgDetailsFrame(Message lastMsg) {
@@ -33,8 +33,9 @@ class ChatItemState extends State<ChatItem> {
     final from = isFromMe ? '' : lastMsg.from.caption;
     final to = isToMe ? '' : lastMsg.chatGroup.caption;
     final dt = lastMsg.epochToTimeString();
-    final fromAv = lastMsg.from.photoURL;
-    final toAv = isToMe ? meSession.photoURL : lastMsg.chatGroup.photoURL;
+    final fromAv = lastMsg.from.defaultPhotoURL;
+    final toAv =
+        isToMe ? meSession.defaultPhotoURL : lastMsg.chatGroup.defaultPhotoURL;
     final msgStat =
         lastMsg.epoch % 2 == 0 ? Colors.grey.shade700 : Colors.blue.shade300;
 
@@ -81,10 +82,10 @@ class ChatItemState extends State<ChatItem> {
   Widget _frame(Widget _inner) => TextButton(
       onPressed: () async => TextingPage.letTheGameBegin(
           context,
-          widget.chatItem.chatGroup,
+          widget.msgItem.chatGroup,
           () => MainPageState.setMainPageState(context)),
       child: Card(
-        key: ValueKey(widget.chatItem.chatGroup.id),
+        key: ValueKey(widget.msgItem.chatGroup.id),
         child: _inner,
       ));
 
@@ -93,7 +94,7 @@ class ChatItemState extends State<ChatItem> {
       child: item);
 
   Slidable _sl(Widget _inner) => Slidable(
-        key: Key(widget.chatItem.id),
+        key: Key(widget.msgItem.id),
         actionPane: SlidableDrawerActionPane(),
         actionExtentRatio: 0.15,
         child: _inner,
@@ -106,8 +107,8 @@ class ChatItemState extends State<ChatItem> {
               onTap: () {
                 Navigator.of(context).push(MaterialPageRoute(
                     builder: (_) => ProfilePage(
-                        widget.chatItem.chatGroup.displayName,
-                        widget.chatItem.chatGroup == meSession)));
+                        widget.msgItem.chatGroup.displayName,
+                        widget.msgItem.chatGroup == meSession)));
               })
         ],
         secondaryActions: [
@@ -116,7 +117,7 @@ class ChatItemState extends State<ChatItem> {
               icon: Icons.delete,
               closeOnTap: false,
               onTap: () async {
-                await messageTable.clearMessages(widget.chatItem.id);
+                await messageTable.clearMessages(widget.msgItem.id);
                 MainPageState.setMainPageState(context);
               }),
         ],

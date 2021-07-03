@@ -12,8 +12,8 @@ abstract class Chat {
   static Uuid uuid = Uuid();
   final String id;
   final String displayName;
-  final String photoURL;
-  Chat(this.id, this.displayName, this.photoURL);
+  final String defaultPhotoURL;
+  Chat(this.id, this.displayName, this.defaultPhotoURL);
 
   static String newId() => Chat.uuid.v4();
 
