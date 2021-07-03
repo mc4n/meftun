@@ -1,13 +1,9 @@
 import 'basemodel.dart';
 
-class ChatModel implements ModelBase {
-  final String id;
+class ChatModel extends ModelBase {
   final String displayName;
   final String type;
-  const ChatModel(this.id, this.displayName, this.type);
-
-  @override
-  String get getId => id;
+  ChatModel(String id, this.displayName, this.type) : super(id: id);
 
   @override
   Map<String, dynamic> get map => {

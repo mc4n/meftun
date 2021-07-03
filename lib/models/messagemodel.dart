@@ -1,17 +1,14 @@
 import 'basemodel.dart';
 
-class MessageModel implements ModelBase {
-  final String id;
+class MessageModel extends ModelBase {
   final String body;
   final String fromId;
   final String chatGroupId;
   final int epoch;
   final String mbodyType;
-  const MessageModel(this.id, this.body, this.fromId, this.chatGroupId,
-      this.epoch, this.mbodyType);
-
-  @override
-  String get getId => id;
+  MessageModel(String id, this.body, this.fromId, this.chatGroupId, this.epoch,
+      this.mbodyType)
+      : super(id: id);
 
   @override
   Map<String, dynamic> get map => {

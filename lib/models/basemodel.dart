@@ -1,6 +1,7 @@
 abstract class ModelBase {
-  String get getId;
+  final String id;
   Map<String, dynamic> get map;
+  ModelBase({this.id});
 }
 
 abstract class ModelFrom<T extends ModelBase> {

@@ -5,7 +5,7 @@ import 'package:me_flutting/types/draft.dart' show Draft;
 import 'package:me_flutting/models/messagemodel.dart'
     show MessageModel, MessageModelFrom;
 import 'package:me_flutting/tables/table_base.dart' show TableBase;
-import 'package:me_flutting/tables/sembast_table.dart' show SembastTable;
+import 'package:me_flutting/tables/sembast_helper.dart' show SembastHelper;
 import 'package:me_flutting/tables/dbase_manager.dart';
 
 abstract class MessageTable
@@ -87,7 +87,8 @@ abstract class MessageTable
   }
 }
 
-class SembastMessageTable extends MessageTable with SembastTable<MessageModel> {
+class SembastMessageTable extends MessageTable
+    with SembastHelper<MessageModel> {
   final String _name;
   final SembastDbManager _manager;
 
@@ -100,5 +101,5 @@ class SembastMessageTable extends MessageTable with SembastTable<MessageModel> {
   SembastDbManager get manager => _manager;
 
   @override
-  get store => SembastDbManager.getStore(_name);
+  get store => SembastDbManager.getIntMapStore(_name);
 }

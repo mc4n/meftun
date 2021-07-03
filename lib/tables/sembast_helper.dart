@@ -4,7 +4,7 @@ import 'package:me_flutting/tables/table_base.dart' show TableBase;
 import 'package:me_flutting/tables/dbase_manager.dart';
 import 'package:sembast/sembast.dart' as semba;
 
-abstract class SembastTable<T extends ModelBase>
+abstract class SembastHelper<T extends ModelBase>
     implements ModelFrom<T>, TableBase<T> {
   @override
   Future<List<T>> select({int pageNum = 0, String orderBy}) async {

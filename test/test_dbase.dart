@@ -1,23 +1,19 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:me_flutting/models/basemodel.dart';
 import 'package:me_flutting/tables/dbase_manager.dart';
-import 'package:me_flutting/tables/sembast_table.dart';
+import 'package:me_flutting/tables/sembast_helper.dart';
 import 'package:me_flutting/tables/table_base.dart';
 
 class TestModel extends ModelBase {
   final String userName;
   final int age;
-
-  TestModel(this.userName, this.age);
-
-  @override
-  String get getId => userName;
+  TestModel(this.userName, this.age) : super(id: userName);
 
   @override
-  Map<String, dynamic> get map => throw UnimplementedError();
+  Map<String, dynamic> get map => {'user_name': userName, 'age': age};
 }
 
-class TestTable extends TableBase<TestModel> with SembastTable<TestModel> {
+class TestTable extends TableBase<TestModel> with SembastHelper<TestModel> {
   final String _name;
   final SembastDbManager _manager;
   TestTable(this._manager, [this._name = 'tbTest']);
@@ -33,7 +29,7 @@ class TestTable extends TableBase<TestModel> with SembastTable<TestModel> {
   SembastDbManager get manager => _manager;
 
   @override
-  get store => SembastDbManager.getStore(_name);
+  get store => SembastDbManager.getIntMapStore(_name);
 }
 
 TestTable get myTestTable => SembastDbManager(false)

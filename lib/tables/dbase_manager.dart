@@ -1,6 +1,6 @@
 //import 'package:me_flutting/tables/table_base.dart' show TableBase;
 import 'package:path/path.dart';
-import 'package:me_flutting/tables/sembast_table.dart';
+import 'package:me_flutting/tables/sembast_helper.dart';
 
 import 'package:sembast/sembast.dart';
 import 'package:sembast/sembast_io.dart';
@@ -11,7 +11,7 @@ class SembastDbManager {
 
   String get dbPath => join('databases', '$DB_NAME.db');
 
-  static StoreRef<int, Map<String, Object>> getStore(String nm) =>
+  static StoreRef<int, Map<String, Object>> getIntMapStore(String nm) =>
       intMapStoreFactory.store(nm);
 
   DatabaseFactory get dbFactory =>
@@ -21,10 +21,10 @@ class SembastDbManager {
 
   SembastDbManager([this.isWeb = false]);
 
-  Map<String, SembastTable> _tables = Map();
+  Map<String, SembastHelper> _tables = Map();
 
-  SembastTable table(String key,
-          {SembastTable Function(SembastDbManager, [String tbname])
+  SembastHelper table(String key,
+          {SembastHelper Function(SembastDbManager, [String tbname])
               tableFactory}) =>
       table == null
           ? _tables[key]

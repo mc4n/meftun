@@ -5,7 +5,7 @@ import 'package:me_flutting/types/botchat.dart' show BotChat;
 import 'package:me_flutting/models/chatmodel.dart'
     show ChatModel, ChatModelFrom;
 import 'package:me_flutting/tables/table_base.dart' show TableBase;
-import 'package:me_flutting/tables/sembast_table.dart' show SembastTable;
+import 'package:me_flutting/tables/sembast_helper.dart' show SembastHelper;
 import 'package:me_flutting/tables/dbase_manager.dart';
 
 abstract class ChatTable with ChatModelFrom implements TableBase<ChatModel> {
@@ -41,7 +41,7 @@ abstract class ChatTable with ChatModelFrom implements TableBase<ChatModel> {
           .toList();
 }
 
-class SembastChatTable extends ChatTable with SembastTable<ChatModel> {
+class SembastChatTable extends ChatTable with SembastHelper<ChatModel> {
   final String _name;
   final SembastDbManager _manager;
 
@@ -54,5 +54,5 @@ class SembastChatTable extends ChatTable with SembastTable<ChatModel> {
   SembastDbManager get manager => _manager;
 
   @override
-  get store => SembastDbManager.getStore(_name);
+  get store => SembastDbManager.getIntMapStore(_name);
 }
