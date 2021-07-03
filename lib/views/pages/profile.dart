@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'usageinfo.dart' show UsageInfoPage;
-import 'dart:convert';
-import 'package:cloud_firestore/cloud_firestore.dart';
+// import 'dart:convert';
 
 class ProfilePage extends StatefulWidget {
   final String userName;
@@ -16,22 +15,18 @@ class ProfilePage extends StatefulWidget {
 
 class _ProfilePageState extends State<ProfilePage> {
   final tedit = TextEditingController();
-  final meColl = FirebaseFirestore.instance.collection('profiles');
 
   Future<void> _onSave() async {
     try {
-      final _obj = json.decode(tedit.text);
-      await meColl.doc(widget.userName)?.update(_obj);
-      setState(() {});
+      //final _obj = json.decode(tedit.text);
+      //setState(() {});
     } catch (_) {
       print(_.message);
     }
   }
 
   Future<Map<String, dynamic>> _onLoad() async {
-    final _doc = meColl.doc(widget.userName);
-    final result = await _doc.get();
-    final _mapped = result?.data() ?? {'result': 'undefined.'};
+    final _mapped = {'result': 'undefined.'};
     tedit?.text = '\{  "new_key" : "new_value"  \}';
     return _mapped;
   }
@@ -65,10 +60,10 @@ class _ProfilePageState extends State<ProfilePage> {
                                         color: Colors.green.shade900)),
                                 TextButton(
                                     onPressed: () async {
-                                      await meColl
-                                          .doc(widget.userName)
-                                          ?.update({'$_ky': null});
-                                      setState(() => null);
+                                      // await meColl
+                                      //     .doc(widget.userName)
+                                      //     ?.update({'$_ky': null});
+                                      // setState(() => null);
                                     },
                                     child: Icon(Icons.delete,
                                         color: Colors.red.shade900))

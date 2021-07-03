@@ -5,8 +5,6 @@ import 'package:me_flutting/views/widgets/chat_list.dart' show ChatList;
 import 'package:me_flutting/views/widgets/contact_list.dart' show ContactList;
 import 'package:me_flutting/views/pages/profile.dart' show ProfilePage;
 import 'about.dart' show aboutPage;
-import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 
 class MainPage extends StatefulWidget {
   final String title;
@@ -74,21 +72,7 @@ class MainPageState extends State<MainPage> {
           body: TabBarView(
             children: tail,
           ),
-          persistentFooterButtons: [
-            aboutPage(context),
-            FutureBuilder(future: () async {
-              await Firebase.initializeApp();
-              return await FirebaseAuth.instance.signInAnonymously();
-            }(), builder: (_, __) {
-              if (__.hasError)
-                return Text('Firebase-User: <error>');
-              else if (__.connectionState != ConnectionState.done)
-                return Text('Firebase-User: <connecting...>');
-              else
-                return Text(
-                    'Firebase-User: ${__.data.user.email ?? '<anonymous>'}');
-            })
-          ],
+          persistentFooterButtons: [aboutPage(context)],
         ),
       );
 
