@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
-import 'package:me_flutting/types/chat.dart' show Chat;
+//import 'package:me_flutting/types/chat.dart' show Chat;
 import 'package:me_flutting/types/message.dart' show Message;
 import 'package:me_flutting/main.dart';
 import 'package:me_flutting/views/pages/main.dart';
@@ -11,7 +11,7 @@ import 'package:me_flutting/views/pages/texting.dart' show TextingPage;
 import 'package:me_flutting/views/pages/msgpreview.dart' show MessagePreview;
 
 class ChatItem extends StatefulWidget {
-  final Chat chatItem;
+  final Message chatItem;
   const ChatItem(this.chatItem, [Key key]) : super(key: key);
 
   @override
@@ -24,15 +24,7 @@ class ChatItemState extends State<ChatItem> {
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<Message>(
-      future: messageTable.lastMessage(widget.chatItem.id, chatTable.getChat),
-      builder: (BuildContext bc, AsyncSnapshot<Message> snap) {
-        if (snap.hasData)
-          return _lastMsgDetailsFrame(snap.data);
-        else
-          return Row();
-      },
-    );
+    return _lastMsgDetailsFrame(widget.chatItem);
   }
 
   Widget _lastMsgDetailsFrame(Message lastMsg) {
@@ -87,10 +79,12 @@ class ChatItemState extends State<ChatItem> {
       );
 
   Widget _frame(Widget _inner) => TextButton(
-      onPressed: () async => TextingPage.letTheGameBegin(context,
-          widget.chatItem, () => MainPageState.setMainPageState(context)),
+      onPressed: () async => TextingPage.letTheGameBegin(
+          context,
+          widget.chatItem.chatGroup,
+          () => MainPageState.setMainPageState(context)),
       child: Card(
-        key: ValueKey(widget.chatItem.id),
+        key: ValueKey(widget.chatItem.chatGroup.id),
         child: _inner,
       ));
 
@@ -111,8 +105,9 @@ class ChatItemState extends State<ChatItem> {
               closeOnTap: false,
               onTap: () {
                 Navigator.of(context).push(MaterialPageRoute(
-                    builder: (_) => ProfilePage(widget.chatItem.username,
-                        widget.chatItem == meSession)));
+                    builder: (_) => ProfilePage(
+                        widget.chatItem.chatGroup.username,
+                        widget.chatItem.chatGroup == meSession)));
               })
         ],
         secondaryActions: [

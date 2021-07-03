@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/rendering.dart';
 import 'chatitem.dart' show ChatItem;
-import 'package:me_flutting/types/chat.dart' show Chat;
+import 'package:me_flutting/types/message.dart' show Message;
 import 'package:me_flutting/main.dart';
+//import 'package:me_flutting/types/directchat.dart';
 
 class ChatList extends StatefulWidget {
   final String tsea;
@@ -16,11 +17,12 @@ class ChatList extends StatefulWidget {
 class ChatListState extends State<ChatList> {
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<List<Chat>>(
-      future: widget.isSearching
-          ? chatTable.filterChats(widget.tsea)
-          : chatTable.chats(),
-      builder: (BuildContext bc, AsyncSnapshot<List<Chat>> snap) {
+    return FutureBuilder<List<Message>>(
+      future: /* widget.isSearching
+          ? null
+          :*/
+          messageTable.lsLastMsgs((i) async => chatTable.getChat(i)),
+      builder: (bc, snap) {
         if (snap.hasData)
           return _expan(snap.data);
         else
@@ -29,16 +31,15 @@ class ChatListState extends State<ChatList> {
     );
   }
 
-  Expanded _expan(final List<Chat> chats) {
+  Expanded _expan(final List<Message> msgs) {
     return Expanded(
       child: Container(
           child: ListView.builder(
         scrollDirection: Axis.vertical,
         shrinkWrap: true,
         physics: BouncingScrollPhysics(),
-        itemCount: chats.length,
-        itemBuilder: (BuildContext context, int index) =>
-            ChatItem(chats[index]),
+        itemCount: msgs.length,
+        itemBuilder: (BuildContext context, int index) => ChatItem(msgs[index]),
       )),
     );
   }

@@ -71,6 +71,20 @@ abstract class MessageTable
     final to = await chatProvider(msgModel.chatGroupId);
     return Message(msgModel.id, bodyObj(msgModel), from, to, msgModel.epoch);
   }
+
+  Future<List<Message>> lsLastMsgs(
+      Future<Chat> Function(String) chatProvider) async {
+    final ls = await select();
+    final chatIds = <String>{};
+    final returnMsgs = <Message>[];
+    for (int i = ls.length - 1; i >= 0; i--) {
+      final _ = ls[i].chatGroupId;
+      if (chatIds.contains(_)) continue;
+      chatIds.add(_);
+      returnMsgs.add(await asMessage(ls[i], chatProvider));
+    }
+    return returnMsgs;
+  }
 }
 
 class SembastMessageTable extends MessageTable with SembastTable<MessageModel> {

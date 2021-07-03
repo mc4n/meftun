@@ -10,6 +10,7 @@ import 'package:me_flutting/tables/dbase_manager.dart';
 
 abstract class ChatTable with ChatModelFrom implements TableBase<ChatModel> {
   static Chat asChat(ChatModel cm) {
+    if (cm == null) return DirectChat('-1', '[deleted_contact]');
     switch (cm.type) {
       case Chat.BOT:
         return BotChat(cm.id, null, cm.userName,
@@ -29,7 +30,10 @@ abstract class ChatTable with ChatModelFrom implements TableBase<ChatModel> {
 
   Future<bool> deleteChat(Chat c) async => delete(c.id);
 
-  Future<Chat> getChat(String id) async => asChat(await single('id', [id]));
+  Future<Chat> getChat(String id) async {
+    final x = await single('id', [id]);
+    return asChat(x);
+  }
 
   Future<List<Chat>> chats() async =>
       (await select()).map((cm) => asChat(cm)).toList();

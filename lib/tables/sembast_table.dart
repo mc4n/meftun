@@ -30,8 +30,10 @@ abstract class SembastTable<T extends ModelBase>
     final finder = semba.Finder(
         filter: semba.Filter.equals(_where, whereArgs[0]),
         sortOrders: [semba.SortOrder(orderBy, false)]);
-    return modelFrom(
-        (await store.findFirst(await manager.dbase, finder: finder)).value);
+
+    final res = (await store.findFirst(await manager.dbase, finder: finder));
+
+    return res != null ? modelFrom(res.value) : null;
   }
 
   @override
