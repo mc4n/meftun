@@ -28,6 +28,7 @@ dev_dependencies:
 flutter:
   uses-material-design: true
   assets:
+    - logo.png
     - avatar.png
     - group_avatar.png
     - bot_avatar.png

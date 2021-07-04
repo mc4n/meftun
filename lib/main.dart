@@ -36,6 +36,6 @@ void main() {
           meSession = __.data;
           return const MainPage(APP_TITLE);
         }
-        return Text('...');
+        return Center(child: Container(child: Image.asset('logo.png')));
       })));
 }
