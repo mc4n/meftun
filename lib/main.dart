@@ -15,10 +15,10 @@ MessageTable messageTable;
 void main() {
   final _ = SembastDbManager(true);
 
-  chatTable = _.table('chats', tableFactory: (m, [_]) => SembastChatTable(m, _))
-      as ChatTable;
-  messageTable = _.table('messages',
-      tableFactory: (m, [_]) => SembastMessageTable(m, _)) as MessageTable;
+  chatTable =
+      _.table('chats', tableBuilder: (m, [_]) => SembastChatTable(m, _));
+  messageTable =
+      _.table('messages', tableBuilder: (m, [_]) => SembastMessageTable(m, _));
 
   const APP_TITLE = 'Meftune';
 

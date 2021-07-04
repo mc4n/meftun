@@ -2,7 +2,6 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:me_flutting/models/basemodel.dart';
 import 'package:me_flutting/tables/dbase_manager.dart';
 import 'package:me_flutting/tables/sembast_helper.dart';
-import 'package:me_flutting/tables/table_base.dart';
 
 class TestModel extends ModelBase {
   final String userName;
@@ -13,7 +12,7 @@ class TestModel extends ModelBase {
   Map<String, dynamic> get map => {'user_name': userName, 'age': age};
 }
 
-class TestTable extends TableBase<TestModel> with SembastHelper<TestModel> {
+class TestTable with SembastHelper<TestModel> {
   final String _name;
   final SembastDbManager _manager;
   TestTable(this._manager, [this._name = 'tbTest']);
@@ -33,7 +32,7 @@ class TestTable extends TableBase<TestModel> with SembastHelper<TestModel> {
 }
 
 TestTable get myTestTable => SembastDbManager(false)
-    .table('tbTest', tableFactory: (man, [name]) => TestTable(man, name));
+    .table('tbTest', tableBuilder: (man, [name]) => TestTable(man, name));
 
 void main() {
   test('get test table', () async {
