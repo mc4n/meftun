@@ -1,7 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:me_flutting/models/basemodel.dart';
 import 'package:me_flutting/tables/dbase_manager.dart';
-import 'package:me_flutting/tables/sembast_helper_v2.dart';
+import 'package:me_flutting/tables/sembast_helper.dart';
 
 class TestModel extends ModelBase {
   final String userName;
@@ -12,7 +12,7 @@ class TestModel extends ModelBase {
   Map<String, dynamic> get map => {'user_name': userName, 'age': age};
 }
 
-class TestTable with SembastHelperV2<TestModel> {
+class TestTable with SembastHelper<TestModel> {
   final String _name;
   final SembastDbManager _manager;
   TestTable(this._manager, [this._name = 'tbTest']);
@@ -36,9 +36,33 @@ TestTable get myTestTable => SembastDbManager(false)
 
 void main() {
   test('list test table', () async {
-    final ls = await myTestTable.list(orderBy: '-user_name');
-    print(ls.map((i) => i.userName));
+    final ls = await myTestTable.list(
+      orderBy: '-user_name',
+      filter: MapEntry('>=age', 7),
+    );
     expect(ls.length, 4);
+  });
+
+  test('first test table', () async {
+    final v = await myTestTable.first(
+      orderBy: 'age',
+      filter: MapEntry('<<age', 7),
+    );
+    expect(v, null);
+  });
+
+  test('delete test table', () async {
+    final c1 = (await myTestTable.list()).length;
+
+    await myTestTable.insert(TestModel('x', 100));
+
+    final c2 = (await myTestTable.list()).length;
+    expect(c1 + 1, c2);
+
+    await myTestTable.deleteOne(filter: MapEntry('user_name', 'x'));
+
+    final c3 = (await myTestTable.list()).length;
+    expect(c1, c3);
   });
 
   /*test('insert test table', () async {

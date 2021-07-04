@@ -43,7 +43,7 @@ class _ContactListState extends State<ContactList> {
           child: FutureBuilder<List<Chat>>(
               future: widget.isSearching
                   ? chatTable.filterChats(widget.tsea)
-                  : chatTable.chats(),
+                  : chatTable.filterChats(''),
               builder: (BuildContext bc, AsyncSnapshot<List<Chat>> snap) {
                 if (snap.hasData && snap.data.length > 0)
                   return Row(

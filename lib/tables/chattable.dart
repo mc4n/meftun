@@ -25,20 +25,20 @@ abstract class ChatTable with ChatModelFrom implements TableBase<ChatModel> {
   Future<bool> insertChat(Chat item) async =>
       insert(ChatModel(item.id, item.displayName, item.type));
 
-  Future<bool> deleteChat(Chat c) async => delete(c.id);
+  Future<bool> deleteChat(Chat c) async =>
+      deleteOne(filter: MapEntry('id', c.id));
 
   Future<Chat> getChat(String id) async {
-    final x = await single('id', [id]);
+    final x = await first(filter: MapEntry('id', id));
     return asChat(x);
   }
 
-  Future<List<Chat>> chats() async =>
-      (await select()).map((cm) => asChat(cm)).toList();
-
-  Future<List<Chat>> filterChats(String ftext) async =>
-      (ftext != '' ? await selectWhere('user_name', [ftext]) : await select())
-          .map((cm) => asChat(cm))
-          .toList();
+  Future<List<Chat>> filterChats(String ftext) async => (ftext != ''
+          ? await list(
+              orderBy: 'display_name', filter: MapEntry('display_name', ftext))
+          : await list())
+      .map((cm) => asChat(cm))
+      .toList();
 }
 
 class SembastChatTable extends ChatTable with SembastHelper<ChatModel> {

@@ -117,7 +117,7 @@ class MessageTileState extends State<MessageTile> {
               icon: Icons.delete,
               closeOnTap: false,
               onTap: () async {
-                await messageTable.clearMessages(widget.msgItem.id);
+                await messageTable.clearMessages(widget.msgItem.chatGroup.id);
                 MainPageState.setMainPageState(context);
               }),
         ],

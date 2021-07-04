@@ -27,7 +27,7 @@ void main() {
       title: APP_TITLE,
       home: FutureBuilder<DirectChat>(future: () async {
         fillDefaultBots(chatTable);
-        await chatTable.delete('1');
+        await chatTable.deleteOne(filter: MapEntry('id', '1'));
         final me = DirectChat('1', 'admin');
         await chatTable.insertChat(me);
         return me;

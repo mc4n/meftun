@@ -30,16 +30,17 @@ abstract class MessageTable
     return item;
   }
 
-  Future<bool> deleteMessage(Message msg) async => delete(msg.id);
+  Future<bool> deleteMessage(Message msg) async =>
+      deleteOne(filter: MapEntry('id', msg.id));
 
   Future<bool> clearMessages(String chatGroupId) async =>
-      deleteWhere('chat_group_id', [chatGroupId]);
+      deleteAll(filter: MapEntry('==chat_group_id', chatGroupId));
 
   Future<List<Message>> chatMessages(
       String chatGroupId, Future<Chat> Function(String) chatProvider) async {
     final _trans = (model) async => getMessage(model.id, chatProvider);
-    final _res =
-        await selectWhere('chat_group_id', [chatGroupId], orderBy: 'epoch');
+    final _res = await list(
+        filter: MapEntry('chat_group_id', chatGroupId), orderBy: 'epoch');
     final List<Message> msgs = [];
     for (final _ in _res) msgs.add(await _trans(_));
     return msgs;
@@ -47,7 +48,7 @@ abstract class MessageTable
 
   // idareten ...
   Future<List<double>> countMessages(int start, int end, Chat me) async {
-    final sel = await select();
+    final sel = await list();
     final total =
         sel.where((m) => m.epoch >= start && m.epoch <= end).length as double;
     final mines = sel
@@ -58,12 +59,15 @@ abstract class MessageTable
 
   Future<Message> lastMessage(String chatGroupId,
           Future<Chat> Function(String) chatProvider) async =>
-      asMessage(await single('chat_group_id', [chatGroupId], orderBy: 'epoch'),
+      asMessage(
+          await first(
+              filter: MapEntry('chat_group_id', chatGroupId),
+              orderBy: '-epoch'),
           chatProvider);
 
   Future<Message> getMessage(
           String id, Future<Chat> Function(String) chatProvider) async =>
-      asMessage(await single('id', [id], orderBy: 'epoch'), chatProvider);
+      asMessage(await first(filter: MapEntry('==id', id)), chatProvider);
 
   Future<Message> asMessage(
       MessageModel msgModel, Future<Chat> Function(String) chatProvider) async {
@@ -74,14 +78,14 @@ abstract class MessageTable
 
   Future<List<Message>> lsLastMsgs(
       Future<Chat> Function(String) chatProvider) async {
-    final ls = await select();
+    final ls = await list(orderBy: '-epoch');
     final chatIds = <String>{};
     final returnMsgs = <Message>[];
-    for (int i = ls.length - 1; i >= 0; i--) {
-      final _ = ls[i].chatGroupId;
+    for (final item in ls) {
+      final _ = item.chatGroupId;
       if (chatIds.contains(_)) continue;
       chatIds.add(_);
-      returnMsgs.add(await asMessage(ls[i], chatProvider));
+      returnMsgs.add(await asMessage(item, chatProvider));
     }
     return returnMsgs;
   }

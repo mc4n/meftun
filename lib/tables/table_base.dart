@@ -3,16 +3,34 @@ import 'package:me_flutting/models/basemodel.dart' show ModelBase;
 abstract class TableBase<T extends ModelBase> {
   String get name;
 
-  Future<List<T>> select({int pageNum = 0, String orderBy});
-
-  Future<List<T>> selectWhere(String _where, List<dynamic> whereArgs,
-      {int pageNum = 0, String orderBy});
-
-  Future<T> single(String _where, List<dynamic> whereArgs, {String orderBy});
-
   Future<bool> insert(T item);
 
-  Future<bool> deleteWhere(String _where, List<dynamic> whereArgs);
+  Future<List<T>> list(
+      {String orderBy,
+      MapEntry<String, dynamic> filter,
+      int limit,
+      int offset});
 
-  Future<bool> delete(String id);
+  Future<T> first(
+      {String orderBy,
+      MapEntry<String, dynamic> filter,
+      int limit,
+      int offset});
+
+  Future<bool> deleteAll(
+      {String orderBy,
+      MapEntry<String, dynamic> filter,
+      int limit,
+      int offset});
+
+  Future<bool> deleteOne({String orderBy, MapEntry<String, dynamic> filter});
+
+  Future<bool> updateAll(List<Map<String, Object>> values,
+      {String orderBy,
+      MapEntry<String, dynamic> filter,
+      int limit,
+      int offset});
+
+  Future<bool> updateOne(Map<String, Object> value,
+      {String orderBy, MapEntry<String, dynamic> filter});
 }
