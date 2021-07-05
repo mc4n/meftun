@@ -12,7 +12,7 @@ class TestModel extends ModelBase {
   Map<String, dynamic> get map => {'user_name': userName, 'age': age};
 }
 
-class TestTable with SembastHelper<TestModel> {
+class TestTable with SembastHelper<TestModel, int> {
   final String _name;
   final SembastDbManager _manager;
   TestTable(this._manager, [this._name = 'tbTest']);

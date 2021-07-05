@@ -5,7 +5,7 @@ import 'package:me_flutting/tables/table_base.dart';
 import 'package:sembast/sembast.dart' as semba;
 import 'package:me_flutting/models/basemodel.dart' show ModelBase;
 
-abstract class SembastHelper<T extends ModelBase>
+abstract class SembastHelper<T extends ModelBase, Tkey>
     implements ModelFrom<T>, TableBase<T> {
   semba.Finder _getFinder(
       {MapEntry<String, dynamic> filter,
@@ -98,7 +98,7 @@ abstract class SembastHelper<T extends ModelBase>
     return mp?.value != null ? modelFrom(mp.value) : null;
   }
 
-  Future<List<int>> _listKeys(
+  Future<List<Tkey>> _listKeys(
       {String orderBy,
       MapEntry<String, dynamic> filter,
       int limit,
@@ -113,7 +113,7 @@ abstract class SembastHelper<T extends ModelBase>
         .toList();
   }
 
-  Future<int> _firstKey(
+  Future<Tkey> _firstKey(
       {String orderBy, MapEntry<String, dynamic> filter}) async {
     return (await store.findFirst(await manager.dbase,
             finder: _getFinder(orderBy: orderBy, filter: filter)))
@@ -155,9 +155,9 @@ abstract class SembastHelper<T extends ModelBase>
 
   @override
   Future<bool> insert(T item) async =>
-      (await store.add(await manager.dbase, item.map)) > 0;
+      (await store.add(await manager.dbase, item.map)) != null;
 
   SembastDbManager get manager;
 
-  semba.StoreRef<int, Map<String, Object>> get store;
+  semba.StoreRef<Tkey, Map<String, Object>> get store;
 }

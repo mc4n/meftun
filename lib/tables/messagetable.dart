@@ -89,7 +89,7 @@ abstract class MessageTable
 }
 
 class SembastMessageTable extends MessageTable
-    with SembastHelper<MessageModel> {
+    with SembastHelper<MessageModel, int> {
   final String _name;
   final SembastDbManager _manager;
 

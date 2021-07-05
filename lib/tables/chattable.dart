@@ -41,7 +41,7 @@ abstract class ChatTable with ChatModelFrom implements TableBase<ChatModel> {
       .toList();
 }
 
-class SembastChatTable extends ChatTable with SembastHelper<ChatModel> {
+class SembastChatTable extends ChatTable with SembastHelper<ChatModel, int> {
   final String _name;
   final SembastDbManager _manager;
 

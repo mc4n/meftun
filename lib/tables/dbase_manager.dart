@@ -23,6 +23,9 @@ class SembastDbManager extends TableStorage {
   static StoreRef<int, Map<String, Object>> getIntMapStore(String nm) =>
       intMapStoreFactory.store(nm);
 
+  static StoreRef<String, Map<String, Object>> getStrMapStore(String nm) =>
+      stringMapStoreFactory.store(nm);
+
   DatabaseFactory get dbFactory =>
       isWeb ? databaseFactoryWeb : databaseFactoryIo;
 
