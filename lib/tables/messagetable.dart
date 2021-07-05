@@ -10,7 +10,7 @@ import 'package:me_flutting/tables/dbase_manager.dart';
 
 abstract class MessageTable
     with MessageModelFrom
-    implements TableBase<MessageModel> {
+    implements TableBase<MessageModel, String> {
   static MBody bodyObj(MessageModel mm) {
     switch (mm.mbodyType) {
       case MBody.IMAGE_MESSAGE:
@@ -30,11 +30,10 @@ abstract class MessageTable
     return item;
   }
 
-  Future<bool> deleteMessage(Message msg) async =>
-      deleteOne(filter: MapEntry('id', msg.id));
+  Future<bool> deleteMessage(Message msg) async => await deleteOne(key: msg.id);
 
   Future<bool> clearMessages(String chatGroupId) async =>
-      deleteAll(filter: MapEntry('==chat_group_id', chatGroupId));
+      await deleteAll(filter: MapEntry('==chat_group_id', chatGroupId));
 
   Future<List<Message>> chatMessages(
       String chatGroupId, Future<Chat> Function(String) chatProvider) async {
@@ -64,7 +63,7 @@ abstract class MessageTable
 
   Future<Message> getMessage(
           String id, Future<Chat> Function(String) chatProvider) async =>
-      asMessage(await first(filter: MapEntry('==id', id)), chatProvider);
+      asMessage(await first(key: id), chatProvider);
 
   Future<Message> asMessage(
       MessageModel msgModel, Future<Chat> Function(String) chatProvider) async {
@@ -89,7 +88,7 @@ abstract class MessageTable
 }
 
 class SembastMessageTable extends MessageTable
-    with SembastHelper<MessageModel, int> {
+    with SembastHelper<MessageModel, String> {
   final String _name;
   final SembastDbManager _manager;
 
@@ -102,5 +101,5 @@ class SembastMessageTable extends MessageTable
   SembastDbManager get manager => _manager;
 
   @override
-  get store => SembastDbManager.getIntMapStore(_name);
+  get store => SembastDbManager.getStrMapStore(_name);
 }

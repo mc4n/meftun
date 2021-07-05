@@ -1,5 +1,5 @@
-abstract class ModelBase {
-  final String id;
+abstract class ModelBase<Tkey> {
+  final Tkey id;
   ModelBase({this.id});
 
   List<String> get fields => map.keys.toList();
@@ -19,12 +19,12 @@ abstract class ModelBase {
 
   @override
   bool operator ==(Object other) =>
-      id == ((other is ModelBase) ? other.id : '');
+      id == ((other is ModelBase) ? other.id : null);
 
   @override
   int get hashCode => id.hashCode;
 }
 
-abstract class ModelFrom<T extends ModelBase> {
-  T modelFrom(Map<String, dynamic> _map);
+abstract class ModelFrom<T extends ModelBase, Tkey> {
+  T modelFrom(Tkey _key, Map<String, dynamic> _map);
 }

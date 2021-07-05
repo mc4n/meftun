@@ -13,8 +13,8 @@ class ChatModel extends ModelBase {
       };
 }
 
-abstract class ChatModelFrom implements ModelFrom<ChatModel> {
+abstract class ChatModelFrom implements ModelFrom<ChatModel, String> {
   @override
-  ChatModel modelFrom(Map<String, dynamic> _map) =>
-      ChatModel(_map['id'], _map['display_name'], _map['_type']);
+  ChatModel modelFrom(String _key, Map<String, dynamic> _map) =>
+      ChatModel(_key, _map['display_name'], _map['_type']);
 }

@@ -1,6 +1,6 @@
 import 'package:me_flutting/models/basemodel.dart' show ModelBase;
 
-abstract class TableBase<T extends ModelBase> {
+abstract class TableBase<T extends ModelBase, Tkey> {
   String get name;
 
   Future<bool> insert(T item);
@@ -14,6 +14,7 @@ abstract class TableBase<T extends ModelBase> {
   Future<T> first(
       {String orderBy,
       MapEntry<String, dynamic> filter,
+      Tkey key,
       int limit,
       int offset});
 
@@ -23,8 +24,9 @@ abstract class TableBase<T extends ModelBase> {
       int limit,
       int offset});
 
-  Future<bool> deleteOne({String orderBy, MapEntry<String, dynamic> filter});
+  Future<bool> deleteOne(
+      {String orderBy, MapEntry<String, dynamic> filter, Tkey key});
 
   Future<bool> updateOne(T item, List<int> changedFieldIndexes,
-      {String orderBy, MapEntry<String, dynamic> filter});
+      {String orderBy, MapEntry<String, dynamic> filter, Tkey key});
 }

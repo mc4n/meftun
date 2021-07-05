@@ -6,7 +6,7 @@ import 'package:sembast/sembast.dart' as semba;
 import 'package:me_flutting/models/basemodel.dart' show ModelBase;
 
 abstract class SembastHelper<T extends ModelBase, Tkey>
-    implements ModelFrom<T>, TableBase<T> {
+    implements ModelFrom<T, Tkey>, TableBase<T, Tkey> {
   semba.Finder _getFinder(
       {MapEntry<String, dynamic> filter,
       String orderBy,
@@ -82,7 +82,7 @@ abstract class SembastHelper<T extends ModelBase, Tkey>
                 filter: filter,
                 limit: limit,
                 offset: offset)))
-        .map((i) => modelFrom(i.value))
+        .map((i) => modelFrom(i.key, i.value))
         .toList();
   }
 
@@ -90,12 +90,15 @@ abstract class SembastHelper<T extends ModelBase, Tkey>
   Future<T> first(
       {String orderBy,
       MapEntry<String, dynamic> filter,
+      Tkey key,
       int limit,
       int offset}) async {
-    final mp = await store.findFirst(await manager.dbase,
-        finder: _getFinder(orderBy: orderBy, filter: filter));
+    final mp = key != null
+        ? await store.record(key).getSnapshot(await manager.dbase)
+        : await store.findFirst(await manager.dbase,
+            finder: _getFinder(orderBy: orderBy, filter: filter));
 
-    return mp?.value != null ? modelFrom(mp.value) : null;
+    return mp?.value != null ? modelFrom(mp.key, mp.value) : null;
   }
 
   Future<List<Tkey>> _listKeys(
@@ -135,17 +138,19 @@ abstract class SembastHelper<T extends ModelBase, Tkey>
 
   @override
   Future<bool> deleteOne(
-      {String orderBy, MapEntry<String, dynamic> filter}) async {
-    final ke = await _firstKey(orderBy: orderBy, filter: filter);
+      {String orderBy, MapEntry<String, dynamic> filter, Tkey key}) async {
+    final ke = key ?? await _firstKey(orderBy: orderBy, filter: filter);
     if (ke == null) return false;
-    final res = await store.record(ke).delete(await manager.dbase);
-    return res > 0;
+    final _ = store.record(ke);
+    if (_ == null) return false;
+    final res = await _.delete(await manager.dbase);
+    return res != null;
   }
 
   @override
   Future<bool> updateOne(T item, List<int> changedFieldIndexes,
-      {String orderBy, MapEntry<String, dynamic> filter}) async {
-    final ke = await _firstKey(orderBy: orderBy, filter: filter);
+      {String orderBy, MapEntry<String, dynamic> filter, Tkey key}) async {
+    final ke = key ?? await _firstKey(orderBy: orderBy, filter: filter);
     if (ke == null) return false;
     final res = await store
         .record(ke)
@@ -155,7 +160,10 @@ abstract class SembastHelper<T extends ModelBase, Tkey>
 
   @override
   Future<bool> insert(T item) async =>
-      (await store.add(await manager.dbase, item.map)) != null;
+      (item.id != null
+          ? await store.record(item.id).add(await manager.dbase, item.map)
+          : await store.add(await manager.dbase, item.map)) !=
+      null;
 
   SembastDbManager get manager;
 

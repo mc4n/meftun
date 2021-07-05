@@ -8,7 +8,9 @@ import 'package:me_flutting/tables/table_base.dart' show TableBase;
 import 'package:me_flutting/tables/sembast_helper.dart' show SembastHelper;
 import 'package:me_flutting/tables/dbase_manager.dart';
 
-abstract class ChatTable with ChatModelFrom implements TableBase<ChatModel> {
+abstract class ChatTable
+    with ChatModelFrom
+    implements TableBase<ChatModel, String> {
   static Chat asChat(ChatModel cm) {
     if (cm == null) return DirectChat('-1', '[deleted_contact]');
     switch (cm.type) {
@@ -23,13 +25,12 @@ abstract class ChatTable with ChatModelFrom implements TableBase<ChatModel> {
   }
 
   Future<bool> insertChat(Chat item) async =>
-      insert(ChatModel(item.id, item.displayName, item.type));
+      await insert(ChatModel(item.id, item.displayName, item.type));
 
-  Future<bool> deleteChat(Chat c) async =>
-      deleteOne(filter: MapEntry('id', c.id));
+  Future<bool> deleteChat(Chat c) async => await deleteOne(key: c.id);
 
   Future<Chat> getChat(String id) async {
-    final x = await first(filter: MapEntry('id', id));
+    final x = await first(key: id);
     return asChat(x);
   }
 
@@ -41,7 +42,7 @@ abstract class ChatTable with ChatModelFrom implements TableBase<ChatModel> {
       .toList();
 }
 
-class SembastChatTable extends ChatTable with SembastHelper<ChatModel, int> {
+class SembastChatTable extends ChatTable with SembastHelper<ChatModel, String> {
   final String _name;
   final SembastDbManager _manager;
 
@@ -54,5 +55,5 @@ class SembastChatTable extends ChatTable with SembastHelper<ChatModel, int> {
   SembastDbManager get manager => _manager;
 
   @override
-  get store => SembastDbManager.getIntMapStore(_name);
+  get store => SembastDbManager.getStrMapStore(_name);
 }

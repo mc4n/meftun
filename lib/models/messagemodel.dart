@@ -21,11 +21,11 @@ class MessageModel extends ModelBase {
       };
 }
 
-abstract class MessageModelFrom implements ModelFrom<MessageModel> {
+abstract class MessageModelFrom implements ModelFrom<MessageModel, String> {
   @override
-  MessageModel modelFrom(Map<String, dynamic> _map) {
+  MessageModel modelFrom(String _key, Map<String, dynamic> _map) {
     return MessageModel(
-      _map['id'],
+      _key,
       _map['body'],
       _map['from_id'],
       _map['chat_group_id'],

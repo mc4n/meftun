@@ -6,20 +6,20 @@ import 'package:me_flutting/tables/sembast_helper.dart';
 class TestModel extends ModelBase {
   final String userName;
   final int age;
-  TestModel(this.userName, this.age) : super(id: userName);
+  TestModel(String id, this.userName, this.age) : super(id: id);
 
   @override
   Map<String, dynamic> get map => {'user_name': userName, 'age': age};
 }
 
-class TestTable with SembastHelper<TestModel, int> {
+class TestTable with SembastHelper<TestModel, String> {
   final String _name;
   final SembastDbManager _manager;
   TestTable(this._manager, [this._name = 'tbTest']);
 
   @override
-  TestModel modelFrom(Map<String, dynamic> _map) =>
-      TestModel(_map['user_name'], _map['age']);
+  TestModel modelFrom(String _key, Map<String, dynamic> _map) =>
+      TestModel(_key, _map['user_name'], _map['age']);
 
   @override
   String get name => _name;
@@ -28,7 +28,7 @@ class TestTable with SembastHelper<TestModel, int> {
   SembastDbManager get manager => _manager;
 
   @override
-  get store => SembastDbManager.getIntMapStore(_name);
+  get store => SembastDbManager.getStrMapStore(_name);
 }
 
 TestTable get myTestTable => SembastDbManager(false)
@@ -39,7 +39,7 @@ void main() {
     final ft =
         MapEntry('||', [MapEntry('**user_name', 'a'), MapEntry('age', 31)]);
     print((await myTestTable.list(filter: ft))
-        .map(((i) => i.userName + ', ' + i.age.toString()))
+        .map(((i) => i.id + ', ' + i.userName + ', ' + i.age.toString()))
         .join('\n'));
   });
 
@@ -99,8 +99,14 @@ void main() {
   });
 
   test('insert test table', () async {
-    final ls = await myTestTable.insert(TestModel('memo', 7));
+    final ls = await myTestTable.insert(TestModel(null, 'cem', 14));
 
     expect(ls, isNot(0));
+  });
+
+  test('insert custom key test table', () async {
+    final ls = await myTestTable.insert(TestModel(null, 'cemo', 14));
+
+    expect(ls, isNotNull);
   });*/
 }
