@@ -141,24 +141,13 @@ abstract class SembastHelper<T extends ModelBase>
   }
 
   @override
-  Future<bool> updateAll(List<Map<String, Object>> values,
-      {String orderBy,
-      MapEntry<String, dynamic> filter,
-      int limit,
-      int offset}) async {
-    final ke = await _listKeys(
-        orderBy: orderBy, filter: filter, limit: limit, offset: offset);
-    if (ke == null) return false;
-    final res = await store.records(ke).update(await manager.dbase, values);
-    return res.length > 0;
-  }
-
-  @override
-  Future<bool> updateOne(Map<String, Object> value,
+  Future<bool> updateOne(T item, List<int> changedFieldIndexes,
       {String orderBy, MapEntry<String, dynamic> filter}) async {
     final ke = await _firstKey(orderBy: orderBy, filter: filter);
     if (ke == null) return false;
-    final res = await store.record(ke).update(await manager.dbase, value);
+    final res = await store
+        .record(ke)
+        .update(await manager.dbase, item.selectMap(changedFieldIndexes));
     return res != null;
   }
 

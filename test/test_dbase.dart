@@ -1,4 +1,4 @@
-//import 'package:flutter_test/flutter_test.dart';
+import 'package:flutter_test/flutter_test.dart';
 import 'package:me_flutting/models/basemodel.dart';
 import 'package:me_flutting/tables/dbase_manager.dart';
 import 'package:me_flutting/tables/sembast_helper.dart';
@@ -35,7 +35,28 @@ TestTable get myTestTable => SembastDbManager(false)
     .table('tbTest', tableBuilder: (man, [name]) => TestTable(man, name));
 
 void main() {
-  /*test('filters test', () async {
+  test('db list all', () async {
+    final ft = null;
+    print((await myTestTable.list(filter: ft))
+        .map(((i) => i.userName + ', ' + i.age.toString())));
+  });
+  /*test('db update test', () async {
+    const OLD = 5;
+    const NEW = 3;
+    final ftChang = MapEntry('==age', OLD);
+    final r = await myTestTable.first(filter: ftChang);
+    expect(r.age, OLD);
+    final newmdl = TestModel(r.userName, NEW);
+    final _ = await myTestTable.updateOne(newmdl, [1], filter: ftChang);
+    expect(_, true);
+    final rv2 = await myTestTable.first(
+      filter: MapEntry('age', NEW),
+    );
+    expect(r, rv2);
+    expect(rv2.age, NEW);
+  });
+
+  test('filters test', () async {
     final ls = await myTestTable.list(
       orderBy: '-user_name',
       filter:

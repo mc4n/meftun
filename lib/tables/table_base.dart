@@ -25,12 +25,6 @@ abstract class TableBase<T extends ModelBase> {
 
   Future<bool> deleteOne({String orderBy, MapEntry<String, dynamic> filter});
 
-  Future<bool> updateAll(List<Map<String, Object>> values,
-      {String orderBy,
-      MapEntry<String, dynamic> filter,
-      int limit,
-      int offset});
-
-  Future<bool> updateOne(Map<String, Object> value,
+  Future<bool> updateOne(T item, List<int> changedFieldIndexes,
       {String orderBy, MapEntry<String, dynamic> filter});
 }
