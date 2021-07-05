@@ -1,5 +1,6 @@
 //import 'package:me_flutting/tables/table_base.dart' show TableBase;
 //import 'package:me_flutting/tables/sembast_helper.dart';
+import 'package:me_flutting/models/basemodel.dart';
 import 'package:me_flutting/tables/table_base.dart';
 import 'package:path/path.dart';
 import 'package:sembast/sembast.dart';
@@ -8,7 +9,8 @@ import 'package:sembast_web/sembast_web.dart';
 
 abstract class TableStorage {
   Map<String, TableBase> _tables = Map();
-  T table<T extends TableBase>(String key,
+  T table<Tkey, Tval extends ModelBase<Tkey>, T extends TableBase<Tval, Tkey>>(
+          String key,
           {T Function(TableStorage, [String tbname]) tableBuilder}) =>
       tableBuilder == null
           ? _tables[key]

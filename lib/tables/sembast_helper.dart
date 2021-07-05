@@ -5,7 +5,7 @@ import 'package:me_flutting/tables/table_base.dart';
 import 'package:sembast/sembast.dart' as semba;
 import 'package:me_flutting/models/basemodel.dart' show ModelBase;
 
-abstract class SembastHelper<T extends ModelBase, Tkey>
+abstract class SembastHelper<T extends ModelBase<Tkey>, Tkey>
     implements ModelFrom<T, Tkey>, TableBase<T, Tkey> {
   semba.Finder _getFinder(
       {MapEntry<String, dynamic> filter,

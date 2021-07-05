@@ -1,6 +1,6 @@
 import 'basemodel.dart';
 
-class MessageModel extends ModelBase {
+class MessageModel extends ModelBase<String> {
   final String body;
   final String fromId;
   final String chatGroupId;
@@ -12,7 +12,6 @@ class MessageModel extends ModelBase {
 
   @override
   Map<String, dynamic> get map => {
-        'id': id,
         'body': body,
         'from_id': fromId,
         'chat_group_id': chatGroupId,

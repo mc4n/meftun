@@ -1,6 +1,6 @@
 import 'package:me_flutting/models/basemodel.dart' show ModelBase;
 
-abstract class TableBase<T extends ModelBase, Tkey> {
+abstract class TableBase<T extends ModelBase<Tkey>, Tkey> {
   String get name;
 
   Future<bool> insert(T item);

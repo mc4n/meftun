@@ -25,6 +25,6 @@ abstract class ModelBase<Tkey> {
   int get hashCode => id.hashCode;
 }
 
-abstract class ModelFrom<T extends ModelBase, Tkey> {
+abstract class ModelFrom<T extends ModelBase<Tkey>, Tkey> {
   T modelFrom(Tkey _key, Map<String, dynamic> _map);
 }

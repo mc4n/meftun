@@ -3,7 +3,7 @@ import 'package:me_flutting/models/basemodel.dart';
 import 'package:me_flutting/tables/dbase_manager.dart';
 import 'package:me_flutting/tables/sembast_helper.dart';
 
-class TestModel extends ModelBase {
+class TestModel extends ModelBase<String> {
   final String userName;
   final int age;
   TestModel(String id, this.userName, this.age) : super(id: id);
