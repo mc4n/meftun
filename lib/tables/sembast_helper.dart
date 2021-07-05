@@ -21,37 +21,45 @@ abstract class SembastHelper<T extends ModelBase>
       finder.sortOrder = semba.SortOrder(orderBy, !desc);
     }
 
-    if (filter != null) {
-      final where = filter.key.substring(2);
-      final val = filter.value;
-      final oo = () {
-        switch (filter.key[0] + filter.key[1]) {
-          case '==':
-            return semba.Filter.equals(where, val);
-          case '>>':
-            return semba.Filter.greaterThan(where, val);
-          case '>=':
-            return semba.Filter.greaterThanOrEquals(where, val);
-          case '<<':
-            return semba.Filter.lessThan(where, val);
-          case '<=':
-            return semba.Filter.lessThanOrEquals(where, val);
-          case '!=':
-            return semba.Filter.notEquals(where, val);
-          case '??':
-            return semba.Filter.isNull(where);
-          case '!?':
-            return semba.Filter.notNull(where);
-          case '*_':
-            return semba.Filter.matches(where, '^' + val);
-          case '_*':
-            return semba.Filter.matches(where, val + '\$');
-          default:
-            return semba.Filter.equals(filter.key, val);
-        }
-      };
+    semba.Filter _filterBuilder(MapEntry<String, dynamic> f) {
+      final where = f.key.substring(2);
+      final val = f.value;
+      switch (f.key[0] + f.key[1]) {
+        case '&&':
+          return semba.Filter.and((f.value as List<MapEntry<String, dynamic>>)
+              .map((i) => _filterBuilder(i))
+              .toList());
+        case '||':
+          return semba.Filter.or((f.value as List<MapEntry<String, dynamic>>)
+              .map((i) => _filterBuilder(i))
+              .toList());
+        case '==':
+          return semba.Filter.equals(where, val);
+        case '>>':
+          return semba.Filter.greaterThan(where, val);
+        case '>=':
+          return semba.Filter.greaterThanOrEquals(where, val);
+        case '<<':
+          return semba.Filter.lessThan(where, val);
+        case '<=':
+          return semba.Filter.lessThanOrEquals(where, val);
+        case '!=':
+          return semba.Filter.notEquals(where, val);
+        case '??':
+          return semba.Filter.isNull(where);
+        case '!?':
+          return semba.Filter.notNull(where);
+        case '*_':
+          return semba.Filter.matches(where, '^' + val);
+        case '_*':
+          return semba.Filter.matches(where, val + '\$');
+        default:
+          return semba.Filter.equals(f.key, val);
+      }
+    }
 
-      finder.filter = oo();
+    if (filter != null) {
+      finder.filter = _filterBuilder(filter);
     }
 
     finder.limit = limit;

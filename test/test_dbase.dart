@@ -1,4 +1,4 @@
-import 'package:flutter_test/flutter_test.dart';
+//import 'package:flutter_test/flutter_test.dart';
 import 'package:me_flutting/models/basemodel.dart';
 import 'package:me_flutting/tables/dbase_manager.dart';
 import 'package:me_flutting/tables/sembast_helper.dart';
@@ -35,6 +35,15 @@ TestTable get myTestTable => SembastDbManager(false)
     .table('tbTest', tableBuilder: (man, [name]) => TestTable(man, name));
 
 void main() {
+  /*test('filters test', () async {
+    final ls = await myTestTable.list(
+      orderBy: '-user_name',
+      filter:
+          MapEntry('&&', [MapEntry('<=age', 7), MapEntry('*_user_name', 'm')]),
+    );
+    expect(ls.length, 1);
+  });
+
   test('list test table', () async {
     final ls = await myTestTable.list(
       orderBy: '-user_name',
@@ -65,7 +74,7 @@ void main() {
     expect(c1, c3);
   });
 
-  /*test('insert test table', () async {
+  test('insert test table', () async {
     final ls = await myTestTable.insert(TestModel('memo', 7));
 
     expect(ls, isNot(0));

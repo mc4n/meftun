@@ -46,24 +46,21 @@ abstract class MessageTable
     return msgs;
   }
 
-  // idareten ...
   Future<List<double>> countMessages(int start, int end, Chat me) async {
-    final sel = await list();
-    final total =
-        sel.where((m) => m.epoch >= start && m.epoch <= end).length as double;
-    final mines = sel
-        .where((m) => m.epoch >= start && m.epoch <= end && m.fromId == me.id)
+    final double total = (await list(
+            orderBy: 'epoch',
+            filter: MapEntry(
+                '&&', [MapEntry('>=epoch', start), MapEntry('<=epoch', end)])))
+        .length as double;
+    final mines = (await list(
+            filter: MapEntry('&&', [
+      MapEntry('>=epoch', start),
+      MapEntry('<=epoch', end),
+      MapEntry('from_id', me.id)
+    ])))
         .length as double;
     return [mines, total - mines];
   }
-
-  Future<Message> lastMessage(String chatGroupId,
-          Future<Chat> Function(String) chatProvider) async =>
-      asMessage(
-          await first(
-              filter: MapEntry('chat_group_id', chatGroupId),
-              orderBy: '-epoch'),
-          chatProvider);
 
   Future<Message> getMessage(
           String id, Future<Chat> Function(String) chatProvider) async =>
