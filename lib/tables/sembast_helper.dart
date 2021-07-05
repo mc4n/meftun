@@ -53,6 +53,8 @@ abstract class SembastHelper<T extends ModelBase>
           return semba.Filter.matches(where, '^' + val);
         case '_*':
           return semba.Filter.matches(where, val + '\$');
+        case '**':
+          return semba.Filter.matches(where, val);
         default:
           return semba.Filter.equals(f.key, val);
       }

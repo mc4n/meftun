@@ -35,11 +35,14 @@ TestTable get myTestTable => SembastDbManager(false)
     .table('tbTest', tableBuilder: (man, [name]) => TestTable(man, name));
 
 void main() {
-  test('db list all', () async {
-    final ft = null;
+  test('db filter like', () async {
+    final ft =
+        MapEntry('||', [MapEntry('**user_name', 'a'), MapEntry('age', 31)]);
     print((await myTestTable.list(filter: ft))
-        .map(((i) => i.userName + ', ' + i.age.toString())));
+        .map(((i) => i.userName + ', ' + i.age.toString()))
+        .join('\n'));
   });
+
   /*test('db update test', () async {
     const OLD = 5;
     const NEW = 3;
