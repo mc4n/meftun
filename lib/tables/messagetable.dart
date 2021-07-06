@@ -46,18 +46,16 @@ abstract class MessageTable
   }
 
   Future<List<double>> countMessages(int start, int end, Chat me) async {
-    final double total = (await list(
-            orderBy: 'epoch',
+    final total = (await count(
             filter: MapEntry(
                 '&&', [MapEntry('>=epoch', start), MapEntry('<=epoch', end)])))
-        .length as double;
-    final mines = (await list(
-            filter: MapEntry('&&', [
+        as double;
+    final mines = (await count(
+        filter: MapEntry('&&', [
       MapEntry('>=epoch', start),
       MapEntry('<=epoch', end),
       MapEntry('from_id', me.id)
-    ])))
-        .length as double;
+    ]))) as double;
     return [mines, total - mines];
   }
 

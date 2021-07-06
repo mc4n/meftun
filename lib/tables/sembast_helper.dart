@@ -8,6 +8,45 @@ import 'package:me_flutting/models/basemodel.dart' show ModelBase;
 
 abstract class SembastHelper<T extends ModelBase<Tkey>, Tkey>
     implements ModelFrom<T, Tkey>, TableBase<T, Tkey> {
+  semba.Filter _filterBuilder(MapEntry<String, dynamic> f) {
+    final where = f.key.substring(2);
+    final val = f.value;
+    switch (f.key[0] + f.key[1]) {
+      case '&&':
+        return semba.Filter.and((f.value as List<MapEntry<String, dynamic>>)
+            .map((i) => _filterBuilder(i))
+            .toList());
+      case '||':
+        return semba.Filter.or((f.value as List<MapEntry<String, dynamic>>)
+            .map((i) => _filterBuilder(i))
+            .toList());
+      case '==':
+        return semba.Filter.equals(where, val);
+      case '>>':
+        return semba.Filter.greaterThan(where, val);
+      case '>=':
+        return semba.Filter.greaterThanOrEquals(where, val);
+      case '<<':
+        return semba.Filter.lessThan(where, val);
+      case '<=':
+        return semba.Filter.lessThanOrEquals(where, val);
+      case '!=':
+        return semba.Filter.notEquals(where, val);
+      case '??':
+        return semba.Filter.isNull(where);
+      case '!?':
+        return semba.Filter.notNull(where);
+      case '*_':
+        return semba.Filter.matches(where, '^' + val);
+      case '_*':
+        return semba.Filter.matches(where, val + '\$');
+      case '**':
+        return semba.Filter.matches(where, val);
+      default:
+        return semba.Filter.equals(f.key, val);
+    }
+  }
+
   semba.Finder _getFinder(
       {MapEntry<String, dynamic> filter,
       String orderBy,
@@ -20,45 +59,6 @@ abstract class SembastHelper<T extends ModelBase<Tkey>, Tkey>
       orderBy =
           (desc = orderBy.startsWith('-')) ? orderBy.substring(1) : orderBy;
       finder.sortOrder = semba.SortOrder(orderBy, !desc);
-    }
-
-    semba.Filter _filterBuilder(MapEntry<String, dynamic> f) {
-      final where = f.key.substring(2);
-      final val = f.value;
-      switch (f.key[0] + f.key[1]) {
-        case '&&':
-          return semba.Filter.and((f.value as List<MapEntry<String, dynamic>>)
-              .map((i) => _filterBuilder(i))
-              .toList());
-        case '||':
-          return semba.Filter.or((f.value as List<MapEntry<String, dynamic>>)
-              .map((i) => _filterBuilder(i))
-              .toList());
-        case '==':
-          return semba.Filter.equals(where, val);
-        case '>>':
-          return semba.Filter.greaterThan(where, val);
-        case '>=':
-          return semba.Filter.greaterThanOrEquals(where, val);
-        case '<<':
-          return semba.Filter.lessThan(where, val);
-        case '<=':
-          return semba.Filter.lessThanOrEquals(where, val);
-        case '!=':
-          return semba.Filter.notEquals(where, val);
-        case '??':
-          return semba.Filter.isNull(where);
-        case '!?':
-          return semba.Filter.notNull(where);
-        case '*_':
-          return semba.Filter.matches(where, '^' + val);
-        case '_*':
-          return semba.Filter.matches(where, val + '\$');
-        case '**':
-          return semba.Filter.matches(where, val);
-        default:
-          return semba.Filter.equals(f.key, val);
-      }
     }
 
     if (filter != null) {
@@ -75,6 +75,11 @@ abstract class SembastHelper<T extends ModelBase<Tkey>, Tkey>
   TableCursor<T, Tkey> createCursor(int limit,
           {String orderBy, MapEntry<String, dynamic> filter}) =>
       TableCursor<T, Tkey>(list, limit, orderBy: orderBy, filter: filter);
+
+  @override
+  Future<int> count({MapEntry<String, dynamic> filter}) async =>
+      store.count(await manager.dbase,
+          filter: filter != null ? _filterBuilder(filter) : null);
 
   @override
   Future<List<T>> list(

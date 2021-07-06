@@ -42,12 +42,17 @@ void main() {
          await myTestTable.insert(TestModel(null, 'item-$i', i * 10));
     */
     final scanner = myTestTable.createCursor(7);
+    int counter = 0;
     do {
-      print('------\n' +
-          (await scanner.current)
+      final item = await scanner.current;
+      /*print('------\n' +
+          item
               .map(((i) => i.id + ', ' + i.userName + ', ' + i.age.toString()))
-              .join('\n'));
+              .join('\n'));*/
+      counter += item.length;
     } while (await scanner.moveNext());
+
+    expect(counter, await myTestTable.count());
   });
 
   /*test('db filter like', () async { 

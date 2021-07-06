@@ -9,6 +9,8 @@ abstract class TableBase<T extends ModelBase<Tkey>, Tkey> {
   TableCursor<T, Tkey> createCursor(int limit,
       {String orderBy, MapEntry<String, dynamic> filter});
 
+  Future<int> count({MapEntry<String, dynamic> filter});
+
   Future<List<T>> list(
       {String orderBy,
       MapEntry<String, dynamic> filter,
