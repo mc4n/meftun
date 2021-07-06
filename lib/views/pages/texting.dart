@@ -21,8 +21,8 @@ class TextingPage extends StatefulWidget {
 
   @override
   State<StatefulWidget> createState() => TextingPageState(chatItem.type == 'B'
-      ? BotManager.findManagerByBot(chatItem, messageTable).msgMiddleMan
-      : messageTable.insertMessage);
+      ? BotManager.findManagerByBot(chatItem, storage.messageTable).msgMiddleMan
+      : storage.messageTable.insertMessage);
 
   final Future<void> Function() setMainState;
 
@@ -51,7 +51,7 @@ class TextingPageState extends State<TextingPage> {
 
   Future<void> onMsgRemoveClaimed(
       Message msg, Function(bool isSucceed, {String errorMsg}) callback) async {
-    await messageTable.deleteMessage(msg);
+    await storage.messageTable.deleteMessage(msg);
     setState(() {
       callback(true);
     });
@@ -88,7 +88,7 @@ class TextingPageState extends State<TextingPage> {
           Row(children: [
             TextButton(
                 onPressed: () async {
-                  await chatTable.deleteChat(widget.chatItem);
+                  await storage.chatTable.deleteChat(widget.chatItem);
                   await widget.setMainState();
                   Navigator.of(context).pop();
                 },
@@ -96,7 +96,8 @@ class TextingPageState extends State<TextingPage> {
                     color: Colors.blue.shade100)),
             TextButton(
                 onPressed: () async {
-                  if (await messageTable.clearMessages(widget.chatItem.id)) {
+                  if (await storage.messageTable
+                      .clearMessages(widget.chatItem.id)) {
                     setState(() => null);
                     await widget.setMainState();
                   }

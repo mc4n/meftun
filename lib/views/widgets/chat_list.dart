@@ -21,7 +21,8 @@ class ChatListState extends State<ChatList> {
       future: /* widget.isSearching
           ? null
           :*/
-          messageTable.lsLastMsgs((i) async => chatTable.getChat(i)),
+          storage.messageTable
+              .lsLastMsgs((i) async => storage.chatTable.getChat(i)),
       builder: (bc, snap) {
         if (snap.hasData)
           return _expan(snap.data);

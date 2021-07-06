@@ -58,7 +58,7 @@ class _UsageInfoPageState extends State<UsageInfoPage> {
     final stEpo = start.millisecondsSinceEpoch;
     for (int i = 0; i < iterLen; i++) {
       final drange = rangeCoeff * Duration(days: 1).inMilliseconds;
-      final re = await messageTable.countMessages(
+      final re = await storage.messageTable.countMessages(
           stEpo + i * drange, stEpo + (i + 1) * drange, meSession);
       lsToReturn.add([re[0], re[1]]);
     }

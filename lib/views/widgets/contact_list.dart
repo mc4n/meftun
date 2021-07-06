@@ -26,7 +26,7 @@ class _ContactListState extends State<ContactList> {
       final tsea = widget.tsea;
       if (tsea != '') {
         final cTAdd = DirectChat(Chat.newId(), tsea);
-        await chatTable.insertChat(cTAdd);
+        await storage.chatTable.insertChat(cTAdd);
         callback(cTAdd);
       } else
         callback(null, 'displayName cannot be empty ');
@@ -42,8 +42,8 @@ class _ContactListState extends State<ContactList> {
           padding: EdgeInsets.all(10.0),
           child: FutureBuilder<List<Chat>>(
               future: widget.isSearching
-                  ? chatTable.filterChats(widget.tsea)
-                  : chatTable.filterChats(''),
+                  ? storage.chatTable.filterChats(widget.tsea)
+                  : storage.chatTable.filterChats(''),
               builder: (BuildContext bc, AsyncSnapshot<List<Chat>> snap) {
                 if (snap.hasData && snap.data.length > 0)
                   return Row(

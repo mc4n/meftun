@@ -7,9 +7,8 @@ import 'package:me_flutting/tables/chattable.dart' show ChatTable;
 import 'package:me_flutting/tables/messagetable.dart' show MessageTable;
 
 void fillDefaultBots(ChatTable chatTable) async {
-  final ms = BotChat('0', null, 'BotMaster');
-  await chatTable.deleteChat(ms);
-  chatTable.insertChat(ms);
+  final b = BotChat('0', null, 'BotMaster');
+  if (await chatTable.first(key: b.id) == null) await chatTable.insertChat(b);
 }
 
 class BotCommand {

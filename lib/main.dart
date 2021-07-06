@@ -8,34 +8,37 @@ import 'package:me_flutting/tables/dbase_manager.dart';
 import 'package:me_flutting/types/directchat.dart';
 import 'package:me_flutting/helpers/bot_context.dart' show fillDefaultBots;
 
+const APP_TITLE = 'Meftune';
 DirectChat meSession;
-ChatTable chatTable;
-MessageTable messageTable;
+TableStorage storage = SembastDbManager(true);
+
+extension MyStorage on TableStorage {
+  ChatTable get chatTable =>
+      table('chats', tableBuilder: (m, [_]) => SembastChatTable(m, _));
+
+  MessageTable get messageTable =>
+      table('messages', tableBuilder: (m, [_]) => SembastMessageTable(m, _));
+}
+
+Future<bool> initDefaults() async {
+  fillDefaultBots(storage.chatTable);
+  final me = DirectChat('1', 'admin');
+  if (await storage.chatTable.first(key: me.id) == null)
+    await storage.chatTable.insertChat(me);
+  meSession = me;
+  return true;
+}
 
 void main() {
-  final _ = SembastDbManager(true);
-
-  chatTable =
-      _.table('chats', tableBuilder: (m, [_]) => SembastChatTable(m, _));
-  messageTable =
-      _.table('messages', tableBuilder: (m, [_]) => SembastMessageTable(m, _));
-
-  const APP_TITLE = 'Meftune';
-
   runApp(MaterialApp(
       theme: ThemeData(primarySwatch: Colors.indigo),
       title: APP_TITLE,
-      home: FutureBuilder<DirectChat>(future: () async {
-        fillDefaultBots(chatTable);
-        final me = DirectChat('1', 'admin');
-        await chatTable.deleteChat(me);
-        await chatTable.insertChat(me);
-        return me;
-      }(), builder: (_, __) {
-        if (__.hasData && __.data.id == '1') {
-          meSession = __.data;
-          return const MainPage(APP_TITLE);
-        }
-        return Center(child: Container(child: Image.asset('logo.png')));
-      })));
+      home: FutureBuilder<bool>(
+          future: initDefaults(),
+          builder: (_, __) {
+            if (__.hasData && __.data) {
+              return const MainPage(APP_TITLE);
+            }
+            return Center(child: Container(child: Image.asset('logo.png')));
+          })));
 }
