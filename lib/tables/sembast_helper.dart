@@ -2,6 +2,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:me_flutting/models/basemodel.dart' show ModelBase, ModelFrom;
 import 'package:me_flutting/tables/dbase_manager.dart';
 import 'package:me_flutting/tables/table_base.dart';
+import 'package:me_flutting/tables/table_cursor.dart';
 import 'package:sembast/sembast.dart' as semba;
 import 'package:me_flutting/models/basemodel.dart' show ModelBase;
 
@@ -69,6 +70,11 @@ abstract class SembastHelper<T extends ModelBase<Tkey>, Tkey>
 
     return finder;
   }
+
+  @override
+  TableCursor<T, Tkey> createCursor(int limit,
+          {String orderBy, MapEntry<String, dynamic> filter}) =>
+      TableCursor<T, Tkey>(list, limit, orderBy: orderBy, filter: filter);
 
   @override
   Future<List<T>> list(

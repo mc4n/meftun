@@ -1,9 +1,13 @@
 import 'package:me_flutting/models/basemodel.dart' show ModelBase;
+import 'package:me_flutting/tables/table_cursor.dart';
 
 abstract class TableBase<T extends ModelBase<Tkey>, Tkey> {
   String get name;
 
   Future<bool> insert(T item);
+
+  TableCursor<T, Tkey> createCursor(int limit,
+      {String orderBy, MapEntry<String, dynamic> filter});
 
   Future<List<T>> list(
       {String orderBy,

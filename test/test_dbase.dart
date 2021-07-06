@@ -34,8 +34,23 @@ class TestTable with SembastHelper<TestModel, String> {
 TestTable get myTestTable => SembastDbManager(false)
     .table('tbTest', tableBuilder: (man, [name]) => TestTable(man, name));
 
+//
+
 void main() {
-  test('db filter like', () async {
+  test('test table cursor', () async {
+    /* for (var i = 1; i <= 10; i++) 
+         await myTestTable.insert(TestModel(null, 'item-$i', i * 10));
+    */
+    final scanner = myTestTable.createCursor(7);
+    do {
+      print('------\n' +
+          (await scanner.current)
+              .map(((i) => i.id + ', ' + i.userName + ', ' + i.age.toString()))
+              .join('\n'));
+    } while (await scanner.moveNext());
+  });
+
+  /*test('db filter like', () async { 
     final ft =
         MapEntry('||', [MapEntry('**user_name', 'a'), MapEntry('age', 31)]);
     print((await myTestTable.list(filter: ft))
@@ -43,7 +58,7 @@ void main() {
         .join('\n'));
   });
 
-  /*test('db update test', () async {
+  test('db update test', () async {
     const OLD = 5;
     const NEW = 3;
     final ftChang = MapEntry('==age', OLD);
