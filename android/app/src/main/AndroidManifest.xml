@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.me_flutting">
+    package="com.mustacean.meftun">
    <application
-        android:label="Meftune"
+        android:label="Meftun"
         android:icon="@mipmap/ic_launcher">
         <activity
             android:name=".MainActivity"

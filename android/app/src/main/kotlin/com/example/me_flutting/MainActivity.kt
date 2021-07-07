@@ -1,4 +1,4 @@
-package com.example.me_flutting
+package com.mustacean.meftun
 
 import io.flutter.embedding.android.FlutterActivity
 
