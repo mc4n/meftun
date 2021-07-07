@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:meftun/types/chat.dart' show Chat;
-import 'package:meftun/types/directchat.dart' show DirectChat;
 import 'package:meftun/types/message.dart' show Message;
 import 'package:meftun/main.dart';
 import 'package:meftun/views/pages/texting.dart' show TextingPageState;
@@ -28,34 +27,33 @@ class _MessageDialogsState extends State<MessageDialogs> {
           .chatMessages(widget.chatItem.id, storage.chatTable.getChat),
       builder: (BuildContext bc, AsyncSnapshot<List<Message>> snap) {
         if (snap.hasData)
-          return Expanded(child: _lv(snap.data, meSession));
+          return Expanded(child: _lv(snap.data, storage.adminId));
         else
           return Text('no item');
       },
     );
   }
 
-  Widget _lv(final List<Message> messages, DirectChat owner) =>
-      ListView.builder(
-          //reverse: true,
-          physics: BouncingScrollPhysics(),
-          controller: sc,
-          itemCount: messages.length,
-          shrinkWrap: false,
-          itemBuilder: (_, __) {
-            var msg = messages[__];
-            var isMe = msg.from == owner;
-            return Container(
-              child: Padding(
-                padding: EdgeInsets.symmetric(horizontal: 15),
-                child: Row(
-                  mainAxisAlignment:
-                      isMe ? MainAxisAlignment.end : MainAxisAlignment.start,
-                  children: [_dsmb(_dialog(msg, isMe), msg)],
-                ),
-              ),
-            );
-          });
+  Widget _lv(final List<Message> messages, String owner) => ListView.builder(
+      //reverse: true,
+      physics: BouncingScrollPhysics(),
+      controller: sc,
+      itemCount: messages.length,
+      shrinkWrap: false,
+      itemBuilder: (_, __) {
+        var msg = messages[__];
+        var isMe = msg.from.id == owner;
+        return Container(
+          child: Padding(
+            padding: EdgeInsets.symmetric(horizontal: 15),
+            child: Row(
+              mainAxisAlignment:
+                  isMe ? MainAxisAlignment.end : MainAxisAlignment.start,
+              children: [_dsmb(_dialog(msg, isMe), msg)],
+            ),
+          ),
+        );
+      });
 
   Widget _dialog(Message msg, bool isRight) => GestureDetector(
       onDoubleTap: () async {

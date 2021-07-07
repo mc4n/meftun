@@ -1,8 +1,11 @@
 import 'package:meftun/models/basemodel.dart' show ModelBase;
+import 'package:meftun/tables/dbase_manager.dart';
 import 'package:meftun/tables/table_cursor.dart';
 
 abstract class TableBase<T extends ModelBase<Tkey>, Tkey> {
   String get name;
+
+  TableStorage get manager;
 
   Future<bool> insert(T item);
 

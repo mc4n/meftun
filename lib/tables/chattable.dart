@@ -6,6 +6,7 @@ import 'package:meftun/models/chatmodel.dart' show ChatModel, ChatModelFrom;
 import 'package:meftun/tables/table_base.dart' show TableBase;
 import 'package:meftun/tables/sembast_helper.dart' show SembastHelper;
 import 'package:meftun/tables/dbase_manager.dart';
+import 'package:meftun/main.dart' show MyStorage;
 
 abstract class ChatTable
     with ChatModelFrom
@@ -29,6 +30,8 @@ abstract class ChatTable
   Future<bool> deleteChat(Chat c) async => await deleteOne(key: c.id);
 
   Future<Chat> getChat(String id) async {
+    if (this.manager.adminId == id)
+      return DirectChat(this.manager.adminId, '[admin]');
     final x = await first(key: id);
     return asChat(x);
   }

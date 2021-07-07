@@ -28,14 +28,13 @@ class MessageTileState extends State<MessageTile> {
   }
 
   Widget _lastMsgDetailsFrame(Message lastMsg) {
-    final isFromMe = lastMsg.from == meSession;
+    final isFromMe = lastMsg.from.id == storage.adminId;
     final isToMe = lastMsg.from == lastMsg.chatGroup;
     final from = isFromMe ? '' : lastMsg.from.caption;
     final to = isToMe ? '' : lastMsg.chatGroup.caption;
     final dt = lastMsg.epochToTimeString();
     final fromAv = lastMsg.from.defaultPhotoURL;
-    final toAv =
-        isToMe ? meSession.defaultPhotoURL : lastMsg.chatGroup.defaultPhotoURL;
+    final toAv = isToMe ? 'avatar.png' : lastMsg.chatGroup.defaultPhotoURL;
     final msgStat =
         lastMsg.epoch % 2 == 0 ? Colors.grey.shade700 : Colors.blue.shade300;
 
@@ -108,7 +107,7 @@ class MessageTileState extends State<MessageTile> {
                 Navigator.of(context).push(MaterialPageRoute(
                     builder: (_) => ProfilePage(
                         widget.msgItem.chatGroup.displayName,
-                        widget.msgItem.chatGroup == meSession)));
+                        widget.msgItem.chatGroup.id == storage.adminId)));
               })
         ],
         secondaryActions: [

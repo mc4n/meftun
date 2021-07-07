@@ -58,11 +58,10 @@ class MainPageState extends State<MainPage> {
                 TextButton(
                   onPressed: () {
                     Navigator.of(context).push(MaterialPageRoute(
-                        builder: (_) =>
-                            ProfilePage(meSession.displayName, true)));
+                        builder: (_) => ProfilePage(storage.adminId, true)));
                   },
-                  child: CircleAvatar(
-                      backgroundImage: AssetImage(meSession.defaultPhotoURL)),
+                  child:
+                      CircleAvatar(backgroundImage: AssetImage('avatar.png')),
                 )
               ]),
               bottom: TabBar(

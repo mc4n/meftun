@@ -5,13 +5,14 @@ import 'package:meftun/views/pages/main.dart' show MainPage;
 import 'package:meftun/tables/chattable.dart';
 import 'package:meftun/tables/messagetable.dart';
 import 'package:meftun/tables/dbase_manager.dart';
-import 'package:meftun/types/directchat.dart';
-import 'package:meftun/helpers/bot_context.dart' show fillDefaultBots;
 
-DirectChat meSession;
-TableStorage storage;
+const WEB_MODE = true;
+const APP_TITLE = WEB_MODE ? 'Meftune' : 'Meftun';
+final TableStorage storage = SembastDbManager(WEB_MODE);
 
 extension MyStorage on TableStorage {
+  String get adminId => '1';
+
   ChatTable get chatTable =>
       table('chats', tableBuilder: (m, [_]) => SembastChatTable(m, _));
 
@@ -19,33 +20,9 @@ extension MyStorage on TableStorage {
       table('messages', tableBuilder: (m, [_]) => SembastMessageTable(m, _));
 }
 
-Future<bool> initDefaults() async {
-  fillDefaultBots(storage.chatTable);
-  final me = DirectChat('1', '[admin]');
-  if (await storage.chatTable.first(key: me.id) == null)
-    await storage.chatTable.insertChat(me);
-  meSession = me;
-  return true;
-}
-
 void main() {
-  const WEB_MODE = true;
-  const APP_TITLE = WEB_MODE ? 'Meftune' : 'Meftun';
-  storage = SembastDbManager(WEB_MODE);
-  if (!WEB_MODE) WidgetsFlutterBinding.ensureInitialized();
-  runApp(
-    MaterialApp(
+  runApp(MaterialApp(
       theme: ThemeData(primarySwatch: Colors.indigo),
       title: APP_TITLE,
-      home: FutureBuilder<bool>(
-          future: initDefaults(),
-          builder: (_, __) {
-            if (__.hasData && __.data) {
-              return const MainPage(APP_TITLE);
-            }
-            return Center(child: Container(child: Image.asset('logo.png')));
-          }),
-      color: Colors.white,
-    ),
-  );
+      home: const MainPage(APP_TITLE)));
 }

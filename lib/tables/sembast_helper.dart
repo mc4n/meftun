@@ -176,6 +176,7 @@ abstract class SembastHelper<T extends ModelBase<Tkey>, Tkey>
           : await store.add(await manager.dbase, item.map)) !=
       null;
 
+  @override
   SembastDbManager get manager;
 
   semba.StoreRef<Tkey, Map<String, Object>> get store;

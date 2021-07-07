@@ -45,7 +45,7 @@ abstract class MessageTable
     return msgs;
   }
 
-  Future<List<double>> countMessages(int start, int end, Chat me) async {
+  Future<List<double>> countMessages(int start, int end, String adminId) async {
     final total = (await count(
             filter: MapEntry(
                 '&&', [MapEntry('>=epoch', start), MapEntry('<=epoch', end)])))
@@ -54,7 +54,7 @@ abstract class MessageTable
         filter: MapEntry('&&', [
       MapEntry('>=epoch', start),
       MapEntry('<=epoch', end),
-      MapEntry('from_id', me.id)
+      MapEntry('from_id', adminId)
     ]))) as double;
     return [mines, total - mines];
   }
