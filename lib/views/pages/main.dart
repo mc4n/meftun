@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:meftun/main.dart';
+import 'package:meftun/types/botchat.dart';
+import 'package:meftun/views/pages/texting.dart';
 import 'package:meftun/views/widgets/chat_list.dart' show ChatList;
 import 'package:meftun/views/widgets/contact_list.dart' show ContactList;
 import 'package:meftun/views/pages/profile.dart' show ProfilePage;
@@ -72,7 +74,18 @@ class MainPageState extends State<MainPage> {
           body: TabBarView(
             children: tail,
           ),
-          persistentFooterButtons: [aboutPage(context)],
+          persistentFooterButtons: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).push(MaterialPageRoute(
+                    builder: (_) => TextingPage(
+                        BotChat(storage.botmasterId, null, '[BotMaster]'),
+                        () async => this.setState(() => null))));
+              },
+              child: Text('> Console'),
+            ),
+            aboutPage(context)
+          ],
         ),
       );
 

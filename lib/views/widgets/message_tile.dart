@@ -105,8 +105,7 @@ class MessageTileState extends State<MessageTile> {
               closeOnTap: false,
               onTap: () {
                 Navigator.of(context).push(MaterialPageRoute(
-                    builder: (_) => ProfilePage(
-                        widget.msgItem.chatGroup.displayName,
+                    builder: (_) => ProfilePage(widget.msgItem.chatGroup.id,
                         widget.msgItem.chatGroup.id == storage.adminId)));
               })
         ],

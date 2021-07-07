@@ -23,8 +23,7 @@ class _MessageDialogsState extends State<MessageDialogs> {
     });
 
     return FutureBuilder<List<Message>>(
-      future: storage.messageTable
-          .chatMessages(widget.chatItem.id, storage.chatTable.getChat),
+      future: storage.messageTable.chatMessages(widget.chatItem.id),
       builder: (BuildContext bc, AsyncSnapshot<List<Message>> snap) {
         if (snap.hasData)
           return Expanded(child: _lv(snap.data, storage.adminId));

@@ -4,10 +4,10 @@ import 'usageinfo.dart' show UsageInfoPage;
 // import 'dart:convert';
 
 class ProfilePage extends StatefulWidget {
-  final String displayName;
+  final String profileId;
   final bool isMe;
 
-  const ProfilePage(this.displayName, [this.isMe = false]);
+  const ProfilePage(this.profileId, [this.isMe = false]);
 
   @override
   State<StatefulWidget> createState() => _ProfilePageState();
@@ -99,9 +99,9 @@ class _ProfilePageState extends State<ProfilePage> {
     return Scaffold(
         appBar: AppBar(
           leading: BackButton(),
-          title: Text('Profile/${widget.displayName}'),
+          title: Text('Profile/${widget.profileId}'),
         ),
-        body: _body(widget.displayName),
+        body: _body(widget.profileId),
         persistentFooterButtons: _footers(widget.isMe));
   }
 

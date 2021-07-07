@@ -1,4 +1,3 @@
-import 'package:meftun/types/chat.dart' show Chat;
 import 'package:meftun/types/message.dart' show Message;
 import 'package:meftun/types/mbody.dart' show MBody, RawBody, ImageBody;
 import 'package:meftun/types/draft.dart' show Draft;
@@ -7,6 +6,7 @@ import 'package:meftun/models/messagemodel.dart'
 import 'package:meftun/tables/table_base.dart' show TableBase;
 import 'package:meftun/tables/sembast_helper.dart' show SembastHelper;
 import 'package:meftun/tables/dbase_manager.dart';
+import 'package:meftun/main.dart' show MyStorage;
 
 abstract class MessageTable
     with MessageModelFrom
@@ -35,9 +35,8 @@ abstract class MessageTable
   Future<bool> clearMessages(String chatGroupId) async =>
       await deleteAll(filter: MapEntry('==chat_group_id', chatGroupId));
 
-  Future<List<Message>> chatMessages(
-      String chatGroupId, Future<Chat> Function(String) chatProvider) async {
-    final _trans = (model) async => getMessage(model.id, chatProvider);
+  Future<List<Message>> chatMessages(String chatGroupId) async {
+    final _trans = (model) async => getMessage(model.id);
     final _res = await list(
         filter: MapEntry('chat_group_id', chatGroupId), orderBy: 'epoch');
     final List<Message> msgs = [];
@@ -45,7 +44,7 @@ abstract class MessageTable
     return msgs;
   }
 
-  Future<List<double>> countMessages(int start, int end, String adminId) async {
+  Future<List<double>> countMessages(int start, int end) async {
     final total = (await count(
             filter: MapEntry(
                 '&&', [MapEntry('>=epoch', start), MapEntry('<=epoch', end)])))
@@ -54,24 +53,21 @@ abstract class MessageTable
         filter: MapEntry('&&', [
       MapEntry('>=epoch', start),
       MapEntry('<=epoch', end),
-      MapEntry('from_id', adminId)
+      MapEntry('from_id', manager.adminId)
     ]))) as double;
     return [mines, total - mines];
   }
 
-  Future<Message> getMessage(
-          String id, Future<Chat> Function(String) chatProvider) async =>
-      asMessage(await first(key: id), chatProvider);
+  Future<Message> getMessage(String id) async =>
+      asMessage(await first(key: id));
 
-  Future<Message> asMessage(
-      MessageModel msgModel, Future<Chat> Function(String) chatProvider) async {
-    final from = await chatProvider(msgModel.fromId);
-    final to = await chatProvider(msgModel.chatGroupId);
+  Future<Message> asMessage(MessageModel msgModel) async {
+    final from = await manager.chatTable.getChat(msgModel.fromId);
+    final to = await manager.chatTable.getChat(msgModel.chatGroupId);
     return Message(msgModel.id, bodyObj(msgModel), from, to, msgModel.epoch);
   }
 
-  Future<List<Message>> lsLastMsgs(
-      Future<Chat> Function(String) chatProvider) async {
+  Future<List<Message>> get lastMessages async {
     final ls = await list(orderBy: '-epoch');
     final chatIds = <String>{};
     final returnMsgs = <Message>[];
@@ -79,7 +75,7 @@ abstract class MessageTable
       final _ = item.chatGroupId;
       if (chatIds.contains(_)) continue;
       chatIds.add(_);
-      returnMsgs.add(await asMessage(item, chatProvider));
+      returnMsgs.add(await asMessage(item));
     }
     return returnMsgs;
   }

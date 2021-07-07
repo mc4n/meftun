@@ -12,7 +12,6 @@ abstract class ChatTable
     with ChatModelFrom
     implements TableBase<ChatModel, String> {
   static Chat asChat(ChatModel cm) {
-    if (cm == null) return DirectChat('-1', '[deleted_contact]');
     switch (cm.type) {
       case Chat.BOT:
         return BotChat(cm.id, null, cm.displayName);
@@ -30,9 +29,11 @@ abstract class ChatTable
   Future<bool> deleteChat(Chat c) async => await deleteOne(key: c.id);
 
   Future<Chat> getChat(String id) async {
-    if (this.manager.adminId == id)
-      return DirectChat(this.manager.adminId, '[admin]');
+    if (manager.botmasterId == id)
+      return BotChat(manager.botmasterId, null, '[BotMaster]');
+    if (manager.adminId == id) return DirectChat(manager.adminId, '[admin]');
     final x = await first(key: id);
+    if (x == null) return DirectChat('-1', '[unknown_contact]');
     return asChat(x);
   }
 

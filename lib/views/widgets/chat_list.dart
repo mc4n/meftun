@@ -4,7 +4,6 @@ import 'package:flutter/rendering.dart';
 import 'message_tile.dart' show MessageTile;
 import 'package:meftun/types/message.dart' show Message;
 import 'package:meftun/main.dart';
-//import 'package:meftun/types/directchat.dart';
 
 class ChatList extends StatefulWidget {
   final String tsea;
@@ -18,16 +17,12 @@ class ChatListState extends State<ChatList> {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<List<Message>>(
-      future: /* widget.isSearching
-          ? null
-          :*/
-          storage.messageTable
-              .lsLastMsgs((i) async => storage.chatTable.getChat(i)),
+      future: storage.messageTable.lastMessages,
       builder: (bc, snap) {
         if (snap.hasData)
           return _expan(snap.data);
         else
-          return Text('no item');
+          return Row();
       },
     );
   }

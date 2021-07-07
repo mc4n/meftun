@@ -11,6 +11,7 @@ const APP_TITLE = WEB_MODE ? 'Meftune' : 'Meftun';
 final TableStorage storage = SembastDbManager(WEB_MODE);
 
 extension MyStorage on TableStorage {
+  String get botmasterId => '0';
   String get adminId => '1';
 
   ChatTable get chatTable =>

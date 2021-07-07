@@ -3,13 +3,7 @@ import 'package:meftun/types/botchat.dart';
 import 'package:meftun/types/message.dart';
 import 'package:meftun/types/draft.dart' show Draft;
 import 'package:meftun/types/mbody.dart';
-import 'package:meftun/tables/chattable.dart' show ChatTable;
 import 'package:meftun/tables/messagetable.dart' show MessageTable;
-
-void fillDefaultBots(ChatTable chatTable) async {
-  final b = BotChat('0', null, 'BotMaster');
-  if (await chatTable.first(key: b.id) == null) await chatTable.insertChat(b);
-}
 
 class BotCommand {
   final String cmd;
@@ -34,11 +28,11 @@ class BotCommand {
   }
 }
 
-class BotManager extends BotChat {
+class BotManager {
+  final BotChat botObj;
   final List<BotCommand> commands;
   final MessageTable messageTable;
-  BotManager(this.commands, BotChat botObj, this.messageTable)
-      : super(botObj.id, botObj.owner, botObj.displayName);
+  BotManager(this.commands, this.botObj, this.messageTable);
 
   Future<Message> msgMiddleMan(Draft draft) async {
     final msg = await messageTable.insertMessage(draft);
