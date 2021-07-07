@@ -1,7 +1,7 @@
-//import 'package:me_flutting/tables/table_base.dart' show TableBase;
-//import 'package:me_flutting/tables/sembast_helper.dart';
-import 'package:me_flutting/models/basemodel.dart';
-import 'package:me_flutting/tables/table_base.dart';
+//import 'package:meftun/tables/table_base.dart' show TableBase;
+//import 'package:meftun/tables/sembast_helper.dart';
+import 'package:meftun/models/basemodel.dart';
+import 'package:meftun/tables/table_base.dart';
 import 'package:path/path.dart';
 import 'package:sembast/sembast.dart';
 import 'package:sembast/sembast_io.dart';

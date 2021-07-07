@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'profile.dart' show ProfilePage;
-import 'package:me_flutting/views/widgets/msgdialogs.dart' show MessageDialogs;
-import 'package:me_flutting/types/chat.dart' show Chat;
-import 'package:me_flutting/types/message.dart' show Message;
-import 'package:me_flutting/types/draft.dart' show Draft;
-import 'package:me_flutting/main.dart';
-import 'package:me_flutting/views/widgets/msgpanel.dart';
-import 'package:me_flutting/helpers/bot_context.dart';
+import 'package:meftun/views/widgets/msgdialogs.dart' show MessageDialogs;
+import 'package:meftun/types/chat.dart' show Chat;
+import 'package:meftun/types/message.dart' show Message;
+import 'package:meftun/types/draft.dart' show Draft;
+import 'package:meftun/main.dart';
+import 'package:meftun/views/widgets/msgpanel.dart';
+import 'package:meftun/helpers/bot_context.dart';
 
 class TextingPage extends StatefulWidget {
   static void letTheGameBegin(BuildContext context, Chat chatItem,

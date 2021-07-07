@@ -1,7 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:me_flutting/models/basemodel.dart';
-import 'package:me_flutting/tables/dbase_manager.dart';
-import 'package:me_flutting/tables/sembast_helper.dart';
+import 'package:meftun/models/basemodel.dart';
+import 'package:meftun/tables/dbase_manager.dart';
+import 'package:meftun/tables/sembast_helper.dart';
 
 class TestModel extends ModelBase<String> {
   final String userName;

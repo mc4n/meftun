@@ -1,12 +1,11 @@
-import 'package:me_flutting/types/chat.dart' show Chat;
-import 'package:me_flutting/types/directchat.dart' show DirectChat;
-import 'package:me_flutting/types/groupchat.dart' show GroupChat;
-import 'package:me_flutting/types/botchat.dart' show BotChat;
-import 'package:me_flutting/models/chatmodel.dart'
-    show ChatModel, ChatModelFrom;
-import 'package:me_flutting/tables/table_base.dart' show TableBase;
-import 'package:me_flutting/tables/sembast_helper.dart' show SembastHelper;
-import 'package:me_flutting/tables/dbase_manager.dart';
+import 'package:meftun/types/chat.dart' show Chat;
+import 'package:meftun/types/directchat.dart' show DirectChat;
+import 'package:meftun/types/groupchat.dart' show GroupChat;
+import 'package:meftun/types/botchat.dart' show BotChat;
+import 'package:meftun/models/chatmodel.dart' show ChatModel, ChatModelFrom;
+import 'package:meftun/tables/table_base.dart' show TableBase;
+import 'package:meftun/tables/sembast_helper.dart' show SembastHelper;
+import 'package:meftun/tables/dbase_manager.dart';
 
 abstract class ChatTable
     with ChatModelFrom

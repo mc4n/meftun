@@ -1,10 +1,10 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:me_flutting/types/botchat.dart';
-import 'package:me_flutting/types/message.dart';
-import 'package:me_flutting/types/draft.dart' show Draft;
-import 'package:me_flutting/types/mbody.dart';
-import 'package:me_flutting/tables/chattable.dart' show ChatTable;
-import 'package:me_flutting/tables/messagetable.dart' show MessageTable;
+import 'package:meftun/types/botchat.dart';
+import 'package:meftun/types/message.dart';
+import 'package:meftun/types/draft.dart' show Draft;
+import 'package:meftun/types/mbody.dart';
+import 'package:meftun/tables/chattable.dart' show ChatTable;
+import 'package:meftun/tables/messagetable.dart' show MessageTable;
 
 void fillDefaultBots(ChatTable chatTable) async {
   final b = BotChat('0', null, 'BotMaster');

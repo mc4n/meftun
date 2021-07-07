@@ -2,13 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
-//import 'package:me_flutting/types/chat.dart' show Chat;
-import 'package:me_flutting/types/message.dart' show Message;
-import 'package:me_flutting/main.dart';
-import 'package:me_flutting/views/pages/main.dart';
-import 'package:me_flutting/views/pages/profile.dart' show ProfilePage;
-import 'package:me_flutting/views/pages/texting.dart' show TextingPage;
-import 'package:me_flutting/views/pages/msgpreview.dart' show MessagePreview;
+//import 'package:meftun/types/chat.dart' show Chat;
+import 'package:meftun/types/message.dart' show Message;
+import 'package:meftun/main.dart';
+import 'package:meftun/views/pages/main.dart';
+import 'package:meftun/views/pages/profile.dart' show ProfilePage;
+import 'package:meftun/views/pages/texting.dart' show TextingPage;
+import 'package:meftun/views/pages/msgpreview.dart' show MessagePreview;
 
 class MessageTile extends StatefulWidget {
   final Message msgItem;

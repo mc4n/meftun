@@ -1,12 +1,12 @@
-import 'package:me_flutting/types/chat.dart' show Chat;
-import 'package:me_flutting/types/message.dart' show Message;
-import 'package:me_flutting/types/mbody.dart' show MBody, RawBody, ImageBody;
-import 'package:me_flutting/types/draft.dart' show Draft;
-import 'package:me_flutting/models/messagemodel.dart'
+import 'package:meftun/types/chat.dart' show Chat;
+import 'package:meftun/types/message.dart' show Message;
+import 'package:meftun/types/mbody.dart' show MBody, RawBody, ImageBody;
+import 'package:meftun/types/draft.dart' show Draft;
+import 'package:meftun/models/messagemodel.dart'
     show MessageModel, MessageModelFrom;
-import 'package:me_flutting/tables/table_base.dart' show TableBase;
-import 'package:me_flutting/tables/sembast_helper.dart' show SembastHelper;
-import 'package:me_flutting/tables/dbase_manager.dart';
+import 'package:meftun/tables/table_base.dart' show TableBase;
+import 'package:meftun/tables/sembast_helper.dart' show SembastHelper;
+import 'package:meftun/tables/dbase_manager.dart';
 
 abstract class MessageTable
     with MessageModelFrom

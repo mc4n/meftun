@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/rendering.dart';
-import 'package:me_flutting/types/chat.dart' show Chat;
-import 'package:me_flutting/types/directchat.dart' show DirectChat;
-import 'package:me_flutting/main.dart';
-import 'package:me_flutting/views/pages/main.dart';
-import 'package:me_flutting/views/pages/texting.dart' show TextingPage;
+import 'package:meftun/types/chat.dart' show Chat;
+import 'package:meftun/types/directchat.dart' show DirectChat;
+import 'package:meftun/main.dart';
+import 'package:meftun/views/pages/main.dart';
+import 'package:meftun/views/pages/texting.dart' show TextingPage;
 
 class ContactList extends StatefulWidget {
   final String tsea;

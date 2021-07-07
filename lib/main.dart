@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/widgets.dart';
-import 'package:me_flutting/views/pages/main.dart' show MainPage;
-import 'package:me_flutting/tables/chattable.dart';
-import 'package:me_flutting/tables/messagetable.dart';
-import 'package:me_flutting/tables/dbase_manager.dart';
-import 'package:me_flutting/types/directchat.dart';
-import 'package:me_flutting/helpers/bot_context.dart' show fillDefaultBots;
+import 'package:meftun/views/pages/main.dart' show MainPage;
+import 'package:meftun/tables/chattable.dart';
+import 'package:meftun/tables/messagetable.dart';
+import 'package:meftun/tables/dbase_manager.dart';
+import 'package:meftun/types/directchat.dart';
+import 'package:meftun/helpers/bot_context.dart' show fillDefaultBots;
 
 const APP_TITLE = 'Meftune';
 DirectChat meSession;

@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/rendering.dart';
 import 'message_tile.dart' show MessageTile;
-import 'package:me_flutting/types/message.dart' show Message;
-import 'package:me_flutting/main.dart';
-//import 'package:me_flutting/types/directchat.dart';
+import 'package:meftun/types/message.dart' show Message;
+import 'package:meftun/main.dart';
+//import 'package:meftun/types/directchat.dart';
 
 class ChatList extends StatefulWidget {
   final String tsea;
