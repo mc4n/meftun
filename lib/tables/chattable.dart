@@ -3,14 +3,14 @@ import 'package:meftun/types/directchat.dart' show DirectChat;
 import 'package:meftun/types/groupchat.dart' show GroupChat;
 import 'package:meftun/types/botchat.dart' show BotChat;
 import 'package:meftun/models/chatmodel.dart' show ChatModel, ChatModelFrom;
-import 'package:meftun/tables/table_base.dart' show TableBase;
+import 'package:meftun/tables/table_base.dart' show TableEntity;
 import 'package:meftun/tables/sembast_helper.dart' show SembastHelper;
 import 'package:meftun/tables/dbase_manager.dart';
 import 'package:meftun/main.dart' show MyStorage;
 
-abstract class ChatTable
-    with ChatModelFrom
-    implements TableBase<ChatModel, String> {
+abstract class ChatTable extends TableEntity<ChatModel, String>
+    with ChatModelFrom {
+  ChatTable(String name, TableStorage ts) : super(name, ts);
   static Chat asChat(ChatModel cm) {
     switch (cm.type) {
       case Chat.BOT:
@@ -46,17 +46,9 @@ abstract class ChatTable
 }
 
 class SembastChatTable extends ChatTable with SembastHelper<ChatModel, String> {
-  final String _name;
-  final SembastDbManager _manager;
-
-  SembastChatTable(this._manager, [this._name = 'chats']);
+  SembastChatTable(SembastDbManager _manager, [String _name = 'chats'])
+      : super(_name, _manager);
 
   @override
-  String get name => _name;
-
-  @override
-  SembastDbManager get manager => _manager;
-
-  @override
-  get store => SembastDbManager.getStrMapStore(_name);
+  get store => SembastDbManager.getStrMapStore(super.name);
 }

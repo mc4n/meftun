@@ -78,7 +78,7 @@ abstract class SembastHelper<T extends ModelBase<Tkey>, Tkey>
 
   @override
   Future<int> count({MapEntry<String, dynamic> filter}) async =>
-      store.count(await manager.dbase,
+      store.count(await nativeManager.dbase,
           filter: filter != null ? _filterBuilder(filter) : null);
 
   @override
@@ -87,7 +87,7 @@ abstract class SembastHelper<T extends ModelBase<Tkey>, Tkey>
       MapEntry<String, dynamic> filter,
       int limit,
       int offset}) async {
-    return (await store.find(await manager.dbase,
+    return (await store.find(await nativeManager.dbase,
             finder: _getFinder(
                 orderBy: orderBy,
                 filter: filter,
@@ -105,8 +105,8 @@ abstract class SembastHelper<T extends ModelBase<Tkey>, Tkey>
       int limit,
       int offset}) async {
     final mp = key != null
-        ? await store.record(key).getSnapshot(await manager.dbase)
-        : await store.findFirst(await manager.dbase,
+        ? await store.record(key).getSnapshot(await nativeManager.dbase)
+        : await store.findFirst(await nativeManager.dbase,
             finder: _getFinder(orderBy: orderBy, filter: filter));
 
     return mp?.value != null ? modelFrom(mp.key, mp.value) : null;
@@ -117,7 +117,7 @@ abstract class SembastHelper<T extends ModelBase<Tkey>, Tkey>
       MapEntry<String, dynamic> filter,
       int limit,
       int offset}) async {
-    return (await store.find(await manager.dbase,
+    return (await store.find(await nativeManager.dbase,
             finder: _getFinder(
                 orderBy: orderBy,
                 filter: filter,
@@ -129,7 +129,7 @@ abstract class SembastHelper<T extends ModelBase<Tkey>, Tkey>
 
   Future<Tkey> _firstKey(
       {String orderBy, MapEntry<String, dynamic> filter}) async {
-    return (await store.findFirst(await manager.dbase,
+    return (await store.findFirst(await nativeManager.dbase,
             finder: _getFinder(orderBy: orderBy, filter: filter)))
         ?.key;
   }
@@ -143,7 +143,7 @@ abstract class SembastHelper<T extends ModelBase<Tkey>, Tkey>
     final ke = await _listKeys(
         orderBy: orderBy, filter: filter, limit: limit, offset: offset);
     if (ke == null || ke.length == 0) return false;
-    final res = await store.records(ke).delete(await manager.dbase);
+    final res = await store.records(ke).delete(await nativeManager.dbase);
     return res.length == ke.length;
   }
 
@@ -154,7 +154,7 @@ abstract class SembastHelper<T extends ModelBase<Tkey>, Tkey>
     if (ke == null) return false;
     final _ = store.record(ke);
     if (_ == null) return false;
-    final res = await _.delete(await manager.dbase);
+    final res = await _.delete(await nativeManager.dbase);
     return res != null;
   }
 
@@ -165,19 +165,18 @@ abstract class SembastHelper<T extends ModelBase<Tkey>, Tkey>
     if (ke == null) return false;
     final res = await store
         .record(ke)
-        .update(await manager.dbase, item.selectMap(changedFieldIndexes));
+        .update(await nativeManager.dbase, item.selectMap(changedFieldIndexes));
     return res != null;
   }
 
   @override
   Future<bool> insert(T item) async =>
       (item.id != null
-          ? await store.record(item.id).add(await manager.dbase, item.map)
-          : await store.add(await manager.dbase, item.map)) !=
+          ? await store.record(item.id).add(await nativeManager.dbase, item.map)
+          : await store.add(await nativeManager.dbase, item.map)) !=
       null;
 
-  @override
-  SembastDbManager get manager;
+  SembastDbManager get nativeManager => manager as SembastDbManager;
 
   semba.StoreRef<Tkey, Map<String, Object>> get store;
 }

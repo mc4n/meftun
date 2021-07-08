@@ -3,14 +3,15 @@ import 'package:meftun/types/mbody.dart' show MBody, RawBody, ImageBody;
 import 'package:meftun/types/draft.dart' show Draft;
 import 'package:meftun/models/messagemodel.dart'
     show MessageModel, MessageModelFrom;
-import 'package:meftun/tables/table_base.dart' show TableBase;
+import 'package:meftun/tables/table_base.dart' show TableEntity;
 import 'package:meftun/tables/sembast_helper.dart' show SembastHelper;
 import 'package:meftun/tables/dbase_manager.dart';
 import 'package:meftun/main.dart' show MyStorage;
 
-abstract class MessageTable
-    with MessageModelFrom
-    implements TableBase<MessageModel, String> {
+abstract class MessageTable extends TableEntity<MessageModel, String>
+    with MessageModelFrom {
+  MessageTable(String nm, TableStorage mng) : super(nm, mng);
+
   static MBody bodyObj(MessageModel mm) {
     switch (mm.mbodyType) {
       case MBody.IMAGE_MESSAGE:
@@ -83,17 +84,9 @@ abstract class MessageTable
 
 class SembastMessageTable extends MessageTable
     with SembastHelper<MessageModel, String> {
-  final String _name;
-  final SembastDbManager _manager;
-
-  SembastMessageTable(this._manager, [this._name = 'messages']);
+  SembastMessageTable(SembastDbManager _manager, [String _name = 'messages'])
+      : super(_name, _manager);
 
   @override
-  String get name => _name;
-
-  @override
-  SembastDbManager get manager => _manager;
-
-  @override
-  get store => SembastDbManager.getStrMapStore(_name);
+  get store => SembastDbManager.getStrMapStore(super.name);
 }

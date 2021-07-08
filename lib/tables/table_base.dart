@@ -39,3 +39,17 @@ abstract class TableBase<T extends ModelBase<Tkey>, Tkey> {
   Future<bool> updateOne(T item, List<int> changedFieldIndexes,
       {String orderBy, MapEntry<String, dynamic> filter, Tkey key});
 }
+
+abstract class TableEntity<T extends ModelBase<Tkey>, Tkey>
+    implements TableBase<T, Tkey> {
+  final String _name;
+  final TableStorage _manager;
+
+  TableEntity(this._name, this._manager);
+
+  @override
+  get name => _name;
+
+  @override
+  get manager => _manager;
+}

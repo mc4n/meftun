@@ -1,5 +1,3 @@
-//import 'package:meftun/tables/table_base.dart' show TableBase;
-//import 'package:meftun/tables/sembast_helper.dart';
 import 'package:meftun/models/basemodel.dart';
 import 'package:meftun/tables/table_base.dart';
 import 'package:path/path.dart';

@@ -2,6 +2,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:meftun/models/basemodel.dart';
 import 'package:meftun/tables/dbase_manager.dart';
 import 'package:meftun/tables/sembast_helper.dart';
+import 'package:meftun/tables/table_base.dart';
 
 class TestModel extends ModelBase<String> {
   final String userName;
@@ -12,31 +13,22 @@ class TestModel extends ModelBase<String> {
   Map<String, dynamic> get map => {'user_name': userName, 'age': age};
 }
 
-class TestTable with SembastHelper<TestModel, String> {
-  final String _name;
-  final SembastDbManager _manager;
-  TestTable(this._manager, [this._name = 'tbTest']);
+class TestTable extends TableEntity<TestModel, String>
+    with SembastHelper<TestModel, String> {
+  TestTable(TableStorage manager, String name) : super(name, manager);
 
   @override
   TestModel modelFrom(String _key, Map<String, dynamic> _map) =>
       TestModel(_key, _map['user_name'], _map['age']);
 
   @override
-  String get name => _name;
-
-  @override
-  SembastDbManager get manager => _manager;
-
-  @override
-  get store => SembastDbManager.getStrMapStore(_name);
+  get store => SembastDbManager.getStrMapStore(super.name);
 }
 
-TestTable get myTestTable => SembastDbManager(false)
-    .table('tbTest', tableBuilder: (man, [name]) => TestTable(man, name));
-
-//
-
 void main() {
+  TestTable myTestTable = SembastDbManager(false)
+      .table('tbTest', tableBuilder: (man, [name]) => TestTable(man, name));
+
   test('test table cursor', () async {
     /* for (var i = 1; i <= 10; i++) 
          await myTestTable.insert(TestModel(null, 'item-$i', i * 10));
