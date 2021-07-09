@@ -1,39 +1,58 @@
 import 'package:meftun/core/basemodel.dart' show ModelBase;
 import 'dart:async';
 
-class TableCursor<T extends ModelBase<Tkey>, Tkey>
-    implements StreamIterator<Future<List<T>>> {
-  final int limit;
+typedef FnList<T> = Future<List<T>> Function(
+    {String orderBy, MapEntry<String, dynamic> filter, int limit, int offset});
+
+class TableCursor<T extends ModelBase<Tkey>, Tkey> {
+  final FnList _source;
+  final int _limit;
+  final String _orderBy;
+  MapEntry<String, dynamic> _filter;
+
   TableCursor(
-    Future<List<T>> Function(
-            {String orderBy,
-            MapEntry<String, dynamic> filter,
-            int limit,
-            int offset})
-        source,
+    FnList source,
     int limit, {
     String orderBy,
     MapEntry<String, dynamic> filter,
-  }) : limit = limit {
-    future = (i) =>
-        source(offset: i, orderBy: orderBy, filter: filter, limit: limit);
+  })  : _limit = limit,
+        _filter = filter,
+        _orderBy = orderBy,
+        _source = source;
+
+  Future<List<T>> _future(int page) {
+    return _source(
+        filter: _filter,
+        limit: _limit,
+        offset: page * _limit,
+        orderBy: _orderBy);
   }
 
-  Future<List<T>> Function(int offset) future;
-  int offset = 0;
+  int _pageNum = 0;
 
-  @override
-  Future cancel() async {
-    offset = 0;
+  set filter(MapEntry<String, dynamic> filter) => _filter = filter;
+
+  void reset() => _pageNum = 0;
+
+  Future<List<T>> get current async => getAt(_pageNum);
+
+  Future<List<T>> getAt(int pageNum) async => (await _future(pageNum)) ?? [];
+
+  Future<bool> seek(int pageNum) async {
+    final listezittin = await getAt(pageNum);
+    return pageNum >= 0 && listezittin != null && listezittin.length != 0;
   }
 
-  @override
-  Future<List<T>> get current async => await future(offset);
+  Future<bool> moveBack() async {
+    if (_pageNum == 0) return false;
+    bool res = await seek(_pageNum - 1);
+    if (res) _pageNum--;
+    return res;
+  }
 
-  @override
   Future<bool> moveNext() async {
-    offset += limit;
-    final listezittin = await future(offset);
-    return listezittin != null && listezittin.length != 0;
+    bool res = await seek(_pageNum + 1);
+    if (res) _pageNum++;
+    return res;
   }
 }
