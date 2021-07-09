@@ -1,10 +1,10 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:meftun/models/basemodel.dart' show ModelBase, ModelFrom;
-import 'package:meftun/tables/dbase_manager.dart';
-import 'package:meftun/tables/table_base.dart';
-import 'package:meftun/tables/table_cursor.dart';
+import 'package:meftun/core/basemodel.dart' show ModelBase, ModelFrom;
+import 'package:meftun/core/dbase_manager.dart';
+import 'package:meftun/core/table_base.dart';
+import 'package:meftun/core/table_cursor.dart';
 import 'package:sembast/sembast.dart' as semba;
-import 'package:meftun/models/basemodel.dart' show ModelBase;
+import 'package:meftun/core/basemodel.dart' show ModelBase;
 
 abstract class SembastHelper<T extends ModelBase<Tkey>, Tkey>
     implements ModelFrom<T, Tkey>, TableBase<T, Tkey> {

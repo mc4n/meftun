@@ -3,7 +3,7 @@ import 'package:meftun/types/botchat.dart';
 import 'package:meftun/types/message.dart';
 import 'package:meftun/types/draft.dart' show Draft;
 import 'package:meftun/types/mbody.dart';
-import 'package:meftun/tables/messagetable.dart' show MessageTable;
+import 'package:meftun/controllers/messagetable.dart' show MessageTable;
 
 class BotCommand {
   final String cmd;

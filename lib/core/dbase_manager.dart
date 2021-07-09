@@ -1,5 +1,5 @@
-import 'package:meftun/models/basemodel.dart';
-import 'package:meftun/tables/table_base.dart';
+import 'package:meftun/core/basemodel.dart';
+import 'package:meftun/core/table_base.dart';
 import 'package:path/path.dart';
 import 'package:sembast/sembast.dart';
 import 'package:sembast/sembast_io.dart';

@@ -1,4 +1,4 @@
-import 'basemodel.dart';
+import '../core/basemodel.dart';
 
 class ChatModel extends ModelBase<String> {
   final String displayName;

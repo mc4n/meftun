@@ -3,9 +3,9 @@ import 'package:meftun/types/directchat.dart' show DirectChat;
 import 'package:meftun/types/groupchat.dart' show GroupChat;
 import 'package:meftun/types/botchat.dart' show BotChat;
 import 'package:meftun/models/chatmodel.dart' show ChatModel, ChatModelFrom;
-import 'package:meftun/tables/table_base.dart' show TableEntity;
-import 'package:meftun/tables/sembast_helper.dart' show SembastHelper;
-import 'package:meftun/tables/dbase_manager.dart';
+import 'package:meftun/core/table_base.dart' show TableEntity;
+import 'package:meftun/core/sembast_helper.dart' show SembastHelper;
+import 'package:meftun/core/dbase_manager.dart';
 import 'package:meftun/main.dart' show MyStorage;
 
 abstract class ChatTable extends TableEntity<ChatModel, String>

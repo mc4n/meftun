@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/widgets.dart';
 import 'package:meftun/views/pages/main.dart' show MainPage;
-import 'package:meftun/tables/chattable.dart';
-import 'package:meftun/tables/messagetable.dart';
-import 'package:meftun/tables/dbase_manager.dart';
+import 'package:meftun/controllers/chattable.dart';
+import 'package:meftun/controllers/messagetable.dart';
+import 'package:meftun/core/dbase_manager.dart';
 
 const WEB_MODE = true;
 const APP_TITLE = WEB_MODE ? 'Meftune' : 'Meftun';

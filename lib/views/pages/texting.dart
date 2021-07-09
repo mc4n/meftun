@@ -7,7 +7,7 @@ import 'package:meftun/types/message.dart' show Message;
 import 'package:meftun/types/draft.dart' show Draft;
 import 'package:meftun/main.dart';
 import 'package:meftun/views/widgets/msgpanel.dart';
-import 'package:meftun/helpers/bot_context.dart';
+import 'package:meftun/controllers/bot_context.dart';
 
 class TextingPage extends StatefulWidget {
   static void letTheGameBegin(BuildContext context, Chat chatItem,

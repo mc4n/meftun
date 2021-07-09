@@ -1,4 +1,4 @@
-import 'package:meftun/models/basemodel.dart' show ModelBase;
+import 'package:meftun/core/basemodel.dart' show ModelBase;
 import 'dart:async';
 
 class TableCursor<T extends ModelBase<Tkey>, Tkey>

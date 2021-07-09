@@ -3,9 +3,9 @@ import 'package:meftun/types/mbody.dart' show MBody, RawBody, ImageBody;
 import 'package:meftun/types/draft.dart' show Draft;
 import 'package:meftun/models/messagemodel.dart'
     show MessageModel, MessageModelFrom;
-import 'package:meftun/tables/table_base.dart' show TableEntity;
-import 'package:meftun/tables/sembast_helper.dart' show SembastHelper;
-import 'package:meftun/tables/dbase_manager.dart';
+import 'package:meftun/core/table_base.dart' show TableEntity;
+import 'package:meftun/core/sembast_helper.dart' show SembastHelper;
+import 'package:meftun/core/dbase_manager.dart';
 import 'package:meftun/main.dart' show MyStorage;
 
 abstract class MessageTable extends TableEntity<MessageModel, String>

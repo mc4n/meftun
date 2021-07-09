@@ -5,7 +5,7 @@ import 'package:meftun/types/directchat.dart';
 import 'package:meftun/types/draft.dart' show Draft;
 import 'package:meftun/types/mbody.dart' show RawBody, ImageBody;
 import 'package:file_picker/file_picker.dart';
-import 'package:meftun/helpers/file_ops.dart';
+import 'package:meftun/core/file_ops.dart';
 import 'package:meftun/main.dart';
 import 'package:meftun/views/pages/texting.dart';
 
